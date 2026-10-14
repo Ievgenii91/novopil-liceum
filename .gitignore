@@ -1,0 +1,8 @@
+# Node & OS
+node_modules/
+.DS_Store
+Thumbs.db
+*.log
+
+# Build output (можна додавати або генерувати в CI/CD)
+# dist/

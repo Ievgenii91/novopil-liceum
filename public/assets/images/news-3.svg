@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 350" width="100%" height="100%">
+  <rect width="600" height="350" fill="#0d3b66"/>
+  <circle cx="500" cy="280" r="130" fill="#f59e0b" opacity="0.3"/>
+  <circle cx="100" cy="80" r="100" fill="#ef4444" opacity="0.2"/>
+  <g transform="translate(300, 140)">
+    <circle cx="0" cy="0" r="48" fill="#f59e0b"/>
+    <!-- Heart / Teacher appreciation icon -->
+    <path d="M0 18 C-25 0 -25 -20 0 -20 C25 -20 25 0 0 18 Z" fill="#b91c1c" transform="scale(0.9) translate(0, 3)"/>
+  </g>
+  <text x="300" y="235" font-family="'Segoe UI', Roboto, sans-serif" font-weight="700" font-size="22" fill="#ffffff" text-anchor="middle">
+    День працівників освіти
+  </text>
+  <text x="300" y="265" font-family="'Segoe UI', Roboto, sans-serif" font-size="14" fill="#cbd5e1" text-anchor="middle">
+    Вдячність педагогам • Учнівське самоврядування
+  </text>
+</svg>

@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 350" width="100%" height="100%">
+  <rect width="600" height="350" fill="#1e3a8a"/>
+  <circle cx="120" cy="100" r="90" fill="#3b82f6" opacity="0.3"/>
+  <circle cx="480" cy="260" r="140" fill="#10b981" opacity="0.25"/>
+  <g transform="translate(300, 140)">
+    <circle cx="0" cy="0" r="48" fill="#10b981"/>
+    <!-- Award / Trophy icon -->
+    <path d="M-15 -18 L15 -18 L12 0 C10 10 0 15 0 15 C0 15 -10 10 -12 0 Z" fill="#ffffff"/>
+    <path d="M-15 -12 L-22 -12 C-22 0 -14 4 -12 4" stroke="#ffffff" stroke-width="3" fill="none"/>
+    <path d="M15 -12 L22 -12 C22 0 14 4 12 4" stroke="#ffffff" stroke-width="3" fill="none"/>
+    <rect x="-4" y="15" width="8" height="10" fill="#ffffff"/>
+    <rect x="-14" y="25" width="28" height="5" fill="#ffffff"/>
+  </g>
+  <text x="300" y="235" font-family="'Segoe UI', Roboto, sans-serif" font-weight="700" font-size="22" fill="#ffffff" text-anchor="middle">
+    Всеукраїнські учнівські олімпіади
+  </text>
+  <text x="300" y="265" font-family="'Segoe UI', Roboto, sans-serif" font-size="14" fill="#cbd5e1" text-anchor="middle">
+    I шкільний етап • Інтелект та творчість
+  </text>
+</svg>

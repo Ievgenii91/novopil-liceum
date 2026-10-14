@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Візуальний редактор контенту | Новопільський ліцей</title>
+  <link rel="icon" type="image/svg+xml" href="/assets/images/logo.svg" />
+  <style>
+    :root {
+      --primary: #0f3b6c;
+      --accent: #f59e0b;
+      --bg: #f8fafc;
+      --sidebar-w: 280px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: #1e293b;
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+    .sidebar {
+      width: var(--sidebar-w);
+      background: #0d2847;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      border-right: 1px solid #1e3a5f;
+    }
+    .sidebar-header {
+      padding: 18px 20px;
+      background: #091f38;
+      border-bottom: 2px solid var(--accent);
+    }
+    .sidebar-header h2 {
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+    }
+    .sidebar-header p {
+      font-size: 12px;
+      color: #94a3b8;
+      margin-top: 4px;
+    }
+    .file-list {
+      list-style: none;
+      overflow-y: auto;
+      flex-grow: 1;
+      padding: 10px 0;
+    }
+    .file-category {
+      font-size: 11px;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: #64748b;
+      padding: 10px 20px 4px;
+      letter-spacing: 0.5px;
+    }
+    .file-item {
+      padding: 8px 20px;
+      font-size: 13.5px;
+      color: #cbd5e1;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+    .file-item:hover {
+      background: #173860;
+      color: #fff;
+    }
+    .file-item.active {
+      background: var(--accent);
+      color: #0f172a;
+      font-weight: 700;
+    }
+    .sidebar-footer {
+      padding: 15px 20px;
+      background: #091f38;
+      border-top: 1px solid #1e3a5f;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+    }
+    .sidebar-footer a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .main-editor {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      background: #fff;
+      overflow: hidden;
+    }
+    .editor-topbar {
+      padding: 14px 24px;
+      background: #ffffff;
+      border-bottom: 1px solid #e2e8f0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .editor-title h3 {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+    .editor-title span {
+      font-size: 12.5px;
+      color: #64748b;
+    }
+    .editor-actions {
+      display: flex;
+      gap: 10px;
+    }
+    .btn {
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+    .btn-save {
+      background: #10b981;
+      color: #fff;
+    }
+    .btn-save:hover { background: #059669; }
+    .btn-view {
+      background: #eff6ff;
+      color: var(--primary);
+      text-decoration: none;
+    }
+    .btn-view:hover { background: #dbeafe; }
+    .editor-body {
+      flex-grow: 1;
+      display: flex;
+      overflow: hidden;
+    }
+    .editor-pane {
+      width: 50%;
+      height: 100%;
+      border-right: 1px solid #e2e8f0;
+      display: flex;
+      flex-direction: column;
+    }
+    .editor-pane textarea {
+      width: 100%;
+      height: 100%;
+      padding: 20px;
+      border: none;
+      outline: none;
+      font-family: "Cascadia Code", "Fira Code", Consolas, monospace;
+      font-size: 14px;
+      line-height: 1.6;
+      resize: none;
+      background: #fafafa;
+    }
+    .preview-pane {
+      width: 50%;
+      height: 100%;
+      padding: 24px;
+      overflow-y: auto;
+      line-height: 1.7;
+    }
+    .preview-pane h1, .preview-pane h2, .preview-pane h3 {
+      color: var(--primary);
+      margin-top: 18px;
+      margin-bottom: 8px;
+    }
+    .preview-pane p { margin-bottom: 12px; }
+    .status-msg {
+      font-size: 13px;
+      color: #059669;
+      font-weight: 600;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <h2>🏛️ Git-based CMS</h2>
+      <p>Новопільський ліцей</p>
+    </div>
+    <ul class="file-list" id="fileList">
+      <!-- Наповнюється динамічно через JS -->
+    </ul>
+    <div class="sidebar-footer">
+      <a href="/admin/">Decap CMS</a>
+      <a href="/" target="_blank">На сайт ↗</a>
+    </div>
+  </div>
+
+  <div class="main-editor">
+    <div class="editor-topbar">
+      <div class="editor-title">
+        <h3 id="currentFileName">Виберіть сторінку для редагування</h3>
+        <span id="currentFilePath">content/...</span>
+      </div>
+      <div class="editor-actions">
+        <span id="statusMsg" class="status-msg">✓ Збережено та перезібрано!</span>
+        <button id="btnSave" class="btn btn-save">💾 Зберегти зміни</button>
+        <a id="btnPreview" href="/" target="_blank" class="btn btn-view">👁️ Відкрити на сайті</a>
+      </div>
+    </div>
+    <div class="editor-body">
+      <div class="editor-pane">
+        <textarea id="editorTextarea" placeholder="Тут відображатиметься вміст файлу у форматі Markdown або JSON..."></textarea>
+      </div>
+      <div class="preview-pane" id="previewPane">
+        <p style="color: #64748b; font-style: italic;">
+          Виберіть будь-який документ ліворуч, щоб редагувати його текст, метадані та переглядати результат.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let activeFilePath = '';
+    const fileListEl = document.getElementById('fileList');
+    const editorTextarea = document.getElementById('editorTextarea');
+    const previewPane = document.getElementById('previewPane');
+    const currentFileName = document.getElementById('currentFileName');
+    const currentFilePath = document.getElementById('currentFilePath');
+    const btnSave = document.getElementById('btnSave');
+    const btnPreview = document.getElementById('btnPreview');
+    const statusMsg = document.getElementById('statusMsg');
+
+    async function loadFiles() {
+      try {
+        const res = await fetch('/api/content/list');
+        const files = await res.json();
+        renderFileList(files);
+      } catch (e) {
+        console.error('Помилка завантаження файлів:', e);
+      }
+    }
+
+    function renderFileList(groups) {
+      fileListEl.innerHTML = '';
+      for (const [groupName, files] of Object.entries(groups)) {
+        const cat = document.createElement('li');
+        cat.className = 'file-category';
+        cat.textContent = groupName;
+        fileListEl.appendChild(cat);
+
+        files.forEach(f => {
+          const item = document.createElement('li');
+          item.className = 'file-item';
+          item.innerHTML = `📄 ${f.title || f.name}`;
+          item.onclick = () => openFile(f.path, f.title || f.name, f.webUrl);
+          fileListEl.appendChild(item);
+        });
+      }
+    }
+
+    async function openFile(filePath, title, webUrl) {
+      activeFilePath = filePath;
+      currentFileName.textContent = title;
+      currentFilePath.textContent = filePath;
+      btnPreview.href = webUrl || '/';
+
+      document.querySelectorAll('.file-item').forEach(el => el.classList.remove('active'));
+      event?.currentTarget?.classList.add('active');
+
+      try {
+        const res = await fetch('/api/content/read?file=' + encodeURIComponent(filePath));
+        const data = await res.json();
+        editorTextarea.value = data.content;
+        updatePreview(data.content);
+      } catch (e) {
+        alert('Не вдалося відкрити файл: ' + e);
+      }
+    }
+
+    function updatePreview(raw) {
+      // Простий рендер заголовків та списків для живого перегляду
+      let html = raw.replace(/^---[\s\S]*?---\s*/, '');
+      html = html.replace(/^### (.*$)/gim, '<h3>$1</h3>');
+      html = html.replace(/^## (.*$)/gim, '<h2>$1</h2>');
+      html = html.replace(/^# (.*$)/gim, '<h1>$1</h1>');
+      html = html.replace(/\*\*(.*?)\*\*/gim, '<strong>$1</strong>');
+      html = html.replace(/\*(.*?)\*/gim, '<em>$1</em>');
+      html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/gim, '<a href="$2" target="_blank">$1</a>');
+      html = html.replace(/\n\n/g, '<br/><br/>');
+      previewPane.innerHTML = html;
+    }
+
+    editorTextarea.addEventListener('input', () => {
+      updatePreview(editorTextarea.value);
+    });
+
+    btnSave.addEventListener('click', async () => {
+      if (!activeFilePath) return;
+
+      try {
+        btnSave.disabled = true;
+        btnSave.textContent = '⏳ Збереження...';
+
+        const res = await fetch('/api/content/save', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            file: activeFilePath,
+            content: editorTextarea.value
+          })
+        });
+
+        const result = await res.json();
+        if (result.success) {
+          statusMsg.style.display = 'inline';
+          setTimeout(() => { statusMsg.style.display = 'none'; }, 3000);
+        } else {
+          alert('Помилка: ' + result.error);
+        }
+      } catch (e) {
+        alert('Помилка збереження: ' + e);
+      } finally {
+        btnSave.disabled = false;
+        btnSave.textContent = '💾 Зберегти зміни';
+      }
+    });
+
+    loadFiles();
+  </script>
+</body>
+</html>

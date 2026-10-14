@@ -1,0 +1,23 @@
+{
+  "name": "novopil-lyceum-website",
+  "version": "1.0.0",
+  "description": "Офіційний вебсайт Новопільського ліцею Оліївської сільської ради з Git-based CMS (Decap CMS)",
+  "main": "src/build.js",
+  "scripts": {
+    "build": "node src/build.js",
+    "start": "node src/server.js",
+    "dev": "node src/server.js",
+    "serve": "node src/server.js"
+  },
+  "keywords": [
+    "school-website",
+    "novopil-lyceum",
+    "git-based-cms",
+    "decap-cms",
+    "static-site",
+    "education",
+    "ukraine"
+  ],
+  "author": "Новопільський ліцей",
+  "license": "MIT"
+}

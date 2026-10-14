@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://novopil-lyceum.zt.ua/sitemap.xml

@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Територія обслуговування | Новопільський ліцей Оліївської сільської ради</title>
+  <meta name="description" content="Закріплена територія обслуговування за Новопільським ліцеєм Оліївської сільської ради. Право першочергового зарахування." />
+  <link rel="icon" type="image/svg+xml" href="/assets/images/logo.svg" />
+  
+  <!-- CSS Stylesheets -->
+  <link rel="stylesheet" href="/assets/css/style.css" />
+  <link rel="stylesheet" href="/assets/css/accessibility.css" />
+</head>
+<body>
+
+  <!-- ВЕРХНЯ ПАНЕЛЬ ДОСТУПНОСТІ (WCAG 2.1 / ДСТУ ISO/IEC 40500:2015) -->
+  <div id="a11yPanel" class="a11y-panel" role="region" aria-label="Панель налаштувань доступності">
+    <div class="a11y-container">
+      <div class="a11y-group">
+        <span class="a11y-label">Розмір шрифту:</span>
+        <button class="a11y-btn" data-a11y-action="fontsize" data-a11y-value="font-md" title="Звичайний розмір шрифту">A</button>
+        <button class="a11y-btn" data-a11y-action="fontsize" data-a11y-value="font-lg" title="Збільшений шрифт">A+</button>
+        <button class="a11y-btn" data-a11y-action="fontsize" data-a11y-value="font-xl" title="Дуже великий шрифт">A++</button>
+      </div>
+
+      <div class="a11y-group">
+        <span class="a11y-label">Контрастність:</span>
+        <button class="a11y-btn" data-a11y-action="theme" data-a11y-value="theme-normal" title="Звичайна колірна схема">Стандарт</button>
+        <button class="a11y-btn" data-a11y-action="theme" data-a11y-value="theme-bw" title="Чорно-білий контраст">Ч/Б</button>
+        <button class="a11y-btn" data-a11y-action="theme" data-a11y-value="theme-wb" title="Темний високий контраст">Інверсія</button>
+        <button class="a11y-btn" data-a11y-action="theme" data-a11y-value="theme-by" title="Синій на жовтому фоні">Синьо-жовтий</button>
+      </div>
+
+      <div class="a11y-group">
+        <span class="a11y-label">Додатково:</span>
+        <button class="a11y-btn" data-a11y-action="spacing" title="Збільшити міжрядковий інтервал">Інтервал</button>
+        <button class="a11y-btn" data-a11y-action="dyslexic" title="Шрифт для людей з дислексією">Шрифт НУШ</button>
+        <button class="a11y-btn" data-a11y-action="images" data-a11y-value="grayscale" title="Чорно-білі фотографії">Ч/Б фото</button>
+        <button class="a11y-btn" data-a11y-action="images" data-a11y-value="hide" title="Приховати зображення">Без фото</button>
+        <button class="a11y-btn" data-a11y-action="speech" title="Озвучити текст сторінки">🔊 Читати голос</button>
+        <button class="a11y-btn" data-a11y-action="reset" title="Скинути до стандартних налаштувань">Скинути</button>
+      </div>
+
+      <div>
+        <button id="a11yCloseBtn" class="a11y-btn-close">✕ Закрити</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOP CONTACT BAR -->
+  <div class="topbar">
+    <div class="container">
+      <div class="topbar-contacts">
+        <a href="tel:+380671844288">
+          📞 +38 (067) 184-42-88
+        </a>
+        <a href="mailto:novopol4@ukr.net">
+          ✉️ novopol4@ukr.net
+        </a>
+        <span>📍 с. Новопіль, вул. Миру, 12</span>
+      </div>
+      <div class="topbar-actions">
+        <button id="a11yToggleBtn" class="btn-accessibility" title="Налаштування сайту для людей з порушенням зору">
+          👁️ Людям з порушенням зору
+        </button>
+        <a href="https://nz.ua/" target="_blank" rel="noopener noreferrer" class="btn-journal-link">
+          📖 NZ.UA Щоденник
+        </a>
+        <a href="https://www.facebook.com/profile.php?id=100083173775079" target="_blank" rel="noopener noreferrer" style="color: #cbd5e1;" title="Facebook ліцею">
+          f Facebook
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- SITE HEADER & NAV -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="/" class="brand-wrapper">
+        <img src="/assets/images/logo.svg" alt="Герб Новопільського ліцею" class="brand-logo" />
+        <div class="brand-text">
+          <h1>Новопільський ліцей</h1>
+          <p>Оліївської сільської ради Житомирського району</p>
+        </div>
+      </a>
+
+      <button id="mobileMenuBtn" class="mobile-menu-btn" aria-label="Відкрити головне меню">
+        ☰
+      </button>
+
+      <nav>
+        <ul id="navMenu" class="nav-menu">
+          <li class="nav-item "><a href="/" class="nav-link">Головна</a></li><li class="nav-item "><a href="/about/" class="nav-link">1. Про ліцей <span class="arrow">▼</span></a><ul class="dropdown-menu"><li><a href="/about/administration/" class="dropdown-link">Візитівка та адміністрація</a></li><li><a href="/about/history/" class="dropdown-link">Історія школи (з 1885 р.)</a></li><li><a href="/about/management/" class="dropdown-link">Структура та врядування</a></li><li><a href="/about/teachers/" class="dropdown-link">Педагогічний колектив</a></li><li><a href="/about/infrastructure/" class="dropdown-link">Матеріально-технічна база</a></li><li><a href="/about/vacancies/" class="dropdown-link">Вакансії</a></li></ul></li><li class="nav-item active"><a href="/transparency/" class="nav-link">2. Прозорість та звітність <span class="arrow">▼</span></a><ul class="dropdown-menu"><li><a href="/transparency/" class="dropdown-link">Огляд публічної інформації</a></li><li><a href="/transparency/statute/" class="dropdown-link">Статут та ліцензії</a></li><li><a href="/transparency/capacity/" class="dropdown-link">Ліцензований обсяг та учні</a></li><li><a href="/transparency/catchment-area/" class="dropdown-link">Територія обслуговування</a></li><li><a href="/transparency/annual-reports/" class="dropdown-link">Звіти директора</a></li><li><a href="/transparency/quality-monitoring/" class="dropdown-link">Моніторинг якості освіти</a></li><li><a href="/transparency/finance/" class="dropdown-link">Фінансова звітність / Закупівлі</a></li><li><a href="/transparency/extra-services/" class="dropdown-link">Додаткові послуги</a></li></ul></li><li class="nav-item "><a href="/education/" class="nav-link">3. Освітній процес <span class="arrow">▼</span></a><ul class="dropdown-menu"><li><a href="/education/programs/" class="dropdown-link">Освітні програми</a></li><li><a href="/education/evaluation/" class="dropdown-link">Критерії оцінювання (1-4 та 5-11 кл.)</a></li><li><a href="/education/schedule/" class="dropdown-link">Розклад уроків та дзвінків</a></li><li><a href="/education/nush/" class="dropdown-link">НУШ: Нова українська школа</a></li><li><a href="/education/distance-learning/" class="dropdown-link">Дистанційне навчання</a></li><li><a href="/education/language/" class="dropdown-link">Мова освітнього процесу</a></li></ul></li><li class="nav-item "><a href="/safety/" class="nav-link">4. Безпечне середовище <span class="arrow">▼</span></a><ul class="dropdown-menu"><li><a href="/safety/anti-bullying/" class="dropdown-link">Протидія булінгу (плани, заяви)</a></li><li><a href="/safety/civil-defense/" class="dropdown-link">Цивільний захист та укриття</a></li><li><a href="/safety/inclusion/" class="dropdown-link">Інклюзивна освіта (ООП)</a></li><li><a href="/safety/code-of-conduct/" class="dropdown-link">Правила поведінки учнів</a></li><li><a href="/safety/psychology/" class="dropdown-link">Психологічна служба</a></li></ul></li><li class="nav-item "><a href="/parents-students/" class="nav-link">5. Вступ та батькам <span class="arrow">▼</span></a><ul class="dropdown-menu"><li><a href="/parents-students/admission-1st-grade/" class="dropdown-link">Прийом до 1 класу</a></li><li><a href="/parents-students/forms/" class="dropdown-link">Зразки заяв та згод</a></li><li><a href="/parents-students/electronic-journal/" class="dropdown-link">Електронний щоденник (NZ.UA)</a></li><li><a href="/parents-students/canteen/" class="dropdown-link">Організація харчування (НАССР)</a></li><li><a href="/parents-students/student-council/" class="dropdown-link">Учнівське самоврядування</a></li></ul></li><li class="nav-item "><a href="/news/" class="nav-link">6. Медіа <span class="arrow">▼</span></a><ul class="dropdown-menu"><li><a href="/news/" class="dropdown-link">Новини ліцею</a></li><li><a href="/news/gallery/" class="dropdown-link">Фото та відеогалерея</a></li><li><a href="https://www.facebook.com/profile.php?id=100083173775079" class="dropdown-link" target="_blank" rel="noopener noreferrer">Facebook-сторінка</a></li></ul></li><li class="nav-item "><a href="/contacts/" class="nav-link">7. Контакти</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- HERO SECTION (Лише на головній) -->
+  
+
+  <!-- ОГОЛОШЕННЯ (якщо є активні) -->
+  
+
+  <!-- ГОЛОВНИЙ ЗМІСТ СТОРІНКИ -->
+  <main>
+    
+        <div class="page-header">
+          <div class="container">
+            <div class="breadcrumbs">
+              <a href="/">Головна</a>
+              <span>/</span>
+              <span>Прозорість та публічна інформація</span>
+              <span>/</span>
+              <span>Територія обслуговування</span>
+            </div>
+            <h1 class="page-title">Територія обслуговування</h1>
+          </div>
+        </div>
+
+        <div class="container page-container">
+          
+          <article class="page-content">
+            <h2>Територія обслуговування закладу освіти</h2>
+<p>Відповідно до Закону України «Про повну загальну середню освіту» та рішень виконкому Оліївської сільської ради, за Новопільським ліцеєм закріплено територію обслуговування для гарантування права кожного громадянина здобувати освіту за місцем проживання.</p>
+<h3>Закріплені населені пункти та вулиці:</h3>
+<ul><li><strong>село Новопіль</strong> (вулиця Миру та всі прилеглі вулиці й провулки села);</li><li>Прилеглі території та хутори згідно з розпорядженням органу місцевого самоврядування.</li></ul>
+Діти, які проживають на закріпленій території обслуговування, мають <strong>право першочергового зарахування</strong> до 1-го класу та інших класів ліцею.
+<hr class="section-divider" />
+<h3>Офіційний нормативний документ:</h3>
+<ul><li>📄 <strong>Територія обслуговування Новопільського ліцею:</strong> <a href="https://rada.info/upload/users_files/04348409/280f6c4bf88eac0f45025651c425c2cd.docx" target="_blank" rel="noopener noreferrer">Завантажити офіційний документ (DOCX)</a></li></ul>
+          </article>
+        </div>
+      
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <h3>Новопільський ліцей</h3>
+          <p>
+            Комунальний заклад загальної середньої освіти I–III ступенів Оліївської сільської ради Житомирського району Житомирської області.
+          </p>
+          <div style="font-size: 13px; line-height: 1.5; color: #cbd5e1;">
+            <div>• Код ЄДРПОУ: <strong>06671161</strong></div>
+            <div>• ID закладу в ІСУО: <strong>16060</strong></div>
+            <div>• КОАТУУ: <strong>1825686201</strong></div>
+            <div>• КАТОТТГ: <strong>UA18040330000021677</strong></div>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h4>Навігація</h4>
+          <ul class="footer-links">
+            <li><a href="/about/">Про ліцей</a></li>
+            <li><a href="/transparency/">Прозорість (ст. 30 ЗУ)</a></li>
+            <li><a href="/education/">Освітній процес</a></li>
+            <li><a href="/safety/">Безпечне середовище</a></li>
+            <li><a href="/parents-students/">Батькам та учням</a></li>
+            <li><a href="/news/">Медіацентр</a></li>
+            <li><a href="/contacts/">Контакти</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Швидкий доступ</h4>
+          <ul class="footer-links">
+            <li><a href="/parents-students/admission-1st-grade/">Вступ до 1 класу</a></li>
+            <li><a href="https://nz.ua/" target="_blank" rel="noopener noreferrer">Електронний щоденник NZ.UA</a></li>
+            <li><a href="/safety/civil-defense/">Укриття ліцею</a></li>
+            <li><a href="/safety/anti-bullying/">Протидія булінгу</a></li>
+            <li><a href="/transparency/statute/">Статутні документи</a></li>
+            <li><a href="/transparency/annual-reports/">Звіти директора</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Контакти ліцею</h4>
+          <ul class="footer-contacts">
+            <li>📍 12333, Житомирська обл., Житомирський р-н, с. Новопіль, вул. Миру, 12</li>
+            <li>📞 <a href="tel:+380671844288">+38 (067) 184-42-88</a></li>
+            <li>✉️ <a href="mailto:novopol4@ukr.net">novopol4@ukr.net</a></li>
+            <li>👤 Директор: Демченко Лідія Миколаївна</li>
+            <li>🌐 <a href="https://www.facebook.com/profile.php?id=100083173775079" target="_blank" rel="noopener noreferrer">Facebook-сторінка</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>
+          © 2026 Новопільський ліцей Оліївської сільської ради. Всі права захищено.
+        </div>
+        <div style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap;">
+          <a href="/transparency/">Відповідність ст. 30 ЗУ «Про освіту»</a>
+          <span>•</span>
+          <a href="/admin/" class="footer-cms-badge" title="Керування вмістом сайту через Git-based CMS (Decap)">
+            ⚙️ Панель керування (Git CMS)
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="/assets/js/accessibility.js"></script>
+  <script src="/assets/js/main.js"></script>
+</body>
+</html>

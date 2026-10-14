@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 350" width="100%" height="100%">
+  <rect width="600" height="350" fill="#0f3b6c"/>
+  <circle cx="500" cy="80" r="120" fill="#1d5b9b" opacity="0.4"/>
+  <circle cx="100" cy="300" r="160" fill="#f59e0b" opacity="0.2"/>
+  <g transform="translate(300, 150)">
+    <circle cx="0" cy="0" r="50" fill="#f59e0b"/>
+    <!-- Bell icon -->
+    <path d="M-15 15 C-15 -10 -25 -20 0 -25 C25 -20 15 -10 15 15 L22 22 L-22 22 Z" fill="#0f3b6c"/>
+    <circle cx="0" cy="27" r="4" fill="#0f3b6c"/>
+  </g>
+  <text x="300" y="240" font-family="'Segoe UI', Roboto, sans-serif" font-weight="700" font-size="22" fill="#ffffff" text-anchor="middle">
+    Перший дзвоник у Новопільському ліцеї
+  </text>
+  <text x="300" y="270" font-family="'Segoe UI', Roboto, sans-serif" font-size="14" fill="#cbd5e1" text-anchor="middle">
+    1 вересня • 165 учнів • Нова українська школа
+  </text>
+</svg>

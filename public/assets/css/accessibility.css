@@ -1,0 +1,284 @@
+/* ==========================================================================
+   ПАНЕЛЬ ТА РЕЖИМИ ДОСТУПНОСТІ (ДСТУ ISO/IEC 40500:2015 / WCAG 2.1)
+   ========================================================================== */
+
+/* Accessibility Toolbar UI */
+.a11y-panel {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: #111827;
+  color: #ffffff;
+  padding: 12px 20px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+  z-index: 99999;
+  display: none;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  border-bottom: 3px solid #f59e0b;
+}
+
+.a11y-panel.is-active {
+  display: block;
+}
+
+.a11y-container {
+  max-width: 1220px;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.a11y-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.a11y-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: #94a3b8;
+  margin-right: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.a11y-btn {
+  background: #1f2937;
+  color: #ffffff;
+  border: 1px solid #374151;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+.a11y-btn:hover, .a11y-btn.active {
+  background: #f59e0b;
+  color: #111827;
+  border-color: #f59e0b;
+}
+
+.a11y-btn-close {
+  background: #ef4444;
+  color: #ffffff;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 13.5px;
+}
+
+.a11y-btn-close:hover {
+  background: #dc2626;
+}
+
+/* ==========================================================================
+   ШРИФТИ ТА МАСШТАБУВАННЯ
+   ========================================================================== */
+
+html.font-md {
+  font-size: 16px;
+}
+
+html.font-lg {
+  font-size: 19px;
+}
+
+html.font-xl {
+  font-size: 22px;
+}
+
+html.spacing-wide body {
+  letter-spacing: 0.08em !important;
+  word-spacing: 0.15em !important;
+  line-height: 2 !important;
+}
+
+html.font-dyslexic body,
+html.font-dyslexic * {
+  font-family: 'OpenDyslexic', 'Comic Sans MS', sans-serif !important;
+}
+
+/* ==========================================================================
+   ЗОБРАЖЕННЯ
+   ========================================================================== */
+
+html.images-hide img,
+html.images-hide svg:not(.brand-logo) {
+  opacity: 0.05 !important;
+  filter: blur(10px) !important;
+}
+
+html.images-grayscale img {
+  filter: grayscale(100%) contrast(120%) !important;
+}
+
+/* ==========================================================================
+   КОНТРАСТНІ ТЕМИ (WCAG 2.1 AAA)
+   ========================================================================== */
+
+/* 1. Чорний текст на білому фоні (High Contrast Black & White) */
+html.theme-bw body {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+}
+
+html.theme-bw .topbar,
+html.theme-bw .site-header,
+html.theme-bw .hero,
+html.theme-bw .hero-card,
+html.theme-bw .quick-card,
+html.theme-bw .stat-item,
+html.theme-bw .news-card,
+html.theme-bw .page-sidebar,
+html.theme-bw .page-content,
+html.theme-bw .site-footer,
+html.theme-bw .doc-search-box,
+html.theme-bw .doc-table-wrapper,
+html.theme-bw .dropdown-menu {
+  background: #ffffff !important;
+  color: #000000 !important;
+  border: 2px solid #000000 !important;
+  box-shadow: none !important;
+}
+
+html.theme-bw a,
+html.theme-bw h1,
+html.theme-bw h2,
+html.theme-bw h3,
+html.theme-bw h4,
+html.theme-bw p,
+html.theme-bw span,
+html.theme-bw td,
+html.theme-bw th {
+  color: #000000 !important;
+}
+
+html.theme-bw a {
+  text-decoration: underline !important;
+  font-weight: 700 !important;
+}
+
+html.theme-bw .btn-primary,
+html.theme-bw .btn-secondary,
+html.theme-bw .btn-submit,
+html.theme-bw .btn-doc-download {
+  background: #000000 !important;
+  color: #ffffff !important;
+  border: 2px solid #000000 !important;
+}
+
+/* 2. Білий/жовтий текст на чорному фоні (High Contrast Dark) */
+html.theme-wb body {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+}
+
+html.theme-wb .topbar,
+html.theme-wb .site-header,
+html.theme-wb .hero,
+html.theme-wb .hero-card,
+html.theme-wb .quick-card,
+html.theme-wb .stat-item,
+html.theme-wb .news-card,
+html.theme-wb .page-sidebar,
+html.theme-wb .page-content,
+html.theme-wb .site-footer,
+html.theme-wb .doc-search-box,
+html.theme-wb .doc-table-wrapper,
+html.theme-wb .dropdown-menu {
+  background: #000000 !important;
+  color: #ffffff !important;
+  border: 2px solid #ffffff !important;
+  box-shadow: none !important;
+}
+
+html.theme-wb a,
+html.theme-wb h1,
+html.theme-wb h2,
+html.theme-wb h3,
+html.theme-wb h4,
+html.theme-wb p,
+html.theme-wb span,
+html.theme-wb td,
+html.theme-wb th {
+  color: #ffffff !important;
+}
+
+html.theme-wb a {
+  color: #ffff00 !important;
+  text-decoration: underline !important;
+}
+
+html.theme-wb .btn-primary,
+html.theme-wb .btn-secondary,
+html.theme-wb .btn-submit,
+html.theme-wb .btn-doc-download {
+  background: #ffff00 !important;
+  color: #000000 !important;
+  border: 2px solid #ffffff !important;
+  font-weight: 800 !important;
+}
+
+/* 3. Синій текст на жовтому фоні (Blue on Yellow - спеціалізований стандарт) */
+html.theme-by body {
+  background-color: #ffffbb !important;
+  color: #002244 !important;
+}
+
+html.theme-by .topbar,
+html.theme-by .site-header,
+html.theme-by .hero,
+html.theme-by .hero-card,
+html.theme-by .quick-card,
+html.theme-by .stat-item,
+html.theme-by .news-card,
+html.theme-by .page-sidebar,
+html.theme-by .page-content,
+html.theme-by .site-footer,
+html.theme-by .doc-search-box,
+html.theme-by .doc-table-wrapper,
+html.theme-by .dropdown-menu {
+  background: #ffffbb !important;
+  color: #002244 !important;
+  border: 2px solid #002244 !important;
+  box-shadow: none !important;
+}
+
+html.theme-by a,
+html.theme-by h1,
+html.theme-by h2,
+html.theme-by h3,
+html.theme-by h4,
+html.theme-by p,
+html.theme-by span,
+html.theme-by td,
+html.theme-by th {
+  color: #002244 !important;
+}
+
+html.theme-by a {
+  text-decoration: underline !important;
+  font-weight: 700 !important;
+}
+
+html.theme-by .btn-primary,
+html.theme-by .btn-secondary,
+html.theme-by .btn-submit,
+html.theme-by .btn-doc-download {
+  background: #002244 !important;
+  color: #ffffbb !important;
+  border: 2px solid #002244 !important;
+}

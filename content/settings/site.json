@@ -1,0 +1,37 @@
+{
+  "schoolName": "Новопільський ліцей Оліївської сільської ради Житомирського району Житомирської області",
+  "shortName": "Новопільський ліцей",
+  "founder": "Оліївська сільська рада",
+  "edrpou": "06671161",
+  "isuoId": "16060",
+  "degree": "I–III ступені (початкова школа, гімназія, ліцей)",
+  "ownership": "Комунальна",
+  "address": "вул. Миру, 12, с. Новопіль, Житомирський район, Житомирська область, Україна, 12333",
+  "koatuu": "1825686201",
+  "katottg": "UA18040330000021677",
+  "director": "Демченко Лідія Миколаївна",
+  "phone": "+38 (067) 184-42-88",
+  "email": "novopol4@ukr.net",
+  "studentsCount": 165,
+  "language": "Українська",
+  "facebookUrl": "https://www.facebook.com/profile.php?id=100083173775079",
+  "electronicJournalUrl": "https://nz.ua/",
+  "coordinates": {
+    "lat": 50.3667,
+    "lng": 28.6667
+  },
+  "stats": [
+    { "value": "165", "label": "Здобувачів освіти" },
+    { "value": "I-III", "label": "Ступені навчання" },
+    { "value": "1885", "label": "Рік заснування школи" },
+    { "value": "100%", "label": "Облаштоване безпечне укриття" }
+  ],
+  "quickLinks": [
+    { "title": "Прийом до 1 класу", "url": "/parents-students/admission-1st-grade/", "icon": "admission" },
+    { "title": "Електронний щоденник (NZ.UA)", "url": "https://nz.ua/", "icon": "journal", "external": true },
+    { "title": "Розклад уроків", "url": "/education/schedule/", "icon": "schedule" },
+    { "title": "Протидія булінгу", "url": "/safety/anti-bullying/", "icon": "safety" },
+    { "title": "Безпека та укриття", "url": "/safety/civil-defense/", "icon": "shield" },
+    { "title": "Прозорість (ст. 30 ЗУ)", "url": "/transparency/", "icon": "document" }
+  ]
+}

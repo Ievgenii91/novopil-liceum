@@ -1,0 +1,92 @@
+backend:
+  name: git-gateway
+  branch: main
+
+# Local backend enables running Decap CMS locally without third-party authentication
+local_backend: true
+
+media_folder: "public/assets/uploads"
+public_folder: "/assets/uploads"
+
+locale: "uk"
+
+collections:
+  - name: "settings"
+    label: "Паспортні дані та налаштування"
+    files:
+      - name: "general"
+        label: "Основні реквізити ліцею"
+        file: "content/settings/site.json"
+        fields:
+          - { label: "Повна назва", name: "schoolName", widget: "string" }
+          - { label: "Коротка назва", name: "shortName", widget: "string" }
+          - { label: "Засновник", name: "founder", widget: "string" }
+          - { label: "ЄДРПОУ", name: "edrpou", widget: "string" }
+          - { label: "ID в ІСУО", name: "isuoId", widget: "string" }
+          - { label: "Ступінь", name: "degree", widget: "string" }
+          - { label: "Форма власності", name: "ownership", widget: "string" }
+          - { label: "Адреса", name: "address", widget: "string" }
+          - { label: "Директор", name: "director", widget: "string" }
+          - { label: "Телефон", name: "phone", widget: "string" }
+          - { label: "E-mail", name: "email", widget: "string" }
+          - { label: "Кількість учнів", name: "studentsCount", widget: "number" }
+          - { label: "Мова навчання", name: "language", widget: "string" }
+          - { label: "Facebook ліцею", name: "facebookUrl", widget: "string" }
+          - { label: "Електронний журнал (NZ.UA)", name: "electronicJournalUrl", widget: "string" }
+
+  - name: "news"
+    label: "Новини ліцею"
+    folder: "content/news"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    fields:
+      - { label: "Заголовок новини", name: "title", widget: "string" }
+      - { label: "Дата публікації", name: "date", widget: "datetime" }
+      - { label: "Короткий анонс", name: "excerpt", widget: "text" }
+      - { label: "Головне зображення", name: "image", widget: "image", required: false }
+      - { label: "Автор / Джерело", name: "author", widget: "string", default: "Пресцентр Новопільського ліцею" }
+      - { label: "Теги", name: "tags", widget: "list", default: ["Життя ліцею", "Події"] }
+      - { label: "Текст новини", name: "body", widget: "markdown" }
+
+  - name: "announcements"
+    label: "Термінові оголошення"
+    folder: "content/announcements"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Заголовок", name: "title", widget: "string" }
+      - { label: "Дата", name: "date", widget: "datetime" }
+      - { label: "Активне оголошення", name: "active", widget: "boolean", default: true }
+      - { label: "Важливість", name: "priority", widget: "select", options: ["Звичайна", "Важливо", "Терміново"], default: "Важливо" }
+      - { label: "Текст оголошення", name: "body", widget: "markdown" }
+
+  - name: "pages"
+    label: "Сторінки сайту"
+    folder: "content/pages"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Заголовок сторінки", name: "title", widget: "string" }
+      - { label: "URL шлях сторінки", name: "path", widget: "string" }
+      - { label: "Категорія розділу", name: "section", widget: "select", options: ["Головна", "Про ліцей", "Прозорість та публічна інформація", "Освітній процес", "Безпечне середовище", "Батькам та учням", "Медіацентр", "Контакти"] }
+      - { label: "Короткий опис (SEO)", name: "description", widget: "text" }
+      - { label: "Зміст сторінки (Markdown)", name: "body", widget: "markdown" }
+
+  - name: "documents"
+    label: "Реєстр першоджерел та документів (28 актів)"
+    files:
+      - name: "registry"
+        label: "Реєстр офіційних документів"
+        file: "content/documents/registry.json"
+        fields:
+          - label: "Документи"
+            name: "items"
+            widget: "list"
+            fields:
+              - { label: "ID", name: "id", widget: "number" }
+              - { label: "Назва документа", name: "title", widget: "string" }
+              - { label: "Категорія", name: "category", widget: "string" }
+              - { label: "Формат", name: "format", widget: "string" }
+              - { label: "Посилання на файл", name: "url", widget: "string" }
+              - { label: "Сторінка на сайті", name: "pagePath", widget: "string" }
+              - { label: "Опис", name: "description", widget: "text" }

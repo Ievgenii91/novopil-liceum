@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 320" width="100%" height="100%">
+  <defs>
+    <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f3b6c"/>
+      <stop offset="100%" stop-color="#082240"/>
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffd54f"/>
+      <stop offset="100%" stop-color="#f59e0b"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+
+  <!-- Background Shield -->
+  <path d="M160 20 C240 20 280 50 280 120 C280 220 160 290 160 290 C160 290 40 220 40 120 C40 50 80 20 160 20 Z" 
+        fill="url(#shieldGrad)" stroke="url(#goldGrad)" stroke-width="6" filter="url(#shadow)"/>
+
+  <!-- Inner border -->
+  <path d="M160 34 C225 34 262 58 262 120 C262 205 160 268 160 268 C160 268 58 205 58 120 C58 58 95 34 160 34 Z" 
+        fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="2" stroke-dasharray="4,4"/>
+
+  <!-- Sun Rays / Dawn of Knowledge -->
+  <circle cx="160" cy="115" r="45" fill="none" stroke="url(#goldGrad)" stroke-width="2" opacity="0.6"/>
+  <path d="M160 62 L160 52 M198 78 L206 70 M213 115 L223 115 M198 152 L206 160 M160 168 L160 178 M122 152 L114 160 M107 115 L97 115 M122 78 L114 70" 
+        stroke="url(#goldGrad)" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- Open Book -->
+  <g transform="translate(160, 150)">
+    <!-- Pages -->
+    <path d="M0 -25 C25 -38 65 -35 80 -20 L80 35 C65 20 25 23 0 35 C-25 23 -65 20 -80 35 L-80 -20 C-65 -35 -25 -38 0 -25 Z" 
+          fill="#ffffff" stroke="#e2e8f0" stroke-width="2"/>
+    <path d="M0 -25 L0 35" stroke="#0f3b6c" stroke-width="3"/>
+    <!-- Page text lines left -->
+    <line x1="-65" y1="-8" x2="-15" y2="-8" stroke="#94a3b8" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="-65" y1="5" x2="-20" y2="5" stroke="#94a3b8" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="-65" y1="18" x2="-30" y2="18" stroke="#94a3b8" stroke-width="2.5" stroke-linecap="round"/>
+    <!-- Page text lines right -->
+    <line x1="15" y1="-8" x2="65" y2="-8" stroke="#94a3b8" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="20" y1="5" x2="65" y2="5" stroke="#94a3b8" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="30" y1="18" x2="65" y2="18" stroke="#94a3b8" stroke-width="2.5" stroke-linecap="round"/>
+  </g>
+
+  <!-- Torch / Flame of Enlightenment -->
+  <g transform="translate(160, 95)">
+    <path d="M0 -30 C12 -18 16 -8 8 2 C2 10 -8 4 -4 -5 C-5 -12 0 -22 0 -30 Z" fill="#ef4444"/>
+    <path d="M0 -20 C6 -12 8 -5 4 0 C1 5 -4 2 -2 -3 C-3 -7 0 -15 0 -20 Z" fill="url(#goldGrad)"/>
+    <rect x="-4" y="5" width="8" height="16" rx="2" fill="url(#goldGrad)"/>
+    <path d="M-8 5 L8 5 L6 10 L-6 10 Z" fill="#d97706"/>
+  </g>
+
+  <!-- Year Ribbon -->
+  <g transform="translate(160, 225)">
+    <rect x="-55" y="-14" width="110" height="26" rx="4" fill="url(#goldGrad)" stroke="#b45309" stroke-width="1.5"/>
+    <text x="0" y="5" font-family="'Segoe UI', Roboto, sans-serif" font-weight="800" font-size="14" fill="#0f3b6c" text-anchor="middle" letter-spacing="1.5">
+      ЗАСН. 1885
+    </text>
+  </g>
+</svg>
