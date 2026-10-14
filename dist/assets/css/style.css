@@ -869,6 +869,32 @@ a:hover {
   margin-bottom: 60px;
 }
 
+/* Відображення на всю ширину для сторінок без бічного меню (sidebar), наприклад /contacts/ */
+.page-container.no-sidebar,
+.page-container:not(:has(.page-sidebar)),
+.page-container:has(> .page-content:only-child) {
+  grid-template-columns: 1fr;
+}
+
+.page-container.no-sidebar .page-content,
+.page-container > .page-content:only-child {
+  grid-column: 1 / -1;
+  width: 100%;
+}
+
+.contacts-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  margin: 30px 0;
+}
+
+@media (max-width: 900px) {
+  .contacts-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 .page-sidebar {
   background: #ffffff;
   border-radius: 12px;
