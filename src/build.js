@@ -11,11 +11,72 @@ const CONTENT_DIR = path.join(ROOT_DIR, 'content');
 const PUBLIC_DIR = path.join(ROOT_DIR, 'public');
 const DIST_DIR = path.join(ROOT_DIR, 'dist');
 
-// Завантаження базових налаштувань
-const siteSettings = JSON.parse(fs.readFileSync(path.join(CONTENT_DIR, 'settings', 'site.json'), 'utf8'));
-const documentsRegistry = JSON.parse(fs.readFileSync(path.join(CONTENT_DIR, 'documents', 'registry.json'), 'utf8'));
+// Базовий шлях (для GitHub Pages без власного домену, напр. "/novopil-liceum") та адреса сайту для sitemap.
+// У CI значення передаються з actions/configure-pages; локально — порожній шлях і домен за замовчуванням.
+const BASE_PATH = (process.env.BASE_PATH || '').replace(/\/+$/, '');
+const SITE_URL = (process.env.SITE_URL || 'https://novopil-lyceum.zt.ua').replace(/\/+$/, '');
+
+// Дані налаштувань та реєстру документів (перечитуються при кожному білді — див. loadData())
+let siteSettings = {};
+let documentsRegistry = [];
+
+function loadData() {
+  siteSettings = JSON.parse(fs.readFileSync(path.join(CONTENT_DIR, 'settings', 'site.json'), 'utf8'));
+  const registryRaw = JSON.parse(fs.readFileSync(path.join(CONTENT_DIR, 'documents', 'registry.json'), 'utf8'));
+  // Підтримка обох форматів: масив (історичний) та { items: [...] } (формат Decap CMS)
+  documentsRegistry = Array.isArray(registryRaw) ? registryRaw : registryRaw.items || [];
+}
+
+// Початкове завантаження
+loadData();
+
+// Екранування значень для HTML-атрибутів
+function escapeAttr(value) {
+  return String(value == null ? '' : value)
+    .replace(/&/g, '&amp;')
+    .replace(/"/g, '&quot;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+// Додавання базового шляху до кореневих посилань (href="/...", src="/...", action="/...")
+function applyBasePath(html) {
+  if (!BASE_PATH) return html;
+  return html.replace(/(\s(?:href|src|action)=["'])\/(?!\/)/g, `$1${BASE_PATH}/`);
+}
+
+// Розбір одного скалярного значення frontmatter
+function parseScalar(raw) {
+  const val = raw.trim();
+  if (val.length >= 2 && val.startsWith('"') && val.endsWith('"')) {
+    try {
+      return JSON.parse(val);
+    } catch (e) {
+      return val.slice(1, -1);
+    }
+  }
+  if (val.length >= 2 && val.startsWith("'") && val.endsWith("'")) {
+    return val.slice(1, -1).replace(/''/g, "'");
+  }
+  if (val === 'true') return true;
+  if (val === 'false') return false;
+  if (val.startsWith('[') && val.endsWith(']')) {
+    try {
+      return JSON.parse(val.replace(/'/g, '"'));
+    } catch (e) {
+      return val
+        .slice(1, -1)
+        .split(',')
+        .map((s) => s.trim().replace(/^['"]|['"]$/g, ''))
+        .filter(Boolean);
+    }
+  }
+  return val;
+}
 
 // Парсер Frontmatter (--- key: val ---)
+// Підтримує однорядкові значення, а також підмножину YAML, яку записує Decap CMS:
+// блокові списки (key:\n  - a\n  - b) та багаторядкові рядки (key: >- / key: |).
 function parseFrontmatter(fileContent) {
   const match = fileContent.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n([\s\S]*)$/);
   if (!match) {
@@ -25,32 +86,48 @@ function parseFrontmatter(fileContent) {
   const rawMeta = match[1];
   const content = match[2];
   const data = {};
+  const lines = rawMeta.split(/\r?\n/);
 
-  rawMeta.split(/\r?\n/).forEach((line) => {
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    if (!line.trim() || line.trim().startsWith('#') || /^\s/.test(line)) continue;
+
     const colonIdx = line.indexOf(':');
-    if (colonIdx !== -1) {
-      const key = line.slice(0, colonIdx).trim();
-      let val = line.slice(colonIdx + 1).trim();
+    if (colonIdx === -1) continue;
 
-      // Очищення від лапок
-      if ((val.startsWith('"') && val.endsWith('"')) || (val.startsWith("'") && val.endsWith("'"))) {
-        val = val.slice(1, -1);
-      } else if (val === 'true') {
-        val = true;
-      } else if (val === 'false') {
-        val = false;
-      } else if (val.startsWith('[') && val.endsWith(']')) {
-        try {
-          val = JSON.parse(val.replace(/'/g, '"'));
-        } catch (e) {
-          val = val.slice(1, -1).split(',').map((s) => s.trim().replace(/^['"]|['"]$/g, ''));
-        }
+    const key = line.slice(0, colonIdx).trim();
+    const val = line.slice(colonIdx + 1).trim();
+
+    // Блоковий список або багаторядковий рядок: збираємо наступні відступлені рядки / рядки "- "
+    if (val === '' || /^[>|][+-]?$/.test(val)) {
+      const block = [];
+      while (i + 1 < lines.length && (/^\s+\S/.test(lines[i + 1]) || (val === '' && /^-\s/.test(lines[i + 1])) || lines[i + 1].trim() === '')) {
+        block.push(lines[i + 1]);
+        i++;
       }
-      data[key] = val;
+      while (block.length && !block[block.length - 1].trim()) block.pop();
+
+      if (val === '' && block.length && block.every((l) => !l.trim() || /^\s*-\s/.test(l))) {
+        data[key] = block.filter((l) => l.trim()).map((l) => parseScalar(l.replace(/^\s*-\s/, '')));
+      } else if (val.startsWith('|')) {
+        data[key] = block.map((l) => l.trim()).join('\n');
+      } else {
+        data[key] = block.map((l) => l.trim()).filter(Boolean).join(' ');
+      }
+      continue;
     }
-  });
+
+    data[key] = parseScalar(val);
+  }
 
   return { data, content };
+}
+
+// Нормалізація дати до формату YYYY-MM-DD (Decap може записувати ISO datetime)
+function normalizeDate(value) {
+  const str = String(value || '').trim();
+  const m = str.match(/^(\d{4}-\d{2}-\d{2})/);
+  return m ? m[1] : str;
 }
 
 // Повний Markdown конвертер в HTML
@@ -122,15 +199,15 @@ function markdownToHtml(md) {
     return tHtml;
   });
 
+  // Зображення ![alt](url) (обов'язково перед звичайними посиланнями!)
+  html = html.replace(/!\[([^\]]*)\]\(([^)]+)\)/gim, '<img src="$2" alt="$1" loading="lazy" />');
+
   // Посилання [text](url)
   html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/gim, (m, text, url) => {
     const isExt = url.startsWith('http://') || url.startsWith('https://');
     const target = isExt ? ' target="_blank" rel="noopener noreferrer"' : '';
     return `<a href="${url}"${target}>${text}</a>`;
   });
-
-  // Зображення ![alt](url)
-  html = html.replace(/!\[([^\]]*)\]\(([^)]+)\)/gim, '<img src="$2" alt="$1" loading="lazy" />');
 
   // Інлайн-код `code`
   html = html.replace(/`([^`]+)`/gim, '<code>$1</code>');
@@ -299,7 +376,7 @@ function generateContactsHtml() {
       <div style="background: #ffffff; padding: 25px; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 2px 8px rgba(0,0,0,0.05); display: flex; flex-direction: column;">
         <h3 style="margin-top: 0; color: #0f3b6c; font-size: 19px; margin-bottom: 12px;">Розташування та безпечний підхід</h3>
         <p style="font-size: 13.5px; color: #64748b; margin-bottom: 16px;">
-          Адреса: 12333, Житомирська обл., Житомирський р-н, с. Новопіль, вул. Миру, 12.
+          Адреса: ${siteSettings.address || 'вул. Миру, 12, с. Новопіль, Житомирський район, Житомирська область, Україна, 12333'}.
         </p>
         <div style="flex-grow: 1; min-height: 280px; border-radius: 8px; overflow: hidden; border: 1px solid #cbd5e1; position: relative;">
           <iframe 
@@ -547,7 +624,17 @@ function renderNavigationMenu(currentUrl) {
 
 // Генерація бічного меню для внутрішніх сторінок
 function renderSidebarMenu(currentSection, currentUrl) {
-  const sectionObj = navigationStructure.find((item) => item.title.includes(currentSection) || item.url === currentUrl);
+  // Зіставлення за URL або назвою розділу
+  const sectionObj = navigationStructure.find((item) => {
+    if (item.url !== '/' && currentUrl.startsWith(item.url)) return true;
+    if (item.children && item.children.some((c) => c.url === currentUrl)) return true;
+    if (currentSection && item.title.includes(currentSection)) return true;
+    if (currentSection === 'Прозорість та публічна інформація' && item.url === '/transparency/') return true;
+    if (currentSection === 'Батькам та учням' && item.url === '/parents-students/') return true;
+    if (currentSection === 'Медіацентр' && item.url === '/news/') return true;
+    return false;
+  });
+
   if (!sectionObj || !sectionObj.children) return '';
 
   let listHtml = '';
@@ -557,6 +644,9 @@ function renderSidebarMenu(currentSection, currentUrl) {
     listHtml += `<li class="${isAct ? 'active' : ''}"><a href="${sub.url}"${target}>${sub.title}</a></li>`;
   });
 
+  const phone = siteSettings.phone || '+38 (067) 184-42-88';
+  const email = siteSettings.email || 'novopol4@ukr.net';
+
   return `
     <aside class="page-sidebar">
       <h3 class="sidebar-title">${sectionObj.title}</h3>
@@ -565,8 +655,8 @@ function renderSidebarMenu(currentSection, currentUrl) {
       </ul>
       <div style="margin-top: 25px; padding-top: 20px; border-top: 1px solid #e2e8f0; font-size: 13px;">
         <p style="color: #64748b; margin-bottom: 8px;"><strong>Потрібна консультація?</strong></p>
-        <p style="color: #0f3b6c; font-weight: 700;">+38 (067) 184-42-88</p>
-        <p style="color: #64748b;">novopol4@ukr.net</p>
+        <p style="color: #0f3b6c; font-weight: 700;">${phone}</p>
+        <p style="color: #64748b;">${email}</p>
       </div>
     </aside>
   `;
@@ -617,7 +707,7 @@ function renderFullPage({ title, description, contentHtml, currentUrl, section, 
             <div style="font-size: 13.5px; color: #475569; display: flex; flex-direction: column; gap: 6px;">
               <div>📞 <strong>Телефон:</strong> ${siteSettings.phone}</div>
               <div>✉️ <strong>E-mail:</strong> ${siteSettings.email}</div>
-              <div>📍 <strong>Адреса:</strong> с. Новопіль, вул. Миру, 12</div>
+              <div>📍 <strong>Адреса:</strong> ${siteSettings.address || 'вул. Миру, 12, с. Новопіль'}</div>
             </div>
           </div>
         </div>
@@ -627,52 +717,48 @@ function renderFullPage({ title, description, contentHtml, currentUrl, section, 
     <!-- Швидкі кнопки переходу -->
     <div class="container quick-bar">
       <div class="quick-grid">
-        <a href="/parents-students/admission-1st-grade/" class="quick-card">
-          <div class="quick-icon">🎒</div>
-          <div><h3>Вступ до 1 класу</h3></div>
-        </a>
-        <a href="https://nz.ua/" target="_blank" rel="noopener noreferrer" class="quick-card">
-          <div class="quick-icon">📊</div>
-          <div><h3>Щоденник NZ.UA</h3></div>
-        </a>
-        <a href="/education/schedule/" class="quick-card">
-          <div class="quick-icon">⏰</div>
-          <div><h3>Розклад уроків</h3></div>
-        </a>
-        <a href="/safety/anti-bullying/" class="quick-card">
-          <div class="quick-icon">🛡️</div>
-          <div><h3>Протидія булінгу</h3></div>
-        </a>
-        <a href="/safety/civil-defense/" class="quick-card">
-          <div class="quick-icon">🚪</div>
-          <div><h3>Безпечне укриття</h3></div>
-        </a>
-        <a href="/transparency/" class="quick-card">
-          <div class="quick-icon">📜</div>
-          <div><h3>Прозорість (ст. 30 ЗУ)</h3></div>
-        </a>
+        ${(siteSettings.quickLinks && siteSettings.quickLinks.length ? siteSettings.quickLinks : [
+          { title: 'Вступ до 1 класу', url: '/parents-students/admission-1st-grade/', icon: '🎒' },
+          { title: 'Щоденник NZ.UA', url: 'https://nz.ua/', icon: '📊', external: true },
+          { title: 'Розклад уроків', url: '/education/schedule/', icon: '⏰' },
+          { title: 'Протидія булінгу', url: '/safety/anti-bullying/', icon: '🛡️' },
+          { title: 'Безпечне укриття', url: '/safety/civil-defense/', icon: '🚪' },
+          { title: 'Прозорість (ст. 30 ЗУ)', url: '/transparency/', icon: '📜' }
+        ]).map(ql => {
+          const iconMap = {
+            admission: '🎒',
+            journal: '📊',
+            schedule: '⏰',
+            safety: '🛡️',
+            shield: '🚪',
+            document: '📜'
+          };
+          const icon = iconMap[ql.icon] || ql.icon || '🔗';
+          const ext = ql.external ? ' target="_blank" rel="noopener noreferrer"' : '';
+          return `
+            <a href="${ql.url}"${ext} class="quick-card">
+              <div class="quick-icon">${icon}</div>
+              <div><h3>${ql.title}</h3></div>
+            </a>
+          `;
+        }).join('')}
       </div>
     </div>
 
     <!-- Ключові факти в цифрах -->
     <div class="container stats-section">
       <div class="stats-grid">
-        <div class="stat-item">
-          <div class="stat-num">165</div>
-          <div class="stat-label">Здобувачів освіти</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-num">I-III</div>
-          <div class="stat-label">Ступені навчання (1–11 кл.)</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-num">1885</div>
-          <div class="stat-label">Рік заснування першої школи</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-num">100%</div>
-          <div class="stat-label">Облаштоване укриття ДСНС</div>
-        </div>
+        ${(siteSettings.stats && siteSettings.stats.length ? siteSettings.stats : [
+          { value: String(siteSettings.studentsCount || 165), label: 'Здобувачів освіти' },
+          { value: 'I-III', label: 'Ступені навчання' },
+          { value: '1885', label: 'Рік заснування школи' },
+          { value: '100%', label: 'Облаштоване укриття ДСНС' }
+        ]).map(st => `
+          <div class="stat-item">
+            <div class="stat-num">${st.value}</div>
+            <div class="stat-label">${st.label}</div>
+          </div>
+        `).join('')}
       </div>
     </div>
   `
@@ -736,7 +822,7 @@ function renderFullPage({ title, description, contentHtml, currentUrl, section, 
     `;
   }
 
-  return `<!doctype html>
+  const rawHtml = `<!doctype html>
 <html lang="uk">
 <head>
   <meta charset="utf-8" />
@@ -795,7 +881,7 @@ function renderFullPage({ title, description, contentHtml, currentUrl, section, 
         <a href="mailto:${siteSettings.email}">
           ✉️ ${siteSettings.email}
         </a>
-        <span>📍 с. Новопіль, вул. Миру, 12</span>
+        <span>📍 ${siteSettings.address || 'с. Новопіль, вул. Миру, 12'}</span>
       </div>
       <div class="topbar-actions">
         <button id="a11yToggleBtn" class="btn-accessibility" title="Налаштування сайту для людей з порушенням зору">
@@ -858,11 +944,27 @@ function renderFullPage({ title, description, contentHtml, currentUrl, section, 
             <div class="breadcrumbs">
               <a href="/">Головна</a>
               <span>/</span>
-              <span>${section}</span>
+              ${(() => {
+                const sectionUrlMap = {
+                  'Про ліцей': '/about/',
+                  'Прозорість та публічна інформація': '/transparency/',
+                  'Освітній процес': '/education/',
+                  'Безпечне середовище': '/safety/',
+                  'Батькам та учням': '/parents-students/',
+                  'Медіацентр': '/news/',
+                  'Новини ліцею': '/news/',
+                  'Контакти': '/contacts/'
+                };
+                const sUrl = sectionUrlMap[section];
+                if (sUrl && sUrl !== currentUrl) {
+                  return `<span><a href="${sUrl}">${escapeAttr(section)}</a></span>`;
+                }
+                return `<span>${escapeAttr(section)}</span>`;
+              })()}
               <span>/</span>
-              <span>${title}</span>
+              <span>${escapeAttr(title)}</span>
             </div>
-            <h1 class="page-title">${title}</h1>
+            <h1 class="page-title">${escapeAttr(title)}</h1>
           </div>
         </div>
 
@@ -921,7 +1023,7 @@ function renderFullPage({ title, description, contentHtml, currentUrl, section, 
         <div class="footer-col">
           <h4>Контакти ліцею</h4>
           <ul class="footer-contacts">
-            <li>📍 12333, Житомирська обл., Житомирський р-н, с. Новопіль, вул. Миру, 12</li>
+            <li>📍 ${siteSettings.address || '12333, Житомирська обл., Житомирський р-н, с. Новопіль, вул. Миру, 12'}</li>
             <li>📞 <a href="tel:${siteSettings.phone.replace(/[^0-9+]/g, '')}">${siteSettings.phone}</a></li>
             <li>✉️ <a href="mailto:${siteSettings.email}">${siteSettings.email}</a></li>
             <li>👤 Директор: ${siteSettings.director}</li>
@@ -950,6 +1052,8 @@ function renderFullPage({ title, description, contentHtml, currentUrl, section, 
   <script src="/assets/js/main.js"></script>
 </body>
 </html>`;
+
+  return applyBasePath(rawHtml);
 }
 
 // Рекурсивне копіювання файлів
@@ -973,6 +1077,9 @@ function copyDirSync(src, dest) {
 // Головна функція збирання
 function buildSite() {
   console.log('🚀 Початок генерації статичного сайту Новопільського ліцею...');
+
+  // Перечитування конфігурації та реєстру документів перед кожним білдом
+  loadData();
 
   if (!fs.existsSync(DIST_DIR)) {
     fs.mkdirSync(DIST_DIR, { recursive: true });
@@ -1108,16 +1215,16 @@ function buildSite() {
   let sitemapXml = '<?xml version="1.0" encoding="UTF-8"?>\n';
   sitemapXml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
   pages.forEach((p) => {
-    sitemapXml += `  <url>\n    <loc>https://novopil-lyceum.zt.ua${p.path}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>${p.path === '/' ? '1.0' : '0.8'}</priority>\n  </url>\n`;
+    sitemapXml += `  <url>\n    <loc>${SITE_URL}${p.path}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>${p.path === '/' ? '1.0' : '0.8'}</priority>\n  </url>\n`;
   });
   newsList.forEach((n) => {
-    sitemapXml += `  <url>\n    <loc>https://novopil-lyceum.zt.ua/news/${n.slug}/</loc>\n    <changefreq>monthly</changefreq>\n    <priority>0.6</priority>\n  </url>\n`;
+    sitemapXml += `  <url>\n    <loc>${SITE_URL}/news/${n.slug}/</loc>\n    <changefreq>monthly</changefreq>\n    <priority>0.6</priority>\n  </url>\n`;
   });
   sitemapXml += '</urlset>';
   fs.writeFileSync(path.join(DIST_DIR, 'sitemap.xml'), sitemapXml, 'utf8');
 
   // 6. Генерація robots.txt
-  const robotsTxt = `User-agent: *\nAllow: /\nSitemap: https://novopil-lyceum.zt.ua/sitemap.xml\n`;
+  const robotsTxt = `User-agent: *\nAllow: /\nSitemap: ${SITE_URL}/sitemap.xml\n`;
   fs.writeFileSync(path.join(DIST_DIR, 'robots.txt'), robotsTxt, 'utf8');
 
   console.log('✅ Генерація сайту успішно завершена! Всі статичні файли розміщено в папці /dist.');

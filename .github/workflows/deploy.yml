@@ -29,11 +29,15 @@ jobs:
         with:
           node-version: 20
 
+      - name: Setup Pages
+        id: pages
+        uses: actions/configure-pages@v5
+
       - name: Build static site
         run: node src/build.js
-
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
+        env:
+          BASE_PATH: ${{ steps.pages.outputs.base_path }}
+          SITE_URL: ${{ steps.pages.outputs.base_url }}
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

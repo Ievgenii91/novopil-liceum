@@ -259,20 +259,20 @@
           const item = document.createElement('li');
           item.className = 'file-item';
           item.innerHTML = `📄 ${f.title || f.name}`;
-          item.onclick = () => openFile(f.path, f.title || f.name, f.webUrl);
+          item.onclick = () => openFile(f.path, f.title || f.name, f.webUrl, item);
           fileListEl.appendChild(item);
         });
       }
     }
 
-    async function openFile(filePath, title, webUrl) {
+    async function openFile(filePath, title, webUrl, targetEl) {
       activeFilePath = filePath;
       currentFileName.textContent = title;
       currentFilePath.textContent = filePath;
       btnPreview.href = webUrl || '/';
 
       document.querySelectorAll('.file-item').forEach(el => el.classList.remove('active'));
-      event?.currentTarget?.classList.add('active');
+      if (targetEl) targetEl.classList.add('active');
 
       try {
         const res = await fetch('/api/content/read?file=' + encodeURIComponent(filePath));
