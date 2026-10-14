@@ -330,7 +330,7 @@ function generateDocumentsRegistryHtml() {
 // Генерація форми зворотного зв'язку та карти для контактів
 function generateContactsHtml() {
   return `
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin: 30px 0;">
+    <div class="contacts-grid">
       <!-- Форма звернення -->
       <div style="background: #ffffff; padding: 25px; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
         <h3 style="margin-top: 0; color: #0f3b6c; font-size: 19px; margin-bottom: 12px;">Електронне звернення громадян</h3>
@@ -519,7 +519,7 @@ const navigationStructure = [
     url: '/',
   },
   {
-    title: '1. Про ліцей',
+    title: 'Про ліцей',
     url: '/about/',
     children: [
       { title: 'Візитівка та адміністрація', url: '/about/administration/' },
@@ -531,7 +531,7 @@ const navigationStructure = [
     ],
   },
   {
-    title: '2. Прозорість та звітність',
+    title: 'Прозорість та звітність',
     url: '/transparency/',
     badge: 'ст. 30 ЗУ',
     children: [
@@ -546,7 +546,7 @@ const navigationStructure = [
     ],
   },
   {
-    title: '3. Освітній процес',
+    title: 'Освітній процес',
     url: '/education/',
     children: [
       { title: 'Освітні програми', url: '/education/programs/' },
@@ -558,7 +558,7 @@ const navigationStructure = [
     ],
   },
   {
-    title: '4. Безпечне середовище',
+    title: 'Безпечне середовище',
     url: '/safety/',
     children: [
       { title: 'Протидія булінгу (плани, заяви)', url: '/safety/anti-bullying/' },
@@ -569,7 +569,7 @@ const navigationStructure = [
     ],
   },
   {
-    title: '5. Вступ та батькам',
+    title: 'Вступ та батькам',
     url: '/parents-students/',
     children: [
       { title: 'Прийом до 1 класу', url: '/parents-students/admission-1st-grade/' },
@@ -580,7 +580,7 @@ const navigationStructure = [
     ],
   },
   {
-    title: '6. Медіа',
+    title: 'Медіа',
     url: '/news/',
     children: [
       { title: 'Новини ліцею', url: '/news/' },
@@ -589,7 +589,7 @@ const navigationStructure = [
     ],
   },
   {
-    title: '7. Контакти',
+    title: 'Контакти',
     url: '/contacts/',
   },
 ];
@@ -968,7 +968,7 @@ function renderFullPage({ title, description, contentHtml, currentUrl, section, 
           </div>
         </div>
 
-        <div class="container page-container">
+        <div class="container page-container${sidebarHtml && sidebarHtml.trim() ? '' : ' no-sidebar'}">
           ${sidebarHtml}
           <article class="page-content">
             ${contentHtml}
