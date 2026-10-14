@@ -1,8 +1,9 @@
 backend:
-  name: git-gateway
+  name: github
+  repo: Ievgenii91/novopil-liceum
   branch: main
 
-# Local backend enables running Decap CMS locally without third-party authentication
+# Local backend allows running Decap CMS in local dev mode when needed
 local_backend: true
 
 media_folder: "public/assets/uploads"
