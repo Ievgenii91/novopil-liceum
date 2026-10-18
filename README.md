@@ -21,7 +21,7 @@
 * **Офіційний E-mail:** `novopol4@ukr.net`
 * **Кількість учнів:** 165 учнів
 * **Мова освітнього процесу:** Українська (державна)
-* **Офіційний Facebook:** [facebook.com/profile.php?id=100083173775079](https://www.facebook.com/profile.php?id=100083173775079)
+* **Офіційна Facebook-група:** [facebook.com/groups/410306759668647](https://www.facebook.com/groups/410306759668647)
 * **Електронний журнал:** [NZ.UA («Нові знання»)](https://nz.ua/)
 
 ---

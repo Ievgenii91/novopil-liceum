@@ -17,7 +17,7 @@ description: "Контактна інформація Новопільськог
 * **Керівник (директор):** Демченко Лідія Миколаївна
 * **Контактний телефон:** **+38 (067) 184-42-88**
 * **Офіційна електронна скринька:** **novopol4@ukr.net**
-* **Офіційний Facebook:** [facebook.com/profile.php?id=100083173775079](https://www.facebook.com/profile.php?id=100083173775079)
+* **Офіційна Facebook-група:** [facebook.com/groups/410306759668647](https://www.facebook.com/groups/410306759668647)
 
 ---
 

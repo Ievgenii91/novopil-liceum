@@ -585,7 +585,7 @@ const navigationStructure = [
     children: [
       { title: 'Новини ліцею', url: '/news/' },
       { title: 'Фото та відеогалерея', url: '/news/gallery/' },
-      { title: 'Facebook-сторінка', url: 'https://www.facebook.com/profile.php?id=100083173775079', external: true },
+      { title: 'Facebook-спільнота', url: 'https://www.facebook.com/groups/410306759668647', external: true },
     ],
   },
   {
