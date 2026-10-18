@@ -191,7 +191,37 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://novopil-lyceum.zt.ua/news/2026-10-01-den-vchytelya/</loc>
+    <loc>https://novopil-lyceum.zt.ua/news/2026-10-16-den-zdorovoho-kharchuvannya/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://novopil-lyceum.zt.ua/news/2026-10-06-podyaka-do-dnya-vchytelya/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://novopil-lyceum.zt.ua/news/2026-10-02-den-vchytelya-zirky-osvity/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://novopil-lyceum.zt.ua/news/2026-10-01-den-zakhysnykiv-ukrayiny/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://novopil-lyceum.zt.ua/news/2026-09-28-tyzhden-protydiyi-bulingu/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://novopil-lyceum.zt.ua/news/2026-09-22-den-myru/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://novopil-lyceum.zt.ua/news/2026-09-19-den-smaylyka/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -201,7 +231,17 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://novopil-lyceum.zt.ua/news/2026-09-14-snidanky-v-litseyi/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://novopil-lyceum.zt.ua/news/2026-09-01-pershyj-dzvinok/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://novopil-lyceum.zt.ua/news/2026-08-30-yuviley-pedagoga/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
