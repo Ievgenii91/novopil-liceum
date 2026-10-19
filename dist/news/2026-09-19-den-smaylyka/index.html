@@ -63,6 +63,23 @@
     </div>
   </div>
 
+  <!-- МОДАЛЬНЕ ВІКНО ПЕРЕГЛЯДУ ФОТО (ЛАЙТБОКС ГАЛЕРЕЇ) -->
+  <div id="imageLightboxModal" class="lightbox-modal" role="dialog" aria-modal="true" aria-label="Перегляд фотографії у повному розмірі" hidden>
+    <div class="lightbox-backdrop" data-close-lightbox></div>
+    <div class="lightbox-content">
+      <button type="button" id="lightboxCloseBtn" class="lightbox-close" aria-label="Закрити перегляд фото">✕</button>
+      <button type="button" id="lightboxPrevBtn" class="lightbox-nav lightbox-prev" aria-label="Попереднє фото">‹</button>
+      <figure class="lightbox-figure">
+        <img id="lightboxImage" src="" alt="" class="lightbox-img" />
+        <figcaption class="lightbox-footer">
+          <span id="lightboxCaption" class="lightbox-caption"></span>
+          <span id="lightboxCounter" class="lightbox-counter"></span>
+        </figcaption>
+      </figure>
+      <button type="button" id="lightboxNextBtn" class="lightbox-nav lightbox-next" aria-label="Наступне фото">›</button>
+    </div>
+  </div>
+
   <!-- TOP CONTACT BAR -->
   <div class="topbar">
     <div class="container">
@@ -179,7 +196,7 @@
         📅 <strong>Дата публікації:</strong> 2026-09-19 | ✍️ <strong>Автор:</strong> Учнівське самоврядування
       </div>
       <div class="news-article-cover">
-        <img src="/assets/images/news-2.svg" alt="День смайлика у Новопільському ліцеї: територія усмішок та гарного настрою" style="width: 100%; max-height: 420px; object-fit: cover;" />
+        <img src="/assets/images/news-2.svg" alt="День смайлика у Новопільському ліцеї: територія усмішок та гарного настрою" class="news-cover-svg" />
       </div>
       <div class="news-article-body">
         <p>19 вересня шкільна родина Новопільського ліцею яскраво та весело відзначила всесвітній День смайлика!</p>
@@ -187,6 +204,7 @@
 <p>Свято нагадало всім нам, як важливо дарувати один одному тепло, добре слово та щиру усмішку навіть у найпохмуріший день.</p>
 <p>Нехай кожен новий шкільний день починається з посмішки та маленької радості! Новопільський ліцей — це територія щирості, взаємопідтримки та незмінного гарного настрою!</p>
       </div>
+      
       <div class="news-article-footer">
         <a href="/news/" class="section-link">← Повернутися до всіх новин</a>
         <a href="https://www.facebook.com/groups/410306759668647" target="_blank" rel="noopener noreferrer" class="section-link">Обговорити на Facebook →</a>

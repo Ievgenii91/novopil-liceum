@@ -45,6 +45,12 @@ collections:
       - { label: "Дата публікації", name: "date", widget: "datetime" }
       - { label: "Короткий анонс", name: "excerpt", widget: "text" }
       - { label: "Головне зображення", name: "image", widget: "image", required: false }
+      - label: "Галерея зображень"
+        name: "gallery"
+        widget: "list"
+        required: false
+        label_singular: "Фотографія"
+        field: { label: "Зображення", name: "image", widget: "image" }
       - { label: "Автор / Джерело", name: "author", widget: "string", default: "Пресцентр Новопільського ліцею" }
       - { label: "Теги", name: "tags", widget: "list", default: ["Життя ліцею", "Події"] }
       - { label: "Текст новини", name: "body", widget: "markdown" }

@@ -42,12 +42,14 @@ excerpt: "Короткий анонс в одне-два речення для �
 author: "Пресцентр Новопільського ліцею"
 tags: ["Життя ліцею", "Події"]
 image: "/assets/images/news-1.svg"
+gallery: ["/assets/images/news/photo-1.jpg", "/assets/images/news/photo-2.jpg"]
 ---
 Текст новини абзацами…
 ```
 - Filename date must equal `date`. Slug = Latin transliteration of the topic (`den-vchytelya`, `pershyj-dzvinok`).
 - The first tag is shown as the card badge — put the most meaningful one first.
-- `image` must exist under `public/assets/` (or `public/assets/uploads/`). Defaults if omitted: image `news-1.svg`, author «Пресцентр Новопільського ліцею», tags `["Події"]`.
+- `image` must exist under `public/assets/` (or `public/assets/uploads/`). Defaults if omitted: first `gallery` photo or `news-1.svg`, author «Пресцентр Новопільського ліцею», tags `["Події"]`.
+- `gallery` (optional): inline JSON array of image URLs (or YAML block list `- /assets/...` from Decap CMS). Rendered as a responsive uncropped photo gallery with lightbox at the bottom of the news article (or at `<!-- NEWS_GALLERY -->`).
 - No children's full names or identifiable photos without consent.
 
 ### Announcement — `content/announcements/<slug>.md`

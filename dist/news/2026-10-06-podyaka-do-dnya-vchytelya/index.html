@@ -63,6 +63,23 @@
     </div>
   </div>
 
+  <!-- МОДАЛЬНЕ ВІКНО ПЕРЕГЛЯДУ ФОТО (ЛАЙТБОКС ГАЛЕРЕЇ) -->
+  <div id="imageLightboxModal" class="lightbox-modal" role="dialog" aria-modal="true" aria-label="Перегляд фотографії у повному розмірі" hidden>
+    <div class="lightbox-backdrop" data-close-lightbox></div>
+    <div class="lightbox-content">
+      <button type="button" id="lightboxCloseBtn" class="lightbox-close" aria-label="Закрити перегляд фото">✕</button>
+      <button type="button" id="lightboxPrevBtn" class="lightbox-nav lightbox-prev" aria-label="Попереднє фото">‹</button>
+      <figure class="lightbox-figure">
+        <img id="lightboxImage" src="" alt="" class="lightbox-img" />
+        <figcaption class="lightbox-footer">
+          <span id="lightboxCaption" class="lightbox-caption"></span>
+          <span id="lightboxCounter" class="lightbox-counter"></span>
+        </figcaption>
+      </figure>
+      <button type="button" id="lightboxNextBtn" class="lightbox-nav lightbox-next" aria-label="Наступне фото">›</button>
+    </div>
+  </div>
+
   <!-- TOP CONTACT BAR -->
   <div class="topbar">
     <div class="container">
@@ -179,7 +196,12 @@
         📅 <strong>Дата публікації:</strong> 2026-10-06 | ✍️ <strong>Автор:</strong> Педагогічний колектив ліцею
       </div>
       <div class="news-article-cover">
-        <img src="/assets/images/news/post-2002330900466217.jpg" alt="Щира вдячність за привітання та підтримку з нагоди Дня працівників освіти" style="width: 100%; max-height: 420px; object-fit: cover;" />
+        
+        <button type="button" class="news-cover-trigger" data-lightbox-src="/assets/images/news/post-2002330900466217.jpg" data-lightbox-alt="Щира вдячність за привітання та підтримку з нагоди Дня працівників освіти" aria-label="Переглянути головне фото у повному розмірі: Щира вдячність за привітання та підтримку з нагоди Дня працівників освіти">
+          <img src="/assets/images/news/post-2002330900466217.jpg" alt="Щира вдячність за привітання та підтримку з нагоди Дня працівників освіти" class="news-cover-img" />
+          <span class="news-cover-zoom" aria-hidden="true">🔍 Натисніть для збільшення</span>
+        </button>
+      
       </div>
       <div class="news-article-body">
         <p>Педагогічний колектив Новопільського ліцею висловлює щиру вдячність Оліївському сільському голові Анатолію Мельниченку, відділу освіти та всьому депутатському корпусу за щирі привітання, теплі слова та увагу з нагоди Дня працівників освіти!</p>
@@ -187,6 +209,7 @@
 <p>Дякуємо за постійну турботу, підтримку освітян та шанобливе ставлення до тих, хто творив і продовжує творити освітню історію нашої громади.</p>
 <p>Бажаємо Вам міцного здоров’я, добробуту, успіхів, мудрих рішень та нових досягнень на благо Оліївської територіальної громади!</p>
       </div>
+      
       <div class="news-article-footer">
         <a href="/news/" class="section-link">← Повернутися до всіх новин</a>
         <a href="https://www.facebook.com/groups/410306759668647" target="_blank" rel="noopener noreferrer" class="section-link">Обговорити на Facebook →</a>

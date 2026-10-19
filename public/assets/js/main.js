@@ -332,4 +332,107 @@ document.addEventListener('DOMContentLoaded', function () {
 
     setupCopyButton('bullyCopyBtn', () => lastBullyText);
   }
+
+  // 7. Image Lightbox Modal for News Cover, Body Images, and Photo Galleries
+  const lightboxModal = document.getElementById('imageLightboxModal');
+  const lightboxImg = document.getElementById('lightboxImage');
+  const lightboxCaption = document.getElementById('lightboxCaption');
+  const lightboxCounter = document.getElementById('lightboxCounter');
+  const lightboxCloseBtn = document.getElementById('lightboxCloseBtn');
+  const lightboxPrevBtn = document.getElementById('lightboxPrevBtn');
+  const lightboxNextBtn = document.getElementById('lightboxNextBtn');
+  const lightboxBackdrop = document.querySelector('[data-close-lightbox]');
+
+  if (lightboxModal && lightboxImg) {
+    // Збираємо всі інтерактивні фото на сторінці (головне фото, зображення в тексті новини та галерея)
+    const bodyImgs = Array.from(document.querySelectorAll('.news-article-body img')).filter(
+      (img) => !String(img.getAttribute('src') || '').toLowerCase().endsWith('.svg')
+    );
+    bodyImgs.forEach((img) => {
+      if (!img.hasAttribute('data-lightbox-src')) {
+        img.setAttribute('data-lightbox-src', img.getAttribute('src') || '');
+        img.setAttribute('data-lightbox-alt', img.getAttribute('alt') || 'Фото новини');
+      }
+    });
+
+    const triggers = Array.from(document.querySelectorAll('[data-lightbox-src]'));
+    const galleryItems = [];
+    const seenSrcs = new Set();
+
+    triggers.forEach((el) => {
+      const src = el.getAttribute('data-lightbox-src');
+      const alt = el.getAttribute('data-lightbox-alt') || '';
+      if (!src) return;
+      if (!seenSrcs.has(src)) {
+        seenSrcs.add(src);
+        galleryItems.push({ src, alt });
+      }
+      el.addEventListener('click', function (e) {
+        e.preventDefault();
+        const idx = galleryItems.findIndex((g) => g.src === src);
+        openLightbox(idx >= 0 ? idx : 0);
+      });
+    });
+
+    let currentIdx = 0;
+
+    function updateLightboxSlide() {
+      if (!galleryItems.length) return;
+      const item = galleryItems[currentIdx];
+      lightboxImg.src = item.src;
+      lightboxImg.alt = item.alt || 'Фото новини';
+      if (lightboxCaption) {
+        lightboxCaption.textContent = item.alt || '';
+      }
+      if (lightboxCounter) {
+        lightboxCounter.textContent = galleryItems.length > 1 ? `${currentIdx + 1} / ${galleryItems.length}` : '';
+      }
+      if (lightboxPrevBtn) {
+        lightboxPrevBtn.style.display = galleryItems.length > 1 ? 'flex' : 'none';
+      }
+      if (lightboxNextBtn) {
+        lightboxNextBtn.style.display = galleryItems.length > 1 ? 'flex' : 'none';
+      }
+    }
+
+    function openLightbox(idx) {
+      currentIdx = idx;
+      updateLightboxSlide();
+      lightboxModal.hidden = false;
+      if (lightboxCloseBtn) lightboxCloseBtn.focus();
+    }
+
+    function closeLightbox() {
+      lightboxModal.hidden = true;
+      lightboxImg.src = '';
+    }
+
+    function prevSlide() {
+      if (galleryItems.length <= 1) return;
+      currentIdx = (currentIdx - 1 + galleryItems.length) % galleryItems.length;
+      updateLightboxSlide();
+    }
+
+    function nextSlide() {
+      if (galleryItems.length <= 1) return;
+      currentIdx = (currentIdx + 1) % galleryItems.length;
+      updateLightboxSlide();
+    }
+
+    if (lightboxCloseBtn) lightboxCloseBtn.addEventListener('click', closeLightbox);
+    if (lightboxBackdrop) lightboxBackdrop.addEventListener('click', closeLightbox);
+    if (lightboxPrevBtn) lightboxPrevBtn.addEventListener('click', prevSlide);
+    if (lightboxNextBtn) lightboxNextBtn.addEventListener('click', nextSlide);
+
+    document.addEventListener('keydown', function (e) {
+      if (lightboxModal.hidden) return;
+      if (e.key === 'Escape') {
+        closeLightbox();
+      } else if (e.key === 'ArrowLeft') {
+        prevSlide();
+      } else if (e.key === 'ArrowRight') {
+        nextSlide();
+      }
+    });
+  }
 });

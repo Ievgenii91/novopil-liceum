@@ -14,6 +14,8 @@ const ROOT_DIR = path.resolve(__dirname, '..');
 const DIST_DIR = path.join(ROOT_DIR, 'dist');
 const CONTENT_DIR = path.join(ROOT_DIR, 'content');
 
+const PUBLIC_DIR = path.join(ROOT_DIR, 'public');
+
 const MIME_TYPES = {
   '.html': 'text/html; charset=utf-8',
   '.css': 'text/css; charset=utf-8',
@@ -23,6 +25,8 @@ const MIME_TYPES = {
   '.png': 'image/png',
   '.jpg': 'image/jpeg',
   '.jpeg': 'image/jpeg',
+  '.webp': 'image/webp',
+  '.gif': 'image/gif',
   '.ico': 'image/x-icon',
   '.xml': 'application/xml',
   '.txt': 'text/plain; charset=utf-8',
@@ -30,6 +34,20 @@ const MIME_TYPES = {
   '.yaml': 'text/yaml; charset=utf-8',
   '.pdf': 'application/pdf',
 };
+
+// Безпечна нормалізація імені завантаженого файлу
+function sanitizeUploadFileName(rawName) {
+  const ext = path.extname(String(rawName || '')).toLowerCase();
+  const allowedExts = ['.jpg', '.jpeg', '.png', '.webp', '.gif', '.svg'];
+  const safeExt = allowedExts.includes(ext) ? ext : '.jpg';
+  const base = path
+    .basename(String(rawName || 'photo'), ext)
+    .toLowerCase()
+    .replace(/[^a-z0-9_-]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .slice(0, 60) || 'photo';
+  return `${base}-${Date.now().toString(36)}${safeExt}`;
+}
 
 // Запуск первинного білду перед стартом
 buildSite();
@@ -149,6 +167,7 @@ const server = http.createServer((req, res) => {
           return res.end(JSON.stringify({ error: 'Доступ заборонено' }));
         }
 
+        fs.mkdirSync(path.dirname(fullPath), { recursive: true });
         fs.writeFileSync(fullPath, content, 'utf8');
 
         // Автоматична регенерація статичного сайту
@@ -170,6 +189,84 @@ const server = http.createServer((req, res) => {
       }
     });
     return;
+  }
+
+  // 3b. API: Завантаження одного або кількох зображень (галереї) для новин
+  if (pathname === '/api/media/upload' && req.method === 'POST') {
+    const chunks = [];
+    let totalBytes = 0;
+    const MAX_UPLOAD_BYTES = 50 * 1024 * 1024; // до 50 МБ для пакетного завантаження галереї
+
+    req.on('data', (chunk) => {
+      totalBytes += chunk.length;
+      if (totalBytes <= MAX_UPLOAD_BYTES) {
+        chunks.push(chunk);
+      }
+    });
+
+    req.on('end', () => {
+      if (totalBytes > MAX_UPLOAD_BYTES) {
+        res.writeHead(413, { 'Content-Type': 'application/json; charset=utf-8' });
+        return res.end(JSON.stringify({ error: 'Перевищено максимальний розмір завантаження (50 МБ)' }));
+      }
+
+      try {
+        const payload = JSON.parse(Buffer.concat(chunks).toString('utf8'));
+        const items = Array.isArray(payload.files)
+          ? payload.files
+          : payload.name && payload.data
+            ? [{ name: payload.name, data: payload.data }]
+            : [];
+
+        if (!items.length) {
+          res.writeHead(400, { 'Content-Type': 'application/json; charset=utf-8' });
+          return res.end(JSON.stringify({ error: 'Не передано файлів для завантаження' }));
+        }
+
+        const targetDir = path.join(PUBLIC_DIR, 'assets', 'images', 'news');
+        fs.mkdirSync(targetDir, { recursive: true });
+
+        const uploadedUrls = [];
+        items.forEach((item) => {
+          if (!item || !item.data) return;
+          const safeName = sanitizeUploadFileName(item.name);
+          const base64Data = String(item.data).replace(/^data:[^;]+;base64,/, '');
+          const buffer = Buffer.from(base64Data, 'base64');
+          const destPath = path.join(targetDir, safeName);
+          fs.writeFileSync(destPath, buffer);
+          uploadedUrls.push(`/assets/images/news/${safeName}`);
+        });
+
+        buildSite();
+
+        res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+        return res.end(JSON.stringify({ success: true, urls: uploadedUrls }));
+      } catch (err) {
+        res.writeHead(500, { 'Content-Type': 'application/json; charset=utf-8' });
+        return res.end(JSON.stringify({ error: err.message }));
+      }
+    });
+    return;
+  }
+
+  // 3c. API: Список наявних медіафайлів новин
+  if (pathname === '/api/media/list' && req.method === 'GET') {
+    const mediaDirs = [
+      { dir: path.join(PUBLIC_DIR, 'assets', 'images', 'news'), prefix: '/assets/images/news/' },
+      { dir: path.join(PUBLIC_DIR, 'assets', 'uploads'), prefix: '/assets/uploads/' },
+    ];
+    const images = [];
+    mediaDirs.forEach(({ dir, prefix }) => {
+      if (fs.existsSync(dir)) {
+        fs.readdirSync(dir).forEach((f) => {
+          if (/\.(jpg|jpeg|png|webp|gif|svg)$/i.test(f)) {
+            images.push(prefix + f);
+          }
+        });
+      }
+    });
+    res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+    return res.end(JSON.stringify({ images }));
   }
 
   // 4. Статичні файли сайту з /dist

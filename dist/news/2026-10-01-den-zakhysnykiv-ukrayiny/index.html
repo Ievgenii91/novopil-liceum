@@ -63,6 +63,23 @@
     </div>
   </div>
 
+  <!-- МОДАЛЬНЕ ВІКНО ПЕРЕГЛЯДУ ФОТО (ЛАЙТБОКС ГАЛЕРЕЇ) -->
+  <div id="imageLightboxModal" class="lightbox-modal" role="dialog" aria-modal="true" aria-label="Перегляд фотографії у повному розмірі" hidden>
+    <div class="lightbox-backdrop" data-close-lightbox></div>
+    <div class="lightbox-content">
+      <button type="button" id="lightboxCloseBtn" class="lightbox-close" aria-label="Закрити перегляд фото">✕</button>
+      <button type="button" id="lightboxPrevBtn" class="lightbox-nav lightbox-prev" aria-label="Попереднє фото">‹</button>
+      <figure class="lightbox-figure">
+        <img id="lightboxImage" src="" alt="" class="lightbox-img" />
+        <figcaption class="lightbox-footer">
+          <span id="lightboxCaption" class="lightbox-caption"></span>
+          <span id="lightboxCounter" class="lightbox-counter"></span>
+        </figcaption>
+      </figure>
+      <button type="button" id="lightboxNextBtn" class="lightbox-nav lightbox-next" aria-label="Наступне фото">›</button>
+    </div>
+  </div>
+
   <!-- TOP CONTACT BAR -->
   <div class="topbar">
     <div class="container">
@@ -179,7 +196,12 @@
         📅 <strong>Дата публікації:</strong> 2026-10-01 | ✍️ <strong>Автор:</strong> Пресцентр Новопільського ліцею
       </div>
       <div class="news-article-cover">
-        <img src="/assets/images/news/post-1997852370914070.jpg" alt="Дякуємо захисникам і захисницям України: патріотичний захід у Новопільському ліцеї" style="width: 100%; max-height: 420px; object-fit: cover;" />
+        
+        <button type="button" class="news-cover-trigger" data-lightbox-src="/assets/images/news/post-1997852370914070.jpg" data-lightbox-alt="Дякуємо захисникам і захисницям України: патріотичний захід у Новопільському ліцеї" aria-label="Переглянути головне фото у повному розмірі: Дякуємо захисникам і захисницям України: патріотичний захід у Новопільському ліцеї">
+          <img src="/assets/images/news/post-1997852370914070.jpg" alt="Дякуємо захисникам і захисницям України: патріотичний захід у Новопільському ліцеї" class="news-cover-img" />
+          <span class="news-cover-zoom" aria-hidden="true">🔍 Натисніть для збільшення</span>
+        </button>
+      
       </div>
       <div class="news-article-body">
         <p>1 жовтня у Новопільському ліцеї відбувся особливий патріотичний захід, сповнений щирої вдячності, глибокої поваги та дитячих емоцій — День захисників і захисниць України.</p>
@@ -188,6 +210,7 @@
 <p>Дякуємо за мужність! Дякуємо за силу та незламність! Дякуємо за можливість навчатися, жити й мріяти під українським небом!</p>
 <p>Слава Україні! Героям слава!</p>
       </div>
+      
       <div class="news-article-footer">
         <a href="/news/" class="section-link">← Повернутися до всіх новин</a>
         <a href="https://www.facebook.com/groups/410306759668647" target="_blank" rel="noopener noreferrer" class="section-link">Обговорити на Facebook →</a>

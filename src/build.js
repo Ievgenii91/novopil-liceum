@@ -39,10 +39,10 @@ function escapeAttr(value) {
     .replace(/>/g, '&gt;');
 }
 
-// Додавання базового шляху до кореневих посилань (href="/...", src="/...", action="/...")
+// Додавання базового шляху до кореневих посилань (href="/...", src="/...", action="/...", data-lightbox-src="/...")
 function applyBasePath(html) {
   if (!BASE_PATH) return html;
-  return html.replace(/(\s(?:href|src|action)=["'])\/(?!\/)/g, `$1${BASE_PATH}/`);
+  return html.replace(/(\s(?:href|src|action|data-lightbox-src)=["'])\/(?!\/)/g, `$1${BASE_PATH}/`);
 }
 
 // Розбір одного скалярного значення frontmatter
@@ -76,7 +76,7 @@ function parseScalar(raw) {
 
 // Парсер Frontmatter (--- key: val ---)
 // Підтримує однорядкові значення, а також підмножину YAML, яку записує Decap CMS:
-// блокові списки (key:\n  - a\n  - b) та багаторядкові рядки (key: >- / key: |).
+// блокові списки (key:\n  - a\n  - b або списки об'єктів) та багаторядкові рядки (key: >- / key: |).
 function parseFrontmatter(fileContent) {
   const match = fileContent.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n([\s\S]*)$/);
   if (!match) {
@@ -107,8 +107,30 @@ function parseFrontmatter(fileContent) {
       }
       while (block.length && !block[block.length - 1].trim()) block.pop();
 
-      if (val === '' && block.length && block.every((l) => !l.trim() || /^\s*-\s/.test(l))) {
-        data[key] = block.filter((l) => l.trim()).map((l) => parseScalar(l.replace(/^\s*-\s/, '')));
+      if (val === '' && block.length && block.some((l) => /^\s*-\s/.test(l))) {
+        const listItems = [];
+        let currentObj = null;
+        block.forEach((bLine) => {
+          const trimmed = bLine.trim();
+          if (!trimmed) return;
+          if (/^\s*-\s/.test(bLine)) {
+            const itemRaw = bLine.replace(/^\s*-\s/, '').trim();
+            const kvMatch = itemRaw.match(/^([a-zA-Z0-9_-]+):\s*(.*)$/);
+            if (kvMatch && !itemRaw.startsWith('http://') && !itemRaw.startsWith('https://')) {
+              currentObj = { [kvMatch[1]]: parseScalar(kvMatch[2]) };
+              listItems.push(currentObj);
+            } else {
+              currentObj = null;
+              listItems.push(parseScalar(itemRaw));
+            }
+          } else if (currentObj) {
+            const subKv = trimmed.match(/^([a-zA-Z0-9_-]+):\s*(.*)$/);
+            if (subKv) {
+              currentObj[subKv[1]] = parseScalar(subKv[2]);
+            }
+          }
+        });
+        data[key] = listItems;
       } else if (val.startsWith('|')) {
         data[key] = block.map((l) => l.trim()).join('\n');
       } else {
@@ -141,6 +163,7 @@ function markdownToHtml(md) {
     // Зберігаємо наші спеціальні плейсхолдери
     if (match.includes('DOCUMENTS_REGISTRY_TABLE') || 
         match.includes('NEWS_GRID') || 
+        match.includes('NEWS_GALLERY') || 
         match.includes('BULLYING_REPORT_FORM') || 
         match.includes('CONTACT_FORM_AND_MAP')) {
       return match;
@@ -509,6 +532,102 @@ function generateBullyingFormHtml() {
   `;
 }
 
+// Нормалізація галереї зображень новини (підтримка масиву рядків або масиву об'єктів { image, src, url, alt, caption })
+function normalizeGallery(rawGallery, fallbackTitle) {
+  if (!rawGallery) return [];
+  const arr = Array.isArray(rawGallery) ? rawGallery : [rawGallery];
+  const result = [];
+
+  arr.forEach((item, idx) => {
+    if (!item) return;
+    if (typeof item === 'string') {
+      const cleaned = item.replace(/^(?:image|src|url):\s*/i, '').trim().replace(/^['"]|['"]$/g, '');
+      if (cleaned) {
+        result.push({
+          src: cleaned,
+          alt: `${fallbackTitle} — фото ${idx + 1}`,
+          caption: '',
+        });
+      }
+    } else if (typeof item === 'object') {
+      const src = String(item.image || item.src || item.url || '').trim();
+      if (src) {
+        result.push({
+          src,
+          alt: String(item.alt || item.caption || `${fallbackTitle} — фото ${idx + 1}`).trim(),
+          caption: String(item.caption || '').trim(),
+        });
+      }
+    }
+  });
+
+  return result;
+}
+
+// Генерація картки новини для головної сторінки та стрічки новин
+function renderNewsCard(n) {
+  const isSvg = String(n.image || '').toLowerCase().endsWith('.svg');
+  const imgClass = isSvg ? ' class="news-card-svg"' : '';
+  const extraPhotosCount = Array.isArray(n.gallery) ? n.gallery.filter((g) => g.src !== n.image).length : 0;
+  const totalPhotos = extraPhotosCount > 0 ? extraPhotosCount + (isSvg ? 0 : 1) : 0;
+  const galleryBadge = totalPhotos > 1
+    ? `<span class="news-gallery-badge" title="У публікації є фотогалерея (${totalPhotos} фото)">📷 ${totalPhotos} фото</span>`
+    : extraPhotosCount === 1
+      ? `<span class="news-gallery-badge" title="У публікації є додаткові фото">📷 Фотогалерея</span>`
+      : '';
+
+  return `
+    <article class="news-card">
+      <a href="/news/${escapeAttr(n.slug)}/" class="news-img" aria-label="${escapeAttr(n.title)}">
+        <img src="${escapeAttr(n.image)}" alt="${escapeAttr(n.title)}"${imgClass} loading="lazy" />
+        <span class="news-tag">${escapeAttr(n.tags[0] || 'Подія')}</span>
+        ${galleryBadge}
+      </a>
+      <div class="news-body">
+        <div class="news-date">📅 ${escapeAttr(n.date)} • ${escapeAttr(n.author)}</div>
+        <h3 class="news-title"><a href="/news/${escapeAttr(n.slug)}/">${escapeAttr(n.title)}</a></h3>
+        <p class="news-desc">${escapeAttr(n.excerpt)}</p>
+        <a href="/news/${escapeAttr(n.slug)}/" class="section-link" style="margin-top: auto;">
+          Читати повністю →
+        </a>
+      </div>
+    </article>
+  `;
+}
+
+// Генерація блоку фотогалереї для сторінки новини
+function generateNewsGalleryHtml(news) {
+  const gallery = Array.isArray(news.gallery) ? news.gallery : [];
+  if (!gallery.length) return '';
+
+  const itemsHtml = gallery
+    .map((item, idx) => {
+      const altText = item.alt || `${news.title} — фото ${idx + 1}`;
+      return `
+        <figure class="news-gallery-item">
+          <button type="button" class="news-gallery-trigger" data-lightbox-src="${escapeAttr(item.src)}" data-lightbox-alt="${escapeAttr(altText)}" aria-label="Збільшити фото ${idx + 1}: ${escapeAttr(altText)}">
+            <img src="${escapeAttr(item.src)}" alt="${escapeAttr(altText)}" loading="lazy" />
+            <span class="news-gallery-zoom" aria-hidden="true">🔍</span>
+          </button>
+          ${item.caption ? `<figcaption class="news-gallery-caption">${escapeAttr(item.caption)}</figcaption>` : ''}
+        </figure>
+      `;
+    })
+    .join('');
+
+  return `
+    <section class="news-gallery-section" aria-label="Фотогалерея новини">
+      <div class="news-gallery-header">
+        <h3 class="news-gallery-title">📸 Фотогалерея події <span class="news-gallery-count">(${gallery.length})</span></h3>
+        <span class="news-gallery-hint">Натисніть на фото для перегляду у повному розмірі</span>
+      </div>
+      <div class="news-gallery-grid">
+        ${itemsHtml}
+      </div>
+    </section>
+  `;
+}
+
 // Завантаження всіх новин
 function getNewsList() {
   const newsDir = path.join(CONTENT_DIR, 'news');
@@ -519,15 +638,19 @@ function getNewsList() {
     const raw = fs.readFileSync(path.join(newsDir, file), 'utf8');
     const { data, content } = parseFrontmatter(raw);
     const slug = file.replace(/\.md$/, '');
+    const title = data.title || 'Новина ліцею';
     const tags = Array.isArray(data.tags) ? data.tags : data.tags ? [String(data.tags)] : ['Події'];
+    const gallery = normalizeGallery(data.gallery || data.images, title);
+    const primaryImage = data.image || (gallery.length ? gallery[0].src : '/assets/images/news-1.svg');
     return {
       slug,
-      title: data.title || 'Новина ліцею',
+      title,
       date: normalizeDate(data.date),
       excerpt: data.excerpt || '',
       author: data.author || 'Пресцентр Новопільського ліцею',
       tags,
-      image: data.image || '/assets/images/news-1.svg',
+      image: primaryImage,
+      gallery,
       content,
     };
   });
@@ -850,25 +973,7 @@ function renderFullPage({ title, description, contentHtml, currentUrl, section, 
   const newsList = isHomepage ? getNewsList().slice(0, 3) : [];
   let homeNewsHtml = '';
   if (isHomepage && newsList.length > 0) {
-    let cards = '';
-    newsList.forEach((n) => {
-      cards += `
-        <article class="news-card">
-          <div class="news-img">
-            <img src="${escapeAttr(n.image)}" alt="${escapeAttr(n.title)}" loading="lazy" />
-            <span class="news-tag">${escapeAttr(n.tags[0] || 'Подія')}</span>
-          </div>
-          <div class="news-body">
-            <div class="news-date">📅 ${escapeAttr(n.date)} • ${escapeAttr(n.author)}</div>
-            <h3 class="news-title">${escapeAttr(n.title)}</h3>
-            <p class="news-desc">${escapeAttr(n.excerpt)}</p>
-            <a href="/news/${escapeAttr(n.slug)}/" class="section-link" style="margin-top: auto;">
-              Читати повністю →
-            </a>
-          </div>
-        </article>
-      `;
-    });
+    const cards = newsList.map((n) => renderNewsCard(n)).join('');
 
     homeNewsHtml = `
       <section style="padding: 20px 0 50px;">
@@ -952,6 +1057,23 @@ function renderFullPage({ title, description, contentHtml, currentUrl, section, 
       <div id="siteSearchResults" class="search-modal-results" role="region" aria-live="polite">
         <p class="search-modal-hint">Введіть ключове слово (наприклад: «1 клас», «розклад», «булінг», «статут», «харчування»)</p>
       </div>
+    </div>
+  </div>
+
+  <!-- МОДАЛЬНЕ ВІКНО ПЕРЕГЛЯДУ ФОТО (ЛАЙТБОКС ГАЛЕРЕЇ) -->
+  <div id="imageLightboxModal" class="lightbox-modal" role="dialog" aria-modal="true" aria-label="Перегляд фотографії у повному розмірі" hidden>
+    <div class="lightbox-backdrop" data-close-lightbox></div>
+    <div class="lightbox-content">
+      <button type="button" id="lightboxCloseBtn" class="lightbox-close" aria-label="Закрити перегляд фото">✕</button>
+      <button type="button" id="lightboxPrevBtn" class="lightbox-nav lightbox-prev" aria-label="Попереднє фото">‹</button>
+      <figure class="lightbox-figure">
+        <img id="lightboxImage" src="" alt="" class="lightbox-img" />
+        <figcaption class="lightbox-footer">
+          <span id="lightboxCaption" class="lightbox-caption"></span>
+          <span id="lightboxCounter" class="lightbox-counter"></span>
+        </figcaption>
+      </figure>
+      <button type="button" id="lightboxNextBtn" class="lightbox-nav lightbox-next" aria-label="Наступне фото">›</button>
     </div>
   </div>
 
@@ -1239,25 +1361,7 @@ function buildSite() {
     }
     if (parsedBody.includes('<!-- NEWS_GRID -->')) {
       const allNews = getNewsList();
-      let cards = '';
-      allNews.forEach((n) => {
-        cards += `
-          <article class="news-card">
-            <div class="news-img">
-              <img src="${escapeAttr(n.image)}" alt="${escapeAttr(n.title)}" loading="lazy" />
-              <span class="news-tag">${escapeAttr(n.tags[0] || 'Подія')}</span>
-            </div>
-            <div class="news-body">
-              <div class="news-date">📅 ${escapeAttr(n.date)} • ${escapeAttr(n.author)}</div>
-              <h3 class="news-title">${escapeAttr(n.title)}</h3>
-              <p class="news-desc">${escapeAttr(n.excerpt)}</p>
-              <a href="/news/${escapeAttr(n.slug)}/" class="section-link" style="margin-top: auto;">
-                Читати повністю →
-              </a>
-            </div>
-          </article>
-        `;
-      });
+      const cards = allNews.map((n) => renderNewsCard(n)).join('');
       parsedBody = parsedBody.replace('<!-- NEWS_GRID -->', `<div class="cards-grid">${cards}</div>`);
     }
 
@@ -1304,16 +1408,36 @@ function buildSite() {
   console.log(`📰 Генерація ${newsList.length} публікацій новин...`);
 
   newsList.forEach((news) => {
+    const isSvgCover = String(news.image || '').toLowerCase().endsWith('.svg');
+    const coverImgHtml = isSvgCover
+      ? `<img src="${escapeAttr(news.image)}" alt="${escapeAttr(news.title)}" class="news-cover-svg" />`
+      : `
+        <button type="button" class="news-cover-trigger" data-lightbox-src="${escapeAttr(news.image)}" data-lightbox-alt="${escapeAttr(news.title)}" aria-label="Переглянути головне фото у повному розмірі: ${escapeAttr(news.title)}">
+          <img src="${escapeAttr(news.image)}" alt="${escapeAttr(news.title)}" class="news-cover-img" />
+          <span class="news-cover-zoom" aria-hidden="true">🔍 Натисніть для збільшення</span>
+        </button>
+      `;
+
+    let bodyHtml = markdownToHtml(news.content);
+    const galleryHtml = generateNewsGalleryHtml(news);
+    let bottomGalleryHtml = '';
+    if (bodyHtml.includes('<!-- NEWS_GALLERY -->')) {
+      bodyHtml = bodyHtml.replace('<!-- NEWS_GALLERY -->', galleryHtml);
+    } else {
+      bottomGalleryHtml = galleryHtml;
+    }
+
     const newsContentHtml = `
       <div class="news-article-meta">
         📅 <strong>Дата публікації:</strong> ${escapeAttr(news.date)} | ✍️ <strong>Автор:</strong> ${escapeAttr(news.author)}
       </div>
       <div class="news-article-cover">
-        <img src="${escapeAttr(news.image)}" alt="${escapeAttr(news.title)}" style="width: 100%; max-height: 420px; object-fit: cover;" />
+        ${coverImgHtml}
       </div>
       <div class="news-article-body">
-        ${markdownToHtml(news.content)}
+        ${bodyHtml}
       </div>
+      ${bottomGalleryHtml}
       <div class="news-article-footer">
         <a href="/news/" class="section-link">← Повернутися до всіх новин</a>
         <a href="${escapeAttr(siteSettings.facebookUrl)}" target="_blank" rel="noopener noreferrer" class="section-link">Обговорити на Facebook →</a>

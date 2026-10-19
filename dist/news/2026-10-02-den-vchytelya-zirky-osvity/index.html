@@ -63,6 +63,23 @@
     </div>
   </div>
 
+  <!-- МОДАЛЬНЕ ВІКНО ПЕРЕГЛЯДУ ФОТО (ЛАЙТБОКС ГАЛЕРЕЇ) -->
+  <div id="imageLightboxModal" class="lightbox-modal" role="dialog" aria-modal="true" aria-label="Перегляд фотографії у повному розмірі" hidden>
+    <div class="lightbox-backdrop" data-close-lightbox></div>
+    <div class="lightbox-content">
+      <button type="button" id="lightboxCloseBtn" class="lightbox-close" aria-label="Закрити перегляд фото">✕</button>
+      <button type="button" id="lightboxPrevBtn" class="lightbox-nav lightbox-prev" aria-label="Попереднє фото">‹</button>
+      <figure class="lightbox-figure">
+        <img id="lightboxImage" src="" alt="" class="lightbox-img" />
+        <figcaption class="lightbox-footer">
+          <span id="lightboxCaption" class="lightbox-caption"></span>
+          <span id="lightboxCounter" class="lightbox-counter"></span>
+        </figcaption>
+      </figure>
+      <button type="button" id="lightboxNextBtn" class="lightbox-nav lightbox-next" aria-label="Наступне фото">›</button>
+    </div>
+  </div>
+
   <!-- TOP CONTACT BAR -->
   <div class="topbar">
     <div class="container">
@@ -179,7 +196,7 @@
         📅 <strong>Дата публікації:</strong> 2026-10-02 | ✍️ <strong>Автор:</strong> Учнівське самоврядування
       </div>
       <div class="news-article-cover">
-        <img src="/assets/images/news-3.svg" alt="День учителя у Новопільському ліцеї: церемонія «Зірки освіти України» та зміна ролей" style="width: 100%; max-height: 420px; object-fit: cover;" />
+        <img src="/assets/images/news-3.svg" alt="День учителя у Новопільському ліцеї: церемонія «Зірки освіти України» та зміна ролей" class="news-cover-svg" />
       </div>
       <div class="news-article-body">
         <p>2 жовтня у Новопільському ліцеї відбулося особливе свято — День учителя, яке цього року перетворилося на яскраву церемонію нагородження та захопливий день учнівського самоврядування!</p>
@@ -188,6 +205,7 @@
 <p>Окрім урочистої частини, у ліцеї відбулася справжня зміна ролей! Вчителі мали нагоду відпочити, а старшокласники спробували себе в ролі вчителів та адміністрації. Шкільні коридори наповнилися новими емоціями, цікавими інтерактивними уроками, хвилюванням та радісними посмішками. Учні відчули, наскільки відповідальна, важлива й творча професія педагога, а вчителі побачили освітній процес очима своїх учнів.</p>
 <p>Щиро дякуємо нашим педагогам за мудрість, терпіння, турботу та щоденну працю!</p>
       </div>
+      
       <div class="news-article-footer">
         <a href="/news/" class="section-link">← Повернутися до всіх новин</a>
         <a href="https://www.facebook.com/groups/410306759668647" target="_blank" rel="noopener noreferrer" class="section-link">Обговорити на Facebook →</a>

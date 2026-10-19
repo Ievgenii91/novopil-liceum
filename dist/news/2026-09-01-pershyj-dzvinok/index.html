@@ -63,6 +63,23 @@
     </div>
   </div>
 
+  <!-- МОДАЛЬНЕ ВІКНО ПЕРЕГЛЯДУ ФОТО (ЛАЙТБОКС ГАЛЕРЕЇ) -->
+  <div id="imageLightboxModal" class="lightbox-modal" role="dialog" aria-modal="true" aria-label="Перегляд фотографії у повному розмірі" hidden>
+    <div class="lightbox-backdrop" data-close-lightbox></div>
+    <div class="lightbox-content">
+      <button type="button" id="lightboxCloseBtn" class="lightbox-close" aria-label="Закрити перегляд фото">✕</button>
+      <button type="button" id="lightboxPrevBtn" class="lightbox-nav lightbox-prev" aria-label="Попереднє фото">‹</button>
+      <figure class="lightbox-figure">
+        <img id="lightboxImage" src="" alt="" class="lightbox-img" />
+        <figcaption class="lightbox-footer">
+          <span id="lightboxCaption" class="lightbox-caption"></span>
+          <span id="lightboxCounter" class="lightbox-counter"></span>
+        </figcaption>
+      </figure>
+      <button type="button" id="lightboxNextBtn" class="lightbox-nav lightbox-next" aria-label="Наступне фото">›</button>
+    </div>
+  </div>
+
   <!-- TOP CONTACT BAR -->
   <div class="topbar">
     <div class="container">
@@ -179,7 +196,12 @@
         📅 <strong>Дата публікації:</strong> 2026-09-01 | ✍️ <strong>Автор:</strong> Пресцентр Новопільського ліцею
       </div>
       <div class="news-article-cover">
-        <img src="/assets/images/news/post-1972674713431836.jpg" alt="Свято Першого дзвоника та День знань у Новопільському ліцеї" style="width: 100%; max-height: 420px; object-fit: cover;" />
+        
+        <button type="button" class="news-cover-trigger" data-lightbox-src="/assets/images/news/post-1972674713431836.jpg" data-lightbox-alt="Свято Першого дзвоника та День знань у Новопільському ліцеї" aria-label="Переглянути головне фото у повному розмірі: Свято Першого дзвоника та День знань у Новопільському ліцеї">
+          <img src="/assets/images/news/post-1972674713431836.jpg" alt="Свято Першого дзвоника та День знань у Новопільському ліцеї" class="news-cover-img" />
+          <span class="news-cover-zoom" aria-hidden="true">🔍 Натисніть для збільшення</span>
+        </button>
+      
       </div>
       <div class="news-article-body">
         <p>1 вересня — особливий день, сповнений щирих усмішок, хвилювання, радості зустрічей та нових очікувань. Саме сьогодні Новопільський ліцей знову наповнився дитячим сміхом, теплими обіймами та передчуттям дивовижних відкриттів!</p>
@@ -189,6 +211,33 @@
 <p>Після урочистостей у класах пройшли перші тематичні уроки. Зокрема, у 3 класі відбувся зворушливий урок «Мова гідності», присвячений усвідомленню власної цінності, повазі до себе, ближніх і рідної Батьківщини.</p>
 <p>Нехай цей навчальний рік стане для кожного роком нових можливостей, безпеки та спільних перемог!</p>
       </div>
+      
+    <section class="news-gallery-section" aria-label="Фотогалерея новини">
+      <div class="news-gallery-header">
+        <h3 class="news-gallery-title">📸 Фотогалерея події <span class="news-gallery-count">(2)</span></h3>
+        <span class="news-gallery-hint">Натисніть на фото для перегляду у повному розмірі</span>
+      </div>
+      <div class="news-gallery-grid">
+        
+        <figure class="news-gallery-item">
+          <button type="button" class="news-gallery-trigger" data-lightbox-src="/assets/images/news/post-1906246573407984.jpg" data-lightbox-alt="Свято Першого дзвоника та День знань у Новопільському ліцеї — фото 1" aria-label="Збільшити фото 1: Свято Першого дзвоника та День знань у Новопільському ліцеї — фото 1">
+            <img src="/assets/images/news/post-1906246573407984.jpg" alt="Свято Першого дзвоника та День знань у Новопільському ліцеї — фото 1" loading="lazy" />
+            <span class="news-gallery-zoom" aria-hidden="true">🔍</span>
+          </button>
+          
+        </figure>
+      
+        <figure class="news-gallery-item">
+          <button type="button" class="news-gallery-trigger" data-lightbox-src="/assets/images/news/post-1972475870118387.jpg" data-lightbox-alt="Свято Першого дзвоника та День знань у Новопільському ліцеї — фото 2" aria-label="Збільшити фото 2: Свято Першого дзвоника та День знань у Новопільському ліцеї — фото 2">
+            <img src="/assets/images/news/post-1972475870118387.jpg" alt="Свято Першого дзвоника та День знань у Новопільському ліцеї — фото 2" loading="lazy" />
+            <span class="news-gallery-zoom" aria-hidden="true">🔍</span>
+          </button>
+          
+        </figure>
+      
+      </div>
+    </section>
+  
       <div class="news-article-footer">
         <a href="/news/" class="section-link">← Повернутися до всіх новин</a>
         <a href="https://www.facebook.com/groups/410306759668647" target="_blank" rel="noopener noreferrer" class="section-link">Обговорити на Facebook →</a>

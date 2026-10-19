@@ -167,7 +167,11 @@ html.theme-bw .doc-filter-select,
 html.theme-bw .form-alert-success,
 html.theme-bw .map-landmark-note,
 html.theme-bw .doc-category-pill,
-html.theme-bw .format-badge {
+html.theme-bw .format-badge,
+html.theme-bw .news-article-cover,
+html.theme-bw .news-gallery-item,
+html.theme-bw .news-gallery-trigger,
+html.theme-bw .news-gallery-caption {
   background: #ffffff !important;
   color: #000000 !important;
   border: 2px solid #000000 !important;
@@ -250,7 +254,11 @@ html.theme-wb .doc-filter-select,
 html.theme-wb .form-alert-success,
 html.theme-wb .map-landmark-note,
 html.theme-wb .doc-category-pill,
-html.theme-wb .format-badge {
+html.theme-wb .format-badge,
+html.theme-wb .news-article-cover,
+html.theme-wb .news-gallery-item,
+html.theme-wb .news-gallery-trigger,
+html.theme-wb .news-gallery-caption {
   background: #000000 !important;
   color: #ffffff !important;
   border: 2px solid #ffffff !important;
@@ -329,7 +337,11 @@ html.theme-by .doc-filter-select,
 html.theme-by .form-alert-success,
 html.theme-by .map-landmark-note,
 html.theme-by .doc-category-pill,
-html.theme-by .format-badge {
+html.theme-by .format-badge,
+html.theme-by .news-article-cover,
+html.theme-by .news-gallery-item,
+html.theme-by .news-gallery-trigger,
+html.theme-by .news-gallery-caption {
   background: #ffffbb !important;
   color: #002244 !important;
   border: 2px solid #002244 !important;

@@ -117,12 +117,14 @@
     }
     .editor-actions {
       display: flex;
-      gap: 10px;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
     }
     .btn {
-      padding: 8px 16px;
+      padding: 8px 14px;
       border-radius: 6px;
-      font-size: 14px;
+      font-size: 13.5px;
       font-weight: 600;
       cursor: pointer;
       border: none;
@@ -136,6 +138,12 @@
       color: #fff;
     }
     .btn-save:hover { background: #059669; }
+    .btn-upload {
+      background: #fef3c7;
+      color: #92400e;
+      border: 1px solid #fcd34d;
+    }
+    .btn-upload:hover { background: #fde68a; }
     .btn-view {
       background: #eff6ff;
       color: var(--primary);
@@ -179,6 +187,74 @@
       margin-bottom: 8px;
     }
     .preview-pane p { margin-bottom: 12px; }
+    .preview-media-box {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 14px;
+      margin-bottom: 18px;
+    }
+    .preview-media-label {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: #475569;
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .preview-cover-img {
+      max-width: 100%;
+      max-height: 320px;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+      display: block;
+      margin: 0 auto;
+      border-radius: 8px;
+    }
+    .preview-gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 10px;
+      margin-top: 8px;
+    }
+    .preview-gallery-card {
+      background: #fff;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 6px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+    .preview-gallery-card img {
+      width: 100%;
+      height: 100px;
+      object-fit: contain;
+      background: #f1f5f9;
+      border-radius: 4px;
+    }
+    .preview-gallery-actions {
+      display: flex;
+      gap: 4px;
+      width: 100%;
+      justify-content: space-between;
+    }
+    .btn-mini {
+      font-size: 11px;
+      padding: 3px 6px;
+      border-radius: 4px;
+      border: 1px solid #cbd5e1;
+      background: #f8fafc;
+      cursor: pointer;
+      color: #334155;
+    }
+    .btn-mini:hover { background: #e2e8f0; }
+    .btn-mini-danger { color: #b91c1c; border-color: #fecaca; background: #fef2f2; }
+    .btn-mini-danger:hover { background: #fee2e2; }
     .status-msg {
       font-size: 13px;
       color: #059669;
@@ -210,6 +286,10 @@
       </div>
       <div class="editor-actions">
         <span id="statusMsg" class="status-msg">✓ Збережено та перезібрано!</span>
+        <input type="file" id="coverUploadInput" accept="image/*" hidden />
+        <input type="file" id="galleryUploadInput" accept="image/*" multiple hidden />
+        <button type="button" id="btnUploadCover" class="btn btn-upload" style="display: none;" title="Завантажити головне фото новини без обрізання">🖼️ Головне фото</button>
+        <button type="button" id="btnUploadGallery" class="btn btn-upload" style="display: none;" title="Вибрати одне або кілька фото для галереї новини">📸 Завантажити галерею</button>
         <button id="btnSave" class="btn btn-save">💾 Зберегти зміни</button>
         <a id="btnPreview" href="/" target="_blank" class="btn btn-view">👁️ Відкрити на сайті</a>
       </div>
@@ -235,6 +315,10 @@
     const currentFilePath = document.getElementById('currentFilePath');
     const btnSave = document.getElementById('btnSave');
     const btnPreview = document.getElementById('btnPreview');
+    const btnUploadCover = document.getElementById('btnUploadCover');
+    const btnUploadGallery = document.getElementById('btnUploadGallery');
+    const coverUploadInput = document.getElementById('coverUploadInput');
+    const galleryUploadInput = document.getElementById('galleryUploadInput');
     const statusMsg = document.getElementById('statusMsg');
 
     async function loadFiles() {
@@ -271,6 +355,11 @@
       currentFilePath.textContent = filePath;
       btnPreview.href = webUrl || '/';
 
+      const isMarkdown = filePath.endsWith('.md');
+      const isNews = filePath.startsWith('news/');
+      btnUploadCover.style.display = isNews ? 'inline-flex' : 'none';
+      btnUploadGallery.style.display = isMarkdown ? 'inline-flex' : 'none';
+
       document.querySelectorAll('.file-item').forEach(el => el.classList.remove('active'));
       if (targetEl) targetEl.classList.add('active');
 
@@ -284,9 +373,118 @@
       }
     }
 
+    function parseEditorGallery(frontmatter) {
+      if (!frontmatter) return [];
+      const inlineMatch = frontmatter.match(/^gallery:\s*(\[[^\r\n]*\])/m);
+      if (inlineMatch) {
+        try {
+          return JSON.parse(inlineMatch[1].replace(/'/g, '"'));
+        } catch (e) {
+          return inlineMatch[1]
+            .slice(1, -1)
+            .split(',')
+            .map(s => s.trim().replace(/^['"]|['"]$/g, ''))
+            .filter(Boolean);
+        }
+      }
+      const blockMatch = frontmatter.match(/^gallery:\s*\r?\n((?:^\s*-\s*.+\r?\n?)+)/m);
+      if (blockMatch) {
+        return blockMatch[1]
+          .split(/\r?\n/)
+          .map(l => l.replace(/^\s*-\s*(?:image:\s*)?/, '').trim().replace(/^['"]|['"]$/g, ''))
+          .filter(Boolean);
+      }
+      return [];
+    }
+
+    function setEditorCoverImage(url) {
+      const raw = editorTextarea.value;
+      const fmMatch = raw.match(/^(---\r?\n)([\s\S]*?)(\r?\n---\r?\n[\s\S]*)$/);
+      if (!fmMatch) return;
+      let fm = fmMatch[2];
+      if (/^image:\s*.+$/m.test(fm)) {
+        fm = fm.replace(/^image:\s*.+$/m, `image: "${url}"`);
+      } else {
+        fm += `\nimage: "${url}"`;
+      }
+      editorTextarea.value = fmMatch[1] + fm + fmMatch[3];
+      updatePreview(editorTextarea.value);
+    }
+
+    function setEditorGallery(urls) {
+      const raw = editorTextarea.value;
+      const fmMatch = raw.match(/^(---\r?\n)([\s\S]*?)(\r?\n---\r?\n[\s\S]*)$/);
+      if (!fmMatch) return;
+      let fm = fmMatch[2];
+      const serialized = `gallery: ${JSON.stringify(urls)}`;
+      if (/^gallery:\s*\[[^\r\n]*\]/m.test(fm)) {
+        fm = fm.replace(/^gallery:\s*\[[^\r\n]*\]/m, serialized);
+      } else if (/^gallery:\s*\r?\n(?:^\s*-\s*.+\r?\n?)+/m.test(fm)) {
+        fm = fm.replace(/^gallery:\s*\r?\n(?:^\s*-\s*.+\r?\n?)+/m, serialized + '\n');
+      } else if (urls.length > 0) {
+        fm += `\n${serialized}`;
+      }
+      editorTextarea.value = fmMatch[1] + fm.trim() + fmMatch[3];
+      updatePreview(editorTextarea.value);
+    }
+
+    window.removeGalleryPhoto = function(idx) {
+      const fmMatch = editorTextarea.value.match(/^---\r?\n([\s\S]*?)\r?\n---/);
+      if (!fmMatch) return;
+      const list = parseEditorGallery(fmMatch[1]);
+      list.splice(idx, 1);
+      setEditorGallery(list);
+    };
+
+    window.promoteGalleryPhoto = function(url) {
+      setEditorCoverImage(url);
+    };
+
     function updatePreview(raw) {
-      // Простий рендер заголовків та списків для живого перегляду
+      const fmMatch = raw.match(/^---\r?\n([\s\S]*?)\r?\n---\s*/);
+      let mediaHtml = '';
+      if (fmMatch) {
+        const fm = fmMatch[1];
+        const imgMatch = fm.match(/^image:\s*["']?([^"'\r\n]+)["']?/m);
+        const coverUrl = imgMatch ? imgMatch[1].trim() : '';
+        const galleryList = parseEditorGallery(fm);
+
+        if (coverUrl) {
+          mediaHtml += `
+            <div class="preview-media-box">
+              <div class="preview-media-label">
+                <span>🖼️ Головне фото новини (без обрізання)</span>
+                <code>${coverUrl}</code>
+              </div>
+              <img src="${coverUrl}" alt="Головне фото" class="preview-cover-img" />
+            </div>
+          `;
+        }
+
+        if (galleryList.length > 0) {
+          const cards = galleryList.map((u, i) => `
+            <div class="preview-gallery-card">
+              <img src="${u}" alt="Фото ${i + 1}" />
+              <div class="preview-gallery-actions">
+                <button type="button" class="btn-mini" onclick="promoteGalleryPhoto('${u}')" title="Зробити головним фото">⭐ Головне</button>
+                <button type="button" class="btn-mini btn-mini-danger" onclick="removeGalleryPhoto(${i})" title="Видалити з галереї">✕</button>
+              </div>
+            </div>
+          `).join('');
+          mediaHtml += `
+            <div class="preview-media-box">
+              <div class="preview-media-label">
+                <span>📸 Галерея зображень (${galleryList.length})</span>
+              </div>
+              <div class="preview-gallery-grid">${cards}</div>
+            </div>
+          `;
+        }
+      }
+
+      // Простий рендер заголовків, зображень та списків для живого перегляду
       let html = raw.replace(/^---[\s\S]*?---\s*/, '');
+      html = html.replace(/!\[([^\]]*)\]\(([^)]+)\)/gim, '<img src="$2" alt="$1" style="max-width:100%;height:auto;border-radius:8px;margin:10px 0;" />');
       html = html.replace(/^### (.*$)/gim, '<h3>$1</h3>');
       html = html.replace(/^## (.*$)/gim, '<h2>$1</h2>');
       html = html.replace(/^# (.*$)/gim, '<h1>$1</h1>');
@@ -294,8 +492,92 @@
       html = html.replace(/\*(.*?)\*/gim, '<em>$1</em>');
       html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/gim, '<a href="$2" target="_blank">$1</a>');
       html = html.replace(/\n\n/g, '<br/><br/>');
-      previewPane.innerHTML = html;
+      previewPane.innerHTML = mediaHtml + html;
     }
+
+    function readFileAsDataUrl(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve({ name: file.name, data: reader.result });
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+
+    async function uploadSelectedFiles(fileList) {
+      const files = Array.from(fileList || []);
+      if (!files.length) return [];
+      const encoded = await Promise.all(files.map(readFileAsDataUrl));
+      const res = await fetch('/api/media/upload', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ files: encoded }),
+      });
+      const result = await res.json();
+      if (!result.success) {
+        throw new Error(result.error || 'Помилка завантаження');
+      }
+      return result.urls || [];
+    }
+
+    btnUploadCover.addEventListener('click', () => {
+      if (!activeFilePath) return;
+      coverUploadInput.value = '';
+      coverUploadInput.click();
+    });
+
+    coverUploadInput.addEventListener('change', async () => {
+      if (!coverUploadInput.files.length) return;
+      try {
+        btnUploadCover.disabled = true;
+        btnUploadCover.textContent = '⏳ Завантаження...';
+        const urls = await uploadSelectedFiles(coverUploadInput.files);
+        if (urls[0]) {
+          setEditorCoverImage(urls[0]);
+        }
+      } catch (e) {
+        alert('Не вдалося завантажити фото: ' + e.message);
+      } finally {
+        btnUploadCover.disabled = false;
+        btnUploadCover.textContent = '🖼️ Головне фото';
+      }
+    });
+
+    btnUploadGallery.addEventListener('click', () => {
+      if (!activeFilePath) return;
+      galleryUploadInput.value = '';
+      galleryUploadInput.click();
+    });
+
+    galleryUploadInput.addEventListener('change', async () => {
+      if (!galleryUploadInput.files.length) return;
+      try {
+        btnUploadGallery.disabled = true;
+        btnUploadGallery.textContent = '⏳ Завантаження...';
+        const urls = await uploadSelectedFiles(galleryUploadInput.files);
+        if (urls.length) {
+          if (activeFilePath.startsWith('news/')) {
+            const fmMatch = editorTextarea.value.match(/^---\r?\n([\s\S]*?)\r?\n---/);
+            const currentGallery = fmMatch ? parseEditorGallery(fmMatch[1]) : [];
+            const merged = currentGallery.concat(urls.filter(u => !currentGallery.includes(u)));
+            setEditorGallery(merged);
+            // Якщо головне фото ще стандартне .svg, автоматично встановлюємо перше завантажене фото
+            if (fmMatch && /image:\s*["']?\/assets\/images\/news-\d\.svg/i.test(fmMatch[1])) {
+              setEditorCoverImage(urls[0]);
+            }
+          } else {
+            const mdImgs = urls.map((u, i) => `\n![Фото ${i + 1}](${u})`).join('\n');
+            editorTextarea.value += '\n' + mdImgs + '\n';
+            updatePreview(editorTextarea.value);
+          }
+        }
+      } catch (e) {
+        alert('Не вдалося завантажити галерею: ' + e.message);
+      } finally {
+        btnUploadGallery.disabled = false;
+        btnUploadGallery.textContent = '📸 Завантажити галерею';
+      }
+    });
 
     editorTextarea.addEventListener('input', () => {
       updatePreview(editorTextarea.value);

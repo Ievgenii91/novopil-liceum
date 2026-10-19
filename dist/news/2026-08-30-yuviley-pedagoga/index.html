@@ -63,6 +63,23 @@
     </div>
   </div>
 
+  <!-- МОДАЛЬНЕ ВІКНО ПЕРЕГЛЯДУ ФОТО (ЛАЙТБОКС ГАЛЕРЕЇ) -->
+  <div id="imageLightboxModal" class="lightbox-modal" role="dialog" aria-modal="true" aria-label="Перегляд фотографії у повному розмірі" hidden>
+    <div class="lightbox-backdrop" data-close-lightbox></div>
+    <div class="lightbox-content">
+      <button type="button" id="lightboxCloseBtn" class="lightbox-close" aria-label="Закрити перегляд фото">✕</button>
+      <button type="button" id="lightboxPrevBtn" class="lightbox-nav lightbox-prev" aria-label="Попереднє фото">‹</button>
+      <figure class="lightbox-figure">
+        <img id="lightboxImage" src="" alt="" class="lightbox-img" />
+        <figcaption class="lightbox-footer">
+          <span id="lightboxCaption" class="lightbox-caption"></span>
+          <span id="lightboxCounter" class="lightbox-counter"></span>
+        </figcaption>
+      </figure>
+      <button type="button" id="lightboxNextBtn" class="lightbox-nav lightbox-next" aria-label="Наступне фото">›</button>
+    </div>
+  </div>
+
   <!-- TOP CONTACT BAR -->
   <div class="topbar">
     <div class="container">
@@ -179,7 +196,12 @@
         📅 <strong>Дата публікації:</strong> 2026-08-30 | ✍️ <strong>Автор:</strong> Педагогічний колектив ліцею
       </div>
       <div class="news-article-cover">
-        <img src="/assets/images/news/post-1970760620289912.jpg" alt="Щирі вітання з ювілеєм педагогині ліцею Юлії Вікторівні!" style="width: 100%; max-height: 420px; object-fit: cover;" />
+        
+        <button type="button" class="news-cover-trigger" data-lightbox-src="/assets/images/news/post-1970760620289912.jpg" data-lightbox-alt="Щирі вітання з ювілеєм педагогині ліцею Юлії Вікторівні!" aria-label="Переглянути головне фото у повному розмірі: Щирі вітання з ювілеєм педагогині ліцею Юлії Вікторівні!">
+          <img src="/assets/images/news/post-1970760620289912.jpg" alt="Щирі вітання з ювілеєм педагогині ліцею Юлії Вікторівні!" class="news-cover-img" />
+          <span class="news-cover-zoom" aria-hidden="true">🔍 Натисніть для збільшення</span>
+        </button>
+      
       </div>
       <div class="news-article-body">
         <p>Педагогічний колектив Новопільського ліцею щиро вітає шановну Юлію Вікторівну з прекрасним ювілеєм!</p>
@@ -188,6 +210,7 @@
 <p>Нехай у Вашому серці завжди панує весна, в оселі — затишок, достаток і любов, а всі заповітні мрії здійснюються під мирним небом рідної України!</p>
 <p>Многая і благая літа, шановна Юліє Вікторівно!</p>
       </div>
+      
       <div class="news-article-footer">
         <a href="/news/" class="section-link">← Повернутися до всіх новин</a>
         <a href="https://www.facebook.com/groups/410306759668647" target="_blank" rel="noopener noreferrer" class="section-link">Обговорити на Facebook →</a>

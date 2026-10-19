@@ -63,6 +63,23 @@
     </div>
   </div>
 
+  <!-- МОДАЛЬНЕ ВІКНО ПЕРЕГЛЯДУ ФОТО (ЛАЙТБОКС ГАЛЕРЕЇ) -->
+  <div id="imageLightboxModal" class="lightbox-modal" role="dialog" aria-modal="true" aria-label="Перегляд фотографії у повному розмірі" hidden>
+    <div class="lightbox-backdrop" data-close-lightbox></div>
+    <div class="lightbox-content">
+      <button type="button" id="lightboxCloseBtn" class="lightbox-close" aria-label="Закрити перегляд фото">✕</button>
+      <button type="button" id="lightboxPrevBtn" class="lightbox-nav lightbox-prev" aria-label="Попереднє фото">‹</button>
+      <figure class="lightbox-figure">
+        <img id="lightboxImage" src="" alt="" class="lightbox-img" />
+        <figcaption class="lightbox-footer">
+          <span id="lightboxCaption" class="lightbox-caption"></span>
+          <span id="lightboxCounter" class="lightbox-counter"></span>
+        </figcaption>
+      </figure>
+      <button type="button" id="lightboxNextBtn" class="lightbox-nav lightbox-next" aria-label="Наступне фото">›</button>
+    </div>
+  </div>
+
   <!-- TOP CONTACT BAR -->
   <div class="topbar">
     <div class="container">
@@ -178,171 +195,182 @@
 <p>Вітаємо у новинному та медійному центрі Новопільського ліцею! Тут ви знайдете актуальні фоторепортажі з уроків, свята, спортивні перемоги, олімпіадні успіхи та волонтерські ініціативи наших учнів та педагогів.</p>
 <p>Також запрошуємо долучитися до нашої офіційної групи у Facebook, де публікуються оперативні фотозвіти та відеоматеріали з життя ліцею:  <br />👉 <strong><a href="https://www.facebook.com/groups/410306759668647" target="_blank" rel="noopener noreferrer">Офіційна Facebook-група Новопільського ліцею</a></strong></p>
 <div class="cards-grid">
-          <article class="news-card">
-            <div class="news-img">
-              <img src="/assets/images/news-1.svg" alt="День здорового харчування в Новопільському ліцеї: формуємо корисні звички" loading="lazy" />
-              <span class="news-tag">Здорове харчування</span>
-            </div>
-            <div class="news-body">
-              <div class="news-date">📅 2026-10-16 • Пресцентр Новопільського ліцею</div>
-              <h3 class="news-title">День здорового харчування в Новопільському ліцеї: формуємо корисні звички</h3>
-              <p class="news-desc">У ліцеї відбувся тематичний День здорового харчування під гаслом «Їж корисно — живи яскраво!»: правила раціону, користь вітамінів та турбота про самопочуття.</p>
-              <a href="/news/2026-10-16-den-zdorovoho-kharchuvannya/" class="section-link" style="margin-top: auto;">
-                Читати повністю →
-              </a>
-            </div>
-          </article>
+    <article class="news-card">
+      <a href="/news/2026-10-16-den-zdorovoho-kharchuvannya/" class="news-img" aria-label="День здорового харчування в Новопільському ліцеї: формуємо корисні звички">
+        <img src="/assets/images/news-1.svg" alt="День здорового харчування в Новопільському ліцеї: формуємо корисні звички" class="news-card-svg" loading="lazy" />
+        <span class="news-tag">Здорове харчування</span>
         
-          <article class="news-card">
-            <div class="news-img">
-              <img src="/assets/images/news/post-2002330900466217.jpg" alt="Щира вдячність за привітання та підтримку з нагоди Дня працівників освіти" loading="lazy" />
-              <span class="news-tag">Подяка</span>
-            </div>
-            <div class="news-body">
-              <div class="news-date">📅 2026-10-06 • Педагогічний колектив ліцею</div>
-              <h3 class="news-title">Щира вдячність за привітання та підтримку з нагоди Дня працівників освіти</h3>
-              <p class="news-desc">Педагогічний колектив ліцею висловлює щиру подяку Оліївській сільській раді, відділу освіти та депутатському корпусу за увагу до освітян та вчителів-ветеранів.</p>
-              <a href="/news/2026-10-06-podyaka-do-dnya-vchytelya/" class="section-link" style="margin-top: auto;">
-                Читати повністю →
-              </a>
-            </div>
-          </article>
+      </a>
+      <div class="news-body">
+        <div class="news-date">📅 2026-10-16 • Пресцентр Новопільського ліцею</div>
+        <h3 class="news-title"><a href="/news/2026-10-16-den-zdorovoho-kharchuvannya/">День здорового харчування в Новопільському ліцеї: формуємо корисні звички</a></h3>
+        <p class="news-desc">У ліцеї відбувся тематичний День здорового харчування під гаслом «Їж корисно — живи яскраво!»: правила раціону, користь вітамінів та турбота про самопочуття.</p>
+        <a href="/news/2026-10-16-den-zdorovoho-kharchuvannya/" class="section-link" style="margin-top: auto;">
+          Читати повністю →
+        </a>
+      </div>
+    </article>
+  
+    <article class="news-card">
+      <a href="/news/2026-10-06-podyaka-do-dnya-vchytelya/" class="news-img" aria-label="Щира вдячність за привітання та підтримку з нагоди Дня працівників освіти">
+        <img src="/assets/images/news/post-2002330900466217.jpg" alt="Щира вдячність за привітання та підтримку з нагоди Дня працівників освіти" loading="lazy" />
+        <span class="news-tag">Подяка</span>
         
-          <article class="news-card">
-            <div class="news-img">
-              <img src="/assets/images/news-3.svg" alt="День учителя у Новопільському ліцеї: церемонія «Зірки освіти України» та зміна ролей" loading="lazy" />
-              <span class="news-tag">Свято</span>
-            </div>
-            <div class="news-body">
-              <div class="news-date">📅 2026-10-02 • Учнівське самоврядування</div>
-              <h3 class="news-title">День учителя у Новопільському ліцеї: церемонія «Зірки освіти України» та зміна ролей</h3>
-              <p class="news-desc">Святкова церемонія нагородження вчителів відзнаками «Зірки освіти України» та день учнівського самоврядування, під час якого учні спробували себе у ролі педагогів.</p>
-              <a href="/news/2026-10-02-den-vchytelya-zirky-osvity/" class="section-link" style="margin-top: auto;">
-                Читати повністю →
-              </a>
-            </div>
-          </article>
+      </a>
+      <div class="news-body">
+        <div class="news-date">📅 2026-10-06 • Педагогічний колектив ліцею</div>
+        <h3 class="news-title"><a href="/news/2026-10-06-podyaka-do-dnya-vchytelya/">Щира вдячність за привітання та підтримку з нагоди Дня працівників освіти</a></h3>
+        <p class="news-desc">Педагогічний колектив ліцею висловлює щиру подяку Оліївській сільській раді, відділу освіти та депутатському корпусу за увагу до освітян та вчителів-ветеранів.</p>
+        <a href="/news/2026-10-06-podyaka-do-dnya-vchytelya/" class="section-link" style="margin-top: auto;">
+          Читати повністю →
+        </a>
+      </div>
+    </article>
+  
+    <article class="news-card">
+      <a href="/news/2026-10-02-den-vchytelya-zirky-osvity/" class="news-img" aria-label="День учителя у Новопільському ліцеї: церемонія «Зірки освіти України» та зміна ролей">
+        <img src="/assets/images/news-3.svg" alt="День учителя у Новопільському ліцеї: церемонія «Зірки освіти України» та зміна ролей" class="news-card-svg" loading="lazy" />
+        <span class="news-tag">Свято</span>
         
-          <article class="news-card">
-            <div class="news-img">
-              <img src="/assets/images/news/post-1997852370914070.jpg" alt="Дякуємо захисникам і захисницям України: патріотичний захід у Новопільському ліцеї" loading="lazy" />
-              <span class="news-tag">Патріотичне виховання</span>
-            </div>
-            <div class="news-body">
-              <div class="news-date">📅 2026-10-01 • Пресцентр Новопільського ліцею</div>
-              <h3 class="news-title">Дякуємо захисникам і захисницям України: патріотичний захід у Новопільському ліцеї</h3>
-              <p class="news-desc">1 жовтня ліцеїсти вшанували оборонців України: слова безмежної вдячності, дитячі малюнки, творчі листівки та обереги для наших героїв.</p>
-              <a href="/news/2026-10-01-den-zakhysnykiv-ukrayiny/" class="section-link" style="margin-top: auto;">
-                Читати повністю →
-              </a>
-            </div>
-          </article>
+      </a>
+      <div class="news-body">
+        <div class="news-date">📅 2026-10-02 • Учнівське самоврядування</div>
+        <h3 class="news-title"><a href="/news/2026-10-02-den-vchytelya-zirky-osvity/">День учителя у Новопільському ліцеї: церемонія «Зірки освіти України» та зміна ролей</a></h3>
+        <p class="news-desc">Святкова церемонія нагородження вчителів відзнаками «Зірки освіти України» та день учнівського самоврядування, під час якого учні спробували себе у ролі педагогів.</p>
+        <a href="/news/2026-10-02-den-vchytelya-zirky-osvity/" class="section-link" style="margin-top: auto;">
+          Читати повністю →
+        </a>
+      </div>
+    </article>
+  
+    <article class="news-card">
+      <a href="/news/2026-10-01-den-zakhysnykiv-ukrayiny/" class="news-img" aria-label="Дякуємо захисникам і захисницям України: патріотичний захід у Новопільському ліцеї">
+        <img src="/assets/images/news/post-1997852370914070.jpg" alt="Дякуємо захисникам і захисницям України: патріотичний захід у Новопільському ліцеї" loading="lazy" />
+        <span class="news-tag">Патріотичне виховання</span>
         
-          <article class="news-card">
-            <div class="news-img">
-              <img src="/assets/images/news/post-1995030994529541.jpg" alt="Всеукраїнський тиждень протидії булінгу: безпечне шкільне середовище, дружба та повага" loading="lazy" />
-              <span class="news-tag">Безпечне середовище</span>
-            </div>
-            <div class="news-body">
-              <div class="news-date">📅 2026-09-28 • Психологічна служба</div>
-              <h3 class="news-title">Всеукраїнський тиждень протидії булінгу: безпечне шкільне середовище, дружба та повага</h3>
-              <p class="news-desc">У межах Всеукраїнського тижня протидії булінгу практичний психолог ліцею провела цикл інтерактивних занять з толерантності, взаємопідтримки та ненасильницького спілкування.</p>
-              <a href="/news/2026-09-28-tyzhden-protydiyi-bulingu/" class="section-link" style="margin-top: auto;">
-                Читати повністю →
-              </a>
-            </div>
-          </article>
+      </a>
+      <div class="news-body">
+        <div class="news-date">📅 2026-10-01 • Пресцентр Новопільського ліцею</div>
+        <h3 class="news-title"><a href="/news/2026-10-01-den-zakhysnykiv-ukrayiny/">Дякуємо захисникам і захисницям України: патріотичний захід у Новопільському ліцеї</a></h3>
+        <p class="news-desc">1 жовтня ліцеїсти вшанували оборонців України: слова безмежної вдячності, дитячі малюнки, творчі листівки та обереги для наших героїв.</p>
+        <a href="/news/2026-10-01-den-zakhysnykiv-ukrayiny/" class="section-link" style="margin-top: auto;">
+          Читати повністю →
+        </a>
+      </div>
+    </article>
+  
+    <article class="news-card">
+      <a href="/news/2026-09-28-tyzhden-protydiyi-bulingu/" class="news-img" aria-label="Всеукраїнський тиждень протидії булінгу: безпечне шкільне середовище, дружба та повага">
+        <img src="/assets/images/news/post-1995030994529541.jpg" alt="Всеукраїнський тиждень протидії булінгу: безпечне шкільне середовище, дружба та повага" loading="lazy" />
+        <span class="news-tag">Безпечне середовище</span>
         
-          <article class="news-card">
-            <div class="news-img">
-              <img src="/assets/images/news/post-1989456531753654.jpg" alt="Міжнародний день миру у Новопільському ліцеї: білий голуб як символ надії" loading="lazy" />
-              <span class="news-tag">День миру</span>
-            </div>
-            <div class="news-body">
-              <div class="news-date">📅 2026-09-22 • Пресцентр Новопільського ліцею</div>
-              <h3 class="news-title">Міжнародний день миру у Новопільському ліцеї: білий голуб як символ надії</h3>
-              <p class="news-desc">21 вересня наш ліцей наповнився білим кольором: учні й педагоги долучилися до тематичних активностей із щирою вірою у мирне майбутнє України.</p>
-              <a href="/news/2026-09-22-den-myru/" class="section-link" style="margin-top: auto;">
-                Читати повністю →
-              </a>
-            </div>
-          </article>
+      </a>
+      <div class="news-body">
+        <div class="news-date">📅 2026-09-28 • Психологічна служба</div>
+        <h3 class="news-title"><a href="/news/2026-09-28-tyzhden-protydiyi-bulingu/">Всеукраїнський тиждень протидії булінгу: безпечне шкільне середовище, дружба та повага</a></h3>
+        <p class="news-desc">У межах Всеукраїнського тижня протидії булінгу практичний психолог ліцею провела цикл інтерактивних занять з толерантності, взаємопідтримки та ненасильницького спілкування.</p>
+        <a href="/news/2026-09-28-tyzhden-protydiyi-bulingu/" class="section-link" style="margin-top: auto;">
+          Читати повністю →
+        </a>
+      </div>
+    </article>
+  
+    <article class="news-card">
+      <a href="/news/2026-09-22-den-myru/" class="news-img" aria-label="Міжнародний день миру у Новопільському ліцеї: білий голуб як символ надії">
+        <img src="/assets/images/news/post-1989456531753654.jpg" alt="Міжнародний день миру у Новопільському ліцеї: білий голуб як символ надії" loading="lazy" />
+        <span class="news-tag">День миру</span>
         
-          <article class="news-card">
-            <div class="news-img">
-              <img src="/assets/images/news-2.svg" alt="День смайлика у Новопільському ліцеї: територія усмішок та гарного настрою" loading="lazy" />
-              <span class="news-tag">Флешмоб</span>
-            </div>
-            <div class="news-body">
-              <div class="news-date">📅 2026-09-19 • Учнівське самоврядування</div>
-              <h3 class="news-title">День смайлика у Новопільському ліцеї: територія усмішок та гарного настрою</h3>
-              <p class="news-desc">Учні ліцею долучилися до веселого флешмобу до Дня смайлика: власноруч намальовані смайлики, позитивні емоції та щирі посмішки.</p>
-              <a href="/news/2026-09-19-den-smaylyka/" class="section-link" style="margin-top: auto;">
-                Читати повністю →
-              </a>
-            </div>
-          </article>
+      </a>
+      <div class="news-body">
+        <div class="news-date">📅 2026-09-22 • Пресцентр Новопільського ліцею</div>
+        <h3 class="news-title"><a href="/news/2026-09-22-den-myru/">Міжнародний день миру у Новопільському ліцеї: білий голуб як символ надії</a></h3>
+        <p class="news-desc">21 вересня наш ліцей наповнився білим кольором: учні й педагоги долучилися до тематичних активностей із щирою вірою у мирне майбутнє України.</p>
+        <a href="/news/2026-09-22-den-myru/" class="section-link" style="margin-top: auto;">
+          Читати повністю →
+        </a>
+      </div>
+    </article>
+  
+    <article class="news-card">
+      <a href="/news/2026-09-19-den-smaylyka/" class="news-img" aria-label="День смайлика у Новопільському ліцеї: територія усмішок та гарного настрою">
+        <img src="/assets/images/news-2.svg" alt="День смайлика у Новопільському ліцеї: територія усмішок та гарного настрою" class="news-card-svg" loading="lazy" />
+        <span class="news-tag">Флешмоб</span>
         
-          <article class="news-card">
-            <div class="news-img">
-              <img src="/assets/images/news-2.svg" alt="Старт I етапу Всеукраїнських учнівських олімпіад з базових дисциплін" loading="lazy" />
-              <span class="news-tag">Олімпіади</span>
-            </div>
-            <div class="news-body">
-              <div class="news-date">📅 2026-09-15 • Методична рада ліцею</div>
-              <h3 class="news-title">Старт I етапу Всеукраїнських учнівських олімпіад з базових дисциплін</h3>
-              <p class="news-desc">У ліцеї розпочався шкільний етап предметних олімпіад: юні знавці математики, української мови, історії та природничих наук демонструють глибокі знання.</p>
-              <a href="/news/2026-09-15-olimpiady/" class="section-link" style="margin-top: auto;">
-                Читати повністю →
-              </a>
-            </div>
-          </article>
+      </a>
+      <div class="news-body">
+        <div class="news-date">📅 2026-09-19 • Учнівське самоврядування</div>
+        <h3 class="news-title"><a href="/news/2026-09-19-den-smaylyka/">День смайлика у Новопільському ліцеї: територія усмішок та гарного настрою</a></h3>
+        <p class="news-desc">Учні ліцею долучилися до веселого флешмобу до Дня смайлика: власноруч намальовані смайлики, позитивні емоції та щирі посмішки.</p>
+        <a href="/news/2026-09-19-den-smaylyka/" class="section-link" style="margin-top: auto;">
+          Читати повністю →
+        </a>
+      </div>
+    </article>
+  
+    <article class="news-card">
+      <a href="/news/2026-09-15-olimpiady/" class="news-img" aria-label="Старт I етапу Всеукраїнських учнівських олімпіад з базових дисциплін">
+        <img src="/assets/images/news-2.svg" alt="Старт I етапу Всеукраїнських учнівських олімпіад з базових дисциплін" class="news-card-svg" loading="lazy" />
+        <span class="news-tag">Олімпіади</span>
         
-          <article class="news-card">
-            <div class="news-img">
-              <img src="/assets/images/news/post-1983037992395508.jpg" alt="Організація гарячого харчування: щоденний моніторинг шкільних сніданків" loading="lazy" />
-              <span class="news-tag">Харчування</span>
-            </div>
-            <div class="news-body">
-              <div class="news-date">📅 2026-09-14 • Адміністрація ліцею</div>
-              <h3 class="news-title">Організація гарячого харчування: щоденний моніторинг шкільних сніданків</h3>
-              <p class="news-desc">У шкільній їдальні Новопільського ліцею забезпечується якісне, свіже та збалансоване харчування учнів відповідно до стандартів НАССР.</p>
-              <a href="/news/2026-09-14-snidanky-v-litseyi/" class="section-link" style="margin-top: auto;">
-                Читати повністю →
-              </a>
-            </div>
-          </article>
+      </a>
+      <div class="news-body">
+        <div class="news-date">📅 2026-09-15 • Методична рада ліцею</div>
+        <h3 class="news-title"><a href="/news/2026-09-15-olimpiady/">Старт I етапу Всеукраїнських учнівських олімпіад з базових дисциплін</a></h3>
+        <p class="news-desc">У ліцеї розпочався шкільний етап предметних олімпіад: юні знавці математики, української мови, історії та природничих наук демонструють глибокі знання.</p>
+        <a href="/news/2026-09-15-olimpiady/" class="section-link" style="margin-top: auto;">
+          Читати повністю →
+        </a>
+      </div>
+    </article>
+  
+    <article class="news-card">
+      <a href="/news/2026-09-14-snidanky-v-litseyi/" class="news-img" aria-label="Організація гарячого харчування: щоденний моніторинг шкільних сніданків">
+        <img src="/assets/images/news/post-1983037992395508.jpg" alt="Організація гарячого харчування: щоденний моніторинг шкільних сніданків" loading="lazy" />
+        <span class="news-tag">Харчування</span>
         
-          <article class="news-card">
-            <div class="news-img">
-              <img src="/assets/images/news/post-1972674713431836.jpg" alt="Свято Першого дзвоника та День знань у Новопільському ліцеї" loading="lazy" />
-              <span class="news-tag">Життя ліцею</span>
-            </div>
-            <div class="news-body">
-              <div class="news-date">📅 2026-09-01 • Пресцентр Новопільського ліцею</div>
-              <h3 class="news-title">Свято Першого дзвоника та День знань у Новопільському ліцеї</h3>
-              <p class="news-desc">1 вересня Новопільський ліцей гостинно відкрив двері у новий навчальний рік: урочиста лінійка, теплі привітання громади та перший урок «Мова гідності».</p>
-              <a href="/news/2026-09-01-pershyj-dzvinok/" class="section-link" style="margin-top: auto;">
-                Читати повністю →
-              </a>
-            </div>
-          </article>
+      </a>
+      <div class="news-body">
+        <div class="news-date">📅 2026-09-14 • Адміністрація ліцею</div>
+        <h3 class="news-title"><a href="/news/2026-09-14-snidanky-v-litseyi/">Організація гарячого харчування: щоденний моніторинг шкільних сніданків</a></h3>
+        <p class="news-desc">У шкільній їдальні Новопільського ліцею забезпечується якісне, свіже та збалансоване харчування учнів відповідно до стандартів НАССР.</p>
+        <a href="/news/2026-09-14-snidanky-v-litseyi/" class="section-link" style="margin-top: auto;">
+          Читати повністю →
+        </a>
+      </div>
+    </article>
+  
+    <article class="news-card">
+      <a href="/news/2026-09-01-pershyj-dzvinok/" class="news-img" aria-label="Свято Першого дзвоника та День знань у Новопільському ліцеї">
+        <img src="/assets/images/news/post-1972674713431836.jpg" alt="Свято Першого дзвоника та День знань у Новопільському ліцеї" loading="lazy" />
+        <span class="news-tag">Життя ліцею</span>
+        <span class="news-gallery-badge" title="У публікації є фотогалерея (3 фото)">📷 3 фото</span>
+      </a>
+      <div class="news-body">
+        <div class="news-date">📅 2026-09-01 • Пресцентр Новопільського ліцею</div>
+        <h3 class="news-title"><a href="/news/2026-09-01-pershyj-dzvinok/">Свято Першого дзвоника та День знань у Новопільському ліцеї</a></h3>
+        <p class="news-desc">1 вересня Новопільський ліцей гостинно відкрив двері у новий навчальний рік: урочиста лінійка, теплі привітання громади та перший урок «Мова гідності».</p>
+        <a href="/news/2026-09-01-pershyj-dzvinok/" class="section-link" style="margin-top: auto;">
+          Читати повністю →
+        </a>
+      </div>
+    </article>
+  
+    <article class="news-card">
+      <a href="/news/2026-08-30-yuviley-pedagoga/" class="news-img" aria-label="Щирі вітання з ювілеєм педагогині ліцею Юлії Вікторівні!">
+        <img src="/assets/images/news/post-1970760620289912.jpg" alt="Щирі вітання з ювілеєм педагогині ліцею Юлії Вікторівні!" loading="lazy" />
+        <span class="news-tag">Ювілей</span>
         
-          <article class="news-card">
-            <div class="news-img">
-              <img src="/assets/images/news/post-1970760620289912.jpg" alt="Щирі вітання з ювілеєм педагогині ліцею Юлії Вікторівні!" loading="lazy" />
-              <span class="news-tag">Ювілей</span>
-            </div>
-            <div class="news-body">
-              <div class="news-date">📅 2026-08-30 • Педагогічний колектив ліцею</div>
-              <h3 class="news-title">Щирі вітання з ювілеєм педагогині ліцею Юлії Вікторівні!</h3>
-              <p class="news-desc">Педагогічний колектив Новопільського ліцею щиро вітає шановну колегу Юлію Вікторівну з прекрасним життєвим ювілеєм!</p>
-              <a href="/news/2026-08-30-yuviley-pedagoga/" class="section-link" style="margin-top: auto;">
-                Читати повністю →
-              </a>
-            </div>
-          </article>
-        </div>
+      </a>
+      <div class="news-body">
+        <div class="news-date">📅 2026-08-30 • Педагогічний колектив ліцею</div>
+        <h3 class="news-title"><a href="/news/2026-08-30-yuviley-pedagoga/">Щирі вітання з ювілеєм педагогині ліцею Юлії Вікторівні!</a></h3>
+        <p class="news-desc">Педагогічний колектив Новопільського ліцею щиро вітає шановну колегу Юлію Вікторівну з прекрасним життєвим ювілеєм!</p>
+        <a href="/news/2026-08-30-yuviley-pedagoga/" class="section-link" style="margin-top: auto;">
+          Читати повністю →
+        </a>
+      </div>
+    </article>
+  </div>
 <hr class="section-divider" />
 <h3>Розділи медіацентру:</h3>
 <ul><li><a href="/news/">Стрічка новин ліцею</a></li><li><a href="/news/gallery/">Фото- та відеогалерея</a></li></ul>
