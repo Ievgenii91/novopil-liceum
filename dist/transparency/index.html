@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="uk">
+<html lang="uk" data-base-path="">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -18,31 +18,47 @@
     <div class="a11y-container">
       <div class="a11y-group">
         <span class="a11y-label">Розмір шрифту:</span>
-        <button class="a11y-btn" data-a11y-action="fontsize" data-a11y-value="font-md" title="Звичайний розмір шрифту">A</button>
-        <button class="a11y-btn" data-a11y-action="fontsize" data-a11y-value="font-lg" title="Збільшений шрифт">A+</button>
-        <button class="a11y-btn" data-a11y-action="fontsize" data-a11y-value="font-xl" title="Дуже великий шрифт">A++</button>
+        <button type="button" class="a11y-btn" data-a11y-action="fontsize" data-a11y-value="font-md" title="Звичайний розмір шрифту">A</button>
+        <button type="button" class="a11y-btn" data-a11y-action="fontsize" data-a11y-value="font-lg" title="Збільшений шрифт">A+</button>
+        <button type="button" class="a11y-btn" data-a11y-action="fontsize" data-a11y-value="font-xl" title="Дуже великий шрифт">A++</button>
       </div>
 
       <div class="a11y-group">
         <span class="a11y-label">Контрастність:</span>
-        <button class="a11y-btn" data-a11y-action="theme" data-a11y-value="theme-normal" title="Звичайна колірна схема">Стандарт</button>
-        <button class="a11y-btn" data-a11y-action="theme" data-a11y-value="theme-bw" title="Чорно-білий контраст">Ч/Б</button>
-        <button class="a11y-btn" data-a11y-action="theme" data-a11y-value="theme-wb" title="Темний високий контраст">Інверсія</button>
-        <button class="a11y-btn" data-a11y-action="theme" data-a11y-value="theme-by" title="Синій на жовтому фоні">Синьо-жовтий</button>
+        <button type="button" class="a11y-btn" data-a11y-action="theme" data-a11y-value="theme-normal" title="Звичайна колірна схема">Стандарт</button>
+        <button type="button" class="a11y-btn" data-a11y-action="theme" data-a11y-value="theme-bw" title="Чорно-білий контраст">Ч/Б</button>
+        <button type="button" class="a11y-btn" data-a11y-action="theme" data-a11y-value="theme-wb" title="Темний високий контраст">Інверсія</button>
+        <button type="button" class="a11y-btn" data-a11y-action="theme" data-a11y-value="theme-by" title="Синій на жовтому фоні">Синьо-жовтий</button>
       </div>
 
       <div class="a11y-group">
         <span class="a11y-label">Додатково:</span>
-        <button class="a11y-btn" data-a11y-action="spacing" title="Збільшити міжрядковий інтервал">Інтервал</button>
-        <button class="a11y-btn" data-a11y-action="dyslexic" title="Шрифт для людей з дислексією">Шрифт НУШ</button>
-        <button class="a11y-btn" data-a11y-action="images" data-a11y-value="grayscale" title="Чорно-білі фотографії">Ч/Б фото</button>
-        <button class="a11y-btn" data-a11y-action="images" data-a11y-value="hide" title="Приховати зображення">Без фото</button>
-        <button class="a11y-btn" data-a11y-action="speech" title="Озвучити текст сторінки">🔊 Читати голос</button>
-        <button class="a11y-btn" data-a11y-action="reset" title="Скинути до стандартних налаштувань">Скинути</button>
+        <button type="button" class="a11y-btn" data-a11y-action="spacing" title="Збільшити міжрядковий інтервал">Інтервал</button>
+        <button type="button" class="a11y-btn" data-a11y-action="dyslexic" title="Шрифт для людей з дислексією">Шрифт НУШ</button>
+        <button type="button" class="a11y-btn" data-a11y-action="images" data-a11y-value="grayscale" title="Чорно-білі фотографії">Ч/Б фото</button>
+        <button type="button" class="a11y-btn" data-a11y-action="images" data-a11y-value="hide" title="Приховати зображення">Без фото</button>
+        <button type="button" class="a11y-btn" data-a11y-action="speech" title="Озвучити текст сторінки">🔊 Читати голос</button>
+        <button type="button" class="a11y-btn" data-a11y-action="reset" title="Скинути до стандартних налаштувань">Скинути</button>
       </div>
 
       <div>
-        <button id="a11yCloseBtn" class="a11y-btn-close">✕ Закрити</button>
+        <button type="button" id="a11yCloseBtn" class="a11y-btn-close">✕ Закрити</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- МОДАЛЬНЕ ВІКНО ПОШУКУ ПО САЙТУ -->
+  <div id="siteSearchModal" class="search-modal" role="dialog" aria-modal="true" aria-label="Пошук по сайту ліцею" hidden>
+    <div class="search-modal-backdrop" data-close-search></div>
+    <div class="search-modal-dialog">
+      <div class="search-modal-header">
+        <label for="siteSearchInput" class="sr-only">Пошук сторінок, новин та документів</label>
+        <span class="search-modal-icon" aria-hidden="true">🔍</span>
+        <input type="search" id="siteSearchInput" class="search-modal-input" placeholder="Пошук сторінок, новин, розкладу, правил вступу..." autocomplete="off" />
+        <button type="button" id="siteSearchCloseBtn" class="search-modal-close" aria-label="Закрити вікно пошуку">✕</button>
+      </div>
+      <div id="siteSearchResults" class="search-modal-results" role="region" aria-live="polite">
+        <p class="search-modal-hint">Введіть ключове слово (наприклад: «1 клас», «розклад», «булінг», «статут», «харчування»)</p>
       </div>
     </div>
   </div>
@@ -60,13 +76,16 @@
         <span>📍 вул. Миру, 12, с. Новопіль, Житомирський район, Житомирська область, Україна, 12333</span>
       </div>
       <div class="topbar-actions">
-        <button id="a11yToggleBtn" class="btn-accessibility" title="Налаштування сайту для людей з порушенням зору">
+        <button type="button" class="btn-search-trigger" data-open-search title="Пошук по сайту (Ctrl+K)">
+          🔍 Пошук
+        </button>
+        <button type="button" id="a11yToggleBtn" class="btn-accessibility" data-toggle-a11y aria-expanded="false" title="Налаштування сайту для людей з порушенням зору">
           👁️ Людям з порушенням зору
         </button>
         <a href="https://nz.ua/" target="_blank" rel="noopener noreferrer" class="btn-journal-link">
           📖 NZ.UA Щоденник
         </a>
-        <a href="https://www.facebook.com/groups/410306759668647" target="_blank" rel="noopener noreferrer" style="color: #cbd5e1;" title="Facebook ліцею">
+        <a href="https://www.facebook.com/groups/410306759668647" target="_blank" rel="noopener noreferrer" class="topbar-fb-link" title="Facebook ліцею">
           f Facebook
         </a>
       </div>
@@ -79,18 +98,40 @@
       <a href="/" class="brand-wrapper">
         <img src="/assets/images/logo.svg" alt="Герб Новопільського ліцею" class="brand-logo" />
         <div class="brand-text">
-          <h1>Новопільський ліцей</h1>
+          <div class="brand-title">Новопільський ліцей</div>
           <p>Оліївської сільської ради Житомирського району</p>
         </div>
       </a>
 
-      <button id="mobileMenuBtn" class="mobile-menu-btn" aria-label="Відкрити головне меню">
-        ☰
-      </button>
+      <div class="header-mobile-controls">
+        <button type="button" class="mobile-icon-btn" data-open-search aria-label="Пошук по сайту" title="Пошук по сайту">
+          🔍
+        </button>
+        <button type="button" class="mobile-icon-btn" data-toggle-a11y aria-label="Налаштування для людей з порушенням зору" title="Людям з порушенням зору">
+          👁️
+        </button>
+        <button type="button" id="mobileMenuBtn" class="mobile-menu-btn" aria-label="Відкрити головне меню" aria-expanded="false">
+          ☰
+        </button>
+      </div>
 
-      <nav>
+      <nav aria-label="Головна навігація сайту">
         <ul id="navMenu" class="nav-menu">
-          <li class="nav-item "><a href="/" class="nav-link">Головна</a></li><li class="nav-item "><a href="/about/" class="nav-link">Про ліцей <span class="arrow">▼</span></a><ul class="dropdown-menu"><li><a href="/about/administration/" class="dropdown-link">Візитівка та адміністрація</a></li><li><a href="/about/history/" class="dropdown-link">Історія школи (з 1885 р.)</a></li><li><a href="/about/management/" class="dropdown-link">Структура та врядування</a></li><li><a href="/about/teachers/" class="dropdown-link">Педагогічний колектив</a></li><li><a href="/about/infrastructure/" class="dropdown-link">Матеріально-технічна база</a></li><li><a href="/about/vacancies/" class="dropdown-link">Вакансії</a></li></ul></li><li class="nav-item active"><a href="/transparency/" class="nav-link">Прозорість та звітність <span class="arrow">▼</span></a><ul class="dropdown-menu"><li><a href="/transparency/" class="dropdown-link">Огляд публічної інформації</a></li><li><a href="/transparency/statute/" class="dropdown-link">Статут та ліцензії</a></li><li><a href="/transparency/capacity/" class="dropdown-link">Ліцензований обсяг та учні</a></li><li><a href="/transparency/catchment-area/" class="dropdown-link">Територія обслуговування</a></li><li><a href="/transparency/annual-reports/" class="dropdown-link">Звіти директора</a></li><li><a href="/transparency/quality-monitoring/" class="dropdown-link">Моніторинг якості освіти</a></li><li><a href="/transparency/finance/" class="dropdown-link">Фінансова звітність / Закупівлі</a></li><li><a href="/transparency/extra-services/" class="dropdown-link">Додаткові послуги</a></li></ul></li><li class="nav-item "><a href="/education/" class="nav-link">Освітній процес <span class="arrow">▼</span></a><ul class="dropdown-menu"><li><a href="/education/programs/" class="dropdown-link">Освітні програми</a></li><li><a href="/education/evaluation/" class="dropdown-link">Критерії оцінювання (1-4 та 5-11 кл.)</a></li><li><a href="/education/schedule/" class="dropdown-link">Розклад уроків та дзвінків</a></li><li><a href="/education/nush/" class="dropdown-link">НУШ: Нова українська школа</a></li><li><a href="/education/distance-learning/" class="dropdown-link">Дистанційне навчання</a></li><li><a href="/education/language/" class="dropdown-link">Мова освітнього процесу</a></li></ul></li><li class="nav-item "><a href="/safety/" class="nav-link">Безпечне середовище <span class="arrow">▼</span></a><ul class="dropdown-menu"><li><a href="/safety/anti-bullying/" class="dropdown-link">Протидія булінгу (плани, заяви)</a></li><li><a href="/safety/civil-defense/" class="dropdown-link">Цивільний захист та укриття</a></li><li><a href="/safety/inclusion/" class="dropdown-link">Інклюзивна освіта (ООП)</a></li><li><a href="/safety/code-of-conduct/" class="dropdown-link">Правила поведінки учнів</a></li><li><a href="/safety/psychology/" class="dropdown-link">Психологічна служба</a></li></ul></li><li class="nav-item "><a href="/parents-students/" class="nav-link">Вступ та батькам <span class="arrow">▼</span></a><ul class="dropdown-menu"><li><a href="/parents-students/admission-1st-grade/" class="dropdown-link">Прийом до 1 класу</a></li><li><a href="/parents-students/forms/" class="dropdown-link">Зразки заяв та згод</a></li><li><a href="/parents-students/electronic-journal/" class="dropdown-link">Електронний щоденник (NZ.UA)</a></li><li><a href="/parents-students/canteen/" class="dropdown-link">Організація харчування (НАССР)</a></li><li><a href="/parents-students/student-council/" class="dropdown-link">Учнівське самоврядування</a></li></ul></li><li class="nav-item "><a href="/news/" class="nav-link">Медіа <span class="arrow">▼</span></a><ul class="dropdown-menu"><li><a href="/news/" class="dropdown-link">Новини ліцею</a></li><li><a href="/news/gallery/" class="dropdown-link">Фото та відеогалерея</a></li><li><a href="https://www.facebook.com/groups/410306759668647" class="dropdown-link" target="_blank" rel="noopener noreferrer">Facebook-спільнота</a></li></ul></li><li class="nav-item "><a href="/contacts/" class="nav-link">Контакти</a></li>
+          <li class="nav-item "><a href="/" class="nav-link">Головна</a></li><li class="nav-item "><a href="/about/" class="nav-link" aria-haspopup="true" aria-expanded="false">Про ліцей <span class="arrow" aria-hidden="true">▼</span></a><ul class="dropdown-menu"><li><a href="/about/administration/" class="dropdown-link">Візитівка та адміністрація</a></li><li><a href="/about/history/" class="dropdown-link">Історія школи (з 1885 р.)</a></li><li><a href="/about/management/" class="dropdown-link">Структура та врядування</a></li><li><a href="/about/teachers/" class="dropdown-link">Педагогічний колектив</a></li><li><a href="/about/infrastructure/" class="dropdown-link">Матеріально-технічна база</a></li><li><a href="/about/vacancies/" class="dropdown-link">Вакансії</a></li></ul></li><li class="nav-item active"><a href="/transparency/" class="nav-link" aria-haspopup="true" aria-expanded="false">Прозорість та звітність <span class="arrow" aria-hidden="true">▼</span></a><ul class="dropdown-menu"><li><a href="/transparency/" class="dropdown-link">Огляд публічної інформації</a></li><li><a href="/transparency/statute/" class="dropdown-link">Статут та ліцензії</a></li><li><a href="/transparency/capacity/" class="dropdown-link">Ліцензований обсяг та учні</a></li><li><a href="/transparency/catchment-area/" class="dropdown-link">Територія обслуговування</a></li><li><a href="/transparency/annual-reports/" class="dropdown-link">Звіти директора</a></li><li><a href="/transparency/quality-monitoring/" class="dropdown-link">Моніторинг якості освіти</a></li><li><a href="/transparency/finance/" class="dropdown-link">Фінансова звітність / Закупівлі</a></li><li><a href="/transparency/extra-services/" class="dropdown-link">Додаткові послуги</a></li></ul></li><li class="nav-item "><a href="/education/" class="nav-link" aria-haspopup="true" aria-expanded="false">Освітній процес <span class="arrow" aria-hidden="true">▼</span></a><ul class="dropdown-menu"><li><a href="/education/programs/" class="dropdown-link">Освітні програми</a></li><li><a href="/education/evaluation/" class="dropdown-link">Критерії оцінювання (1-4 та 5-11 кл.)</a></li><li><a href="/education/schedule/" class="dropdown-link">Розклад уроків та дзвінків</a></li><li><a href="/education/nush/" class="dropdown-link">НУШ: Нова українська школа</a></li><li><a href="/education/distance-learning/" class="dropdown-link">Дистанційне навчання</a></li><li><a href="/education/language/" class="dropdown-link">Мова освітнього процесу</a></li></ul></li><li class="nav-item "><a href="/safety/" class="nav-link" aria-haspopup="true" aria-expanded="false">Безпечне середовище <span class="arrow" aria-hidden="true">▼</span></a><ul class="dropdown-menu"><li><a href="/safety/anti-bullying/" class="dropdown-link">Протидія булінгу (плани, заяви)</a></li><li><a href="/safety/civil-defense/" class="dropdown-link">Цивільний захист та укриття</a></li><li><a href="/safety/inclusion/" class="dropdown-link">Інклюзивна освіта (ООП)</a></li><li><a href="/safety/code-of-conduct/" class="dropdown-link">Правила поведінки учнів</a></li><li><a href="/safety/psychology/" class="dropdown-link">Психологічна служба</a></li></ul></li><li class="nav-item "><a href="/parents-students/" class="nav-link" aria-haspopup="true" aria-expanded="false">Вступ та батькам <span class="arrow" aria-hidden="true">▼</span></a><ul class="dropdown-menu"><li><a href="/parents-students/admission-1st-grade/" class="dropdown-link">Прийом до 1 класу</a></li><li><a href="/parents-students/forms/" class="dropdown-link">Зразки заяв та згод</a></li><li><a href="/parents-students/electronic-journal/" class="dropdown-link">Електронний щоденник (NZ.UA)</a></li><li><a href="/parents-students/canteen/" class="dropdown-link">Організація харчування (НАССР)</a></li><li><a href="/parents-students/student-council/" class="dropdown-link">Учнівське самоврядування</a></li></ul></li><li class="nav-item "><a href="/news/" class="nav-link" aria-haspopup="true" aria-expanded="false">Медіа <span class="arrow" aria-hidden="true">▼</span></a><ul class="dropdown-menu"><li><a href="/news/" class="dropdown-link">Новини ліцею</a></li><li><a href="/news/gallery/" class="dropdown-link">Фото та відеогалерея</a></li><li><a href="https://www.facebook.com/groups/410306759668647" class="dropdown-link" target="_blank" rel="noopener noreferrer">Facebook-спільнота</a></li></ul></li><li class="nav-item "><a href="/contacts/" class="nav-link">Контакти</a></li>
+          <li class="nav-mobile-Utility">
+            <div class="nav-mobile-actions">
+              <button type="button" class="btn-accessibility" data-toggle-a11y style="width: 100%; justify-content: center; padding: 10px;">
+                👁️ Версія для людей з порушенням зору
+              </button>
+              <a href="https://nz.ua/" target="_blank" rel="noopener noreferrer" class="btn-journal-link" style="width: 100%; justify-content: center; padding: 10px;">
+                📖 Електронний щоденник NZ.UA
+              </a>
+              <div class="nav-mobile-contacts">
+                <a href="tel:+380671844288">📞 +38 (067) 184-42-88</a>
+                <a href="mailto:novopol4@ukr.net">✉️ novopol4@ukr.net</a>
+              </div>
+            </div>
+          </li>
         </ul>
       </nav>
     </div>
@@ -107,12 +148,12 @@
     
         <div class="page-header">
           <div class="container">
-            <div class="breadcrumbs">
+            <div class="breadcrumbs" aria-label="Хлібні крихти">
               <a href="/">Головна</a>
-              <span>/</span>
+              <span aria-hidden="true">/</span>
               <span>Прозорість та публічна інформація</span>
-              <span>/</span>
-              <span>Прозорість та публічна інформація</span>
+              <span aria-hidden="true">/</span>
+              <span aria-current="page">Прозорість та публічна інформація</span>
             </div>
             <h1 class="page-title">Прозорість та публічна інформація</h1>
           </div>
@@ -125,10 +166,10 @@
       <ul class="sidebar-nav">
         <li class="active"><a href="/transparency/">Огляд публічної інформації</a></li><li class=""><a href="/transparency/statute/">Статут та ліцензії</a></li><li class=""><a href="/transparency/capacity/">Ліцензований обсяг та учні</a></li><li class=""><a href="/transparency/catchment-area/">Територія обслуговування</a></li><li class=""><a href="/transparency/annual-reports/">Звіти директора</a></li><li class=""><a href="/transparency/quality-monitoring/">Моніторинг якості освіти</a></li><li class=""><a href="/transparency/finance/">Фінансова звітність / Закупівлі</a></li><li class=""><a href="/transparency/extra-services/">Додаткові послуги</a></li>
       </ul>
-      <div style="margin-top: 25px; padding-top: 20px; border-top: 1px solid #e2e8f0; font-size: 13px;">
-        <p style="color: #64748b; margin-bottom: 8px;"><strong>Потрібна консультація?</strong></p>
-        <p style="color: #0f3b6c; font-weight: 700;">+38 (067) 184-42-88</p>
-        <p style="color: #64748b;">novopol4@ukr.net</p>
+      <div class="sidebar-consult-box">
+        <p class="sidebar-consult-label"><strong>Потрібна консультація?</strong></p>
+        <p class="sidebar-consult-phone"><a href="tel:+380671844288">+38 (067) 184-42-88</a></p>
+        <p class="sidebar-consult-email"><a href="mailto:novopol4@ukr.net">novopol4@ukr.net</a></p>
       </div>
     </aside>
   
@@ -139,15 +180,15 @@
 
     <div class="doc-search-box">
       <div class="doc-input-wrapper">
-        <span class="doc-search-icon">🔍</span>
-        <input type="text" id="docSearchInput" class="doc-input" placeholder="Швидкий пошук документів за назвою або ключовими словами..." />
+        <span class="doc-search-icon" aria-hidden="true">🔍</span>
+        <input type="text" id="docSearchInput" class="doc-input" aria-label="Швидкий пошук документів за назвою або ключовими словами" placeholder="Швидкий пошук документів за назвою або ключовими словами..." />
       </div>
-      <select id="docCategorySelect" class="doc-filter-select">
+      <select id="docCategorySelect" class="doc-filter-select" aria-label="Фільтр документів за категорією">
         <option value="all">Усі категорії документів (28)</option><option value="Установчі документи та адміністрування">Установчі документи та адміністрування (7)</option><option value="Організація освітнього процесу та якість освіти">Організація освітнього процесу та якість освіти (8)</option><option value="Безпечне середовище та протидія булінгу">Безпечне середовище та протидія булінгу (4)</option><option value="Інклюзія та матеріально-технічна база">Інклюзія та матеріально-технічна база (3)</option><option value="Вступна кампанія та робота з батьками">Вступна кампанія та робота з батьками (5)</option><option value="Звітність керівника">Звітність керівника (1)</option>
       </select>
     </div>
-    <div style="font-size: 13.5px; color: #64748b; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center;">
-      <span>Знайдено документів: <strong id="docCountBadge" style="color: #0f3b6c;">28</strong></span>
+    <div class="doc-summary-bar">
+      <span>Знайдено документів: <strong id="docCountBadge">28</strong></span>
       <span>Офіційні першоджерела Оліївської сільської ради</span>
     </div>
     <div class="doc-table-wrapper">
@@ -164,15 +205,15 @@
         <tbody id="docTableBody">
           
       <tr class="doc-row" data-category="Установчі документи та адміністрування" data-title="Статут Новопільського ліцею Оліївської сільської ради" data-desc="Основний установчий документ, що регулює діяльність, статус та структуру закладу." data-format="PDF">
-        <td style="width: 45px; text-align: center; font-weight: bold; color: #64748b;">1</td>
+        <td class="doc-col-id">1</td>
         <td>
-          <div style="font-weight: 700; color: #0f3b6c; font-size: 15px; margin-bottom: 4px;">
+          <div class="doc-row-title">
             <a href="https://rada.info/upload/users_files/04348409/50c7f51acaa342e63109e61e620bb6b5.pdf" target="_blank" rel="noopener noreferrer">Статут Новопільського ліцею Оліївської сільської ради</a>
           </div>
-          <div style="font-size: 13px; color: #64748b; line-height: 1.4;">Основний установчий документ, що регулює діяльність, статус та структуру закладу.</div>
+          <div class="doc-row-desc">Основний установчий документ, що регулює діяльність, статус та структуру закладу.</div>
         </td>
-        <td style="font-size: 13px; color: #475569;">
-          <span style="display: inline-block; background: #f1f5f9; padding: 3px 8px; border-radius: 4px; font-weight: 500;">
+        <td>
+          <span class="doc-category-pill">
             Установчі документи та адміністрування
           </span>
         </td>
@@ -187,15 +228,15 @@
       </tr>
     
       <tr class="doc-row" data-category="Установчі документи та адміністрування" data-title="Ліцензія на провадження освітньої діяльності" data-desc="Офіційна ліцензія на надання освітніх послуг за рівнями початкової, базової та повної загальної середньої освіти." data-format="PDF">
-        <td style="width: 45px; text-align: center; font-weight: bold; color: #64748b;">2</td>
+        <td class="doc-col-id">2</td>
         <td>
-          <div style="font-weight: 700; color: #0f3b6c; font-size: 15px; margin-bottom: 4px;">
+          <div class="doc-row-title">
             <a href="https://rada.info/upload/users_files/04348409/a21edf008c82b32b871f709cb88491eb.pdf" target="_blank" rel="noopener noreferrer">Ліцензія на провадження освітньої діяльності</a>
           </div>
-          <div style="font-size: 13px; color: #64748b; line-height: 1.4;">Офіційна ліцензія на надання освітніх послуг за рівнями початкової, базової та повної загальної середньої освіти.</div>
+          <div class="doc-row-desc">Офіційна ліцензія на надання освітніх послуг за рівнями початкової, базової та повної загальної середньої освіти.</div>
         </td>
-        <td style="font-size: 13px; color: #475569;">
-          <span style="display: inline-block; background: #f1f5f9; padding: 3px 8px; border-radius: 4px; font-weight: 500;">
+        <td>
+          <span class="doc-category-pill">
             Установчі документи та адміністрування
           </span>
         </td>
@@ -210,15 +251,15 @@
       </tr>
     
       <tr class="doc-row" data-category="Установчі документи та адміністрування" data-title="Структура та органи управління ліцею" data-desc="Організаційна структура, повноваження педради, дирекції та самоврядування." data-format="DOCX">
-        <td style="width: 45px; text-align: center; font-weight: bold; color: #64748b;">3</td>
+        <td class="doc-col-id">3</td>
         <td>
-          <div style="font-weight: 700; color: #0f3b6c; font-size: 15px; margin-bottom: 4px;">
+          <div class="doc-row-title">
             <a href="https://rada.info/upload/users_files/04348409/07ad0cad90f28183b8b5b432889ec823.docx" target="_blank" rel="noopener noreferrer">Структура та органи управління ліцею</a>
           </div>
-          <div style="font-size: 13px; color: #64748b; line-height: 1.4;">Організаційна структура, повноваження педради, дирекції та самоврядування.</div>
+          <div class="doc-row-desc">Організаційна структура, повноваження педради, дирекції та самоврядування.</div>
         </td>
-        <td style="font-size: 13px; color: #475569;">
-          <span style="display: inline-block; background: #f1f5f9; padding: 3px 8px; border-radius: 4px; font-weight: 500;">
+        <td>
+          <span class="doc-category-pill">
             Установчі документи та адміністрування
           </span>
         </td>
@@ -233,15 +274,15 @@
       </tr>
     
       <tr class="doc-row" data-category="Установчі документи та адміністрування" data-title="Територія обслуговування закладу освіти" data-desc="Перелік закріплених вулиць та населених пунктів для першочергового зарахування." data-format="DOCX">
-        <td style="width: 45px; text-align: center; font-weight: bold; color: #64748b;">4</td>
+        <td class="doc-col-id">4</td>
         <td>
-          <div style="font-weight: 700; color: #0f3b6c; font-size: 15px; margin-bottom: 4px;">
+          <div class="doc-row-title">
             <a href="https://rada.info/upload/users_files/04348409/280f6c4bf88eac0f45025651c425c2cd.docx" target="_blank" rel="noopener noreferrer">Територія обслуговування закладу освіти</a>
           </div>
-          <div style="font-size: 13px; color: #64748b; line-height: 1.4;">Перелік закріплених вулиць та населених пунктів для першочергового зарахування.</div>
+          <div class="doc-row-desc">Перелік закріплених вулиць та населених пунктів для першочергового зарахування.</div>
         </td>
-        <td style="font-size: 13px; color: #475569;">
-          <span style="display: inline-block; background: #f1f5f9; padding: 3px 8px; border-radius: 4px; font-weight: 500;">
+        <td>
+          <span class="doc-category-pill">
             Установчі документи та адміністрування
           </span>
         </td>
@@ -256,15 +297,15 @@
       </tr>
     
       <tr class="doc-row" data-category="Установчі документи та адміністрування" data-title="Ліцензований обсяг та фактична кількість учнів" data-desc="Потужність закладу за ліцензією та фактична наповнюваність класів (165 учнів)." data-format="DOCX">
-        <td style="width: 45px; text-align: center; font-weight: bold; color: #64748b;">5</td>
+        <td class="doc-col-id">5</td>
         <td>
-          <div style="font-weight: 700; color: #0f3b6c; font-size: 15px; margin-bottom: 4px;">
+          <div class="doc-row-title">
             <a href="https://rada.info/upload/users_files/04348409/a625adbfc3735e10af2e0822d299649d.docx" target="_blank" rel="noopener noreferrer">Ліцензований обсяг та фактична кількість учнів</a>
           </div>
-          <div style="font-size: 13px; color: #64748b; line-height: 1.4;">Потужність закладу за ліцензією та фактична наповнюваність класів (165 учнів).</div>
+          <div class="doc-row-desc">Потужність закладу за ліцензією та фактична наповнюваність класів (165 учнів).</div>
         </td>
-        <td style="font-size: 13px; color: #475569;">
-          <span style="display: inline-block; background: #f1f5f9; padding: 3px 8px; border-radius: 4px; font-weight: 500;">
+        <td>
+          <span class="doc-category-pill">
             Установчі документи та адміністрування
           </span>
         </td>
@@ -279,15 +320,15 @@
       </tr>
     
       <tr class="doc-row" data-category="Установчі документи та адміністрування" data-title="Кадровий склад педагогічних працівників" data-desc="Список вчителів за фахом, кваліфікаційними категоріями та званнями." data-format="PDF">
-        <td style="width: 45px; text-align: center; font-weight: bold; color: #64748b;">6</td>
+        <td class="doc-col-id">6</td>
         <td>
-          <div style="font-weight: 700; color: #0f3b6c; font-size: 15px; margin-bottom: 4px;">
+          <div class="doc-row-title">
             <a href="https://rada.info/upload/users_files/04348409/2d523490fd8380b372c0b23217cdcae8.pdf" target="_blank" rel="noopener noreferrer">Кадровий склад педагогічних працівників</a>
           </div>
-          <div style="font-size: 13px; color: #64748b; line-height: 1.4;">Список вчителів за фахом, кваліфікаційними категоріями та званнями.</div>
+          <div class="doc-row-desc">Список вчителів за фахом, кваліфікаційними категоріями та званнями.</div>
         </td>
-        <td style="font-size: 13px; color: #475569;">
-          <span style="display: inline-block; background: #f1f5f9; padding: 3px 8px; border-radius: 4px; font-weight: 500;">
+        <td>
+          <span class="doc-category-pill">
             Установчі документи та адміністрування
           </span>
         </td>
@@ -302,15 +343,15 @@
       </tr>
     
       <tr class="doc-row" data-category="Установчі документи та адміністрування" data-title="Наявність вакантних посад" data-desc="Актуальна інформація про вакансії вчителів та технічного персоналу." data-format="DOCX">
-        <td style="width: 45px; text-align: center; font-weight: bold; color: #64748b;">7</td>
+        <td class="doc-col-id">7</td>
         <td>
-          <div style="font-weight: 700; color: #0f3b6c; font-size: 15px; margin-bottom: 4px;">
+          <div class="doc-row-title">
             <a href="https://rada.info/upload/users_files/04348409/645728bc1caee826efdc285cc054c524.docx" target="_blank" rel="noopener noreferrer">Наявність вакантних посад</a>
           </div>
-          <div style="font-size: 13px; color: #64748b; line-height: 1.4;">Актуальна інформація про вакансії вчителів та технічного персоналу.</div>
+          <div class="doc-row-desc">Актуальна інформація про вакансії вчителів та технічного персоналу.</div>
         </td>
-        <td style="font-size: 13px; color: #475569;">
-          <span style="display: inline-block; background: #f1f5f9; padding: 3px 8px; border-radius: 4px; font-weight: 500;">
+        <td>
+          <span class="doc-category-pill">
             Установчі документи та адміністрування
           </span>
         </td>
@@ -325,15 +366,15 @@
       </tr>
     
       <tr class="doc-row" data-category="Організація освітнього процесу та якість освіти" data-title="Освітня програма закладу" data-desc="Комплексний план освітньої діяльності ліцею для I, II та III ступенів навчання." data-format="PDF">
-        <td style="width: 45px; text-align: center; font-weight: bold; color: #64748b;">8</td>
+        <td class="doc-col-id">8</td>
         <td>
-          <div style="font-weight: 700; color: #0f3b6c; font-size: 15px; margin-bottom: 4px;">
+          <div class="doc-row-title">
             <a href="https://rada.info/upload/users_files/04348409/5d6abf9757e412978992dfc0a9576469.pdf" target="_blank" rel="noopener noreferrer">Освітня програма закладу</a>
           </div>
-          <div style="font-size: 13px; color: #64748b; line-height: 1.4;">Комплексний план освітньої діяльності ліцею для I, II та III ступенів навчання.</div>
+          <div class="doc-row-desc">Комплексний план освітньої діяльності ліцею для I, II та III ступенів навчання.</div>
         </td>
-        <td style="font-size: 13px; color: #475569;">
-          <span style="display: inline-block; background: #f1f5f9; padding: 3px 8px; border-radius: 4px; font-weight: 500;">
+        <td>
+          <span class="doc-category-pill">
             Організація освітнього процесу та якість освіти
           </span>
         </td>
@@ -348,15 +389,15 @@
       </tr>
     
       <tr class="doc-row" data-category="Організація освітнього процесу та якість освіти" data-title="Освітня програма (додатки та деталізація)" data-desc="Навчальні плани, години варіативної складової та факультативи." data-format="DOCX">
-        <td style="width: 45px; text-align: center; font-weight: bold; color: #64748b;">9</td>
+        <td class="doc-col-id">9</td>
         <td>
-          <div style="font-weight: 700; color: #0f3b6c; font-size: 15px; margin-bottom: 4px;">
+          <div class="doc-row-title">
             <a href="https://rada.info/upload/users_files/04348409/c45b2859d6e7a33fd3558f468e2dc428.docx" target="_blank" rel="noopener noreferrer">Освітня програма (додатки та деталізація)</a>
           </div>
-          <div style="font-size: 13px; color: #64748b; line-height: 1.4;">Навчальні плани, години варіативної складової та факультативи.</div>
+          <div class="doc-row-desc">Навчальні плани, години варіативної складової та факультативи.</div>
         </td>
-        <td style="font-size: 13px; color: #475569;">
-          <span style="display: inline-block; background: #f1f5f9; padding: 3px 8px; border-radius: 4px; font-weight: 500;">
+        <td>
+          <span class="doc-category-pill">
             Організація освітнього процесу та якість освіти
           </span>
         </td>
@@ -371,15 +412,15 @@
       </tr>
     
       <tr class="doc-row" data-category="Організація освітнього процесу та якість освіти" data-title="Моніторинг якості освіти" data-desc="Результати моніторингових досліджень навчальних досягнень здобувачів освіти." data-format="PDF">
-        <td style="width: 45px; text-align: center; font-weight: bold; color: #64748b;">10</td>
+        <td class="doc-col-id">10</td>
         <td>
-          <div style="font-weight: 700; color: #0f3b6c; font-size: 15px; margin-bottom: 4px;">
+          <div class="doc-row-title">
             <a href="https://rada.info/upload/users_files/04348409/6e2728523ff9438fbe2cc54bb4b467a4.pdf" target="_blank" rel="noopener noreferrer">Моніторинг якості освіти</a>
           </div>
-          <div style="font-size: 13px; color: #64748b; line-height: 1.4;">Результати моніторингових досліджень навчальних досягнень здобувачів освіти.</div>
+          <div class="doc-row-desc">Результати моніторингових досліджень навчальних досягнень здобувачів освіти.</div>
         </td>
-        <td style="font-size: 13px; color: #475569;">
-          <span style="display: inline-block; background: #f1f5f9; padding: 3px 8px; border-radius: 4px; font-weight: 500;">
+        <td>
+          <span class="doc-category-pill">
             Організація освітнього процесу та якість освіти
           </span>
         </td>
@@ -394,15 +435,15 @@
       </tr>
     
       <tr class="doc-row" data-category="Організація освітнього процесу та якість освіти" data-title="Про стан формування системи забезпечення якості освіти" data-desc="Аналітичні матеріали щодо розбудови внутрішньої системи забезпечення якості освіти (ВСЗЯО)." data-format="ODT">
-        <td style="width: 45px; text-align: center; font-weight: bold; color: #64748b;">11</td>
+        <td class="doc-col-id">11</td>
         <td>
-          <div style="font-weight: 700; color: #0f3b6c; font-size: 15px; margin-bottom: 4px;">
+          <div class="doc-row-title">
             <a href="https://rada.info/upload/users_files/04348409/fb110bb538718e069621578aaeaed730.odt" target="_blank" rel="noopener noreferrer">Про стан формування системи забезпечення якості освіти</a>
           </div>
-          <div style="font-size: 13px; color: #64748b; line-height: 1.4;">Аналітичні матеріали щодо розбудови внутрішньої системи забезпечення якості освіти (ВСЗЯО).</div>
+          <div class="doc-row-desc">Аналітичні матеріали щодо розбудови внутрішньої системи забезпечення якості освіти (ВСЗЯО).</div>
         </td>
-        <td style="font-size: 13px; color: #475569;">
-          <span style="display: inline-block; background: #f1f5f9; padding: 3px 8px; border-radius: 4px; font-weight: 500;">
+        <td>
+          <span class="doc-category-pill">
             Організація освітнього процесу та якість освіти
           </span>
         </td>
@@ -417,15 +458,15 @@
       </tr>
     
       <tr class="doc-row" data-category="Організація освітнього процесу та якість освіти" data-title="Мова освітнього процесу" data-desc="Офіційне підтвердження державної української мови викладання в ліцеї." data-format="DOCX">
-        <td style="width: 45px; text-align: center; font-weight: bold; color: #64748b;">12</td>
+        <td class="doc-col-id">12</td>
         <td>
-          <div style="font-weight: 700; color: #0f3b6c; font-size: 15px; margin-bottom: 4px;">
+          <div class="doc-row-title">
             <a href="https://rada.info/upload/users_files/04348409/aa7c9fd592e99eec277961469964f8f4.docx" target="_blank" rel="noopener noreferrer">Мова освітнього процесу</a>
           </div>
-          <div style="font-size: 13px; color: #64748b; line-height: 1.4;">Офіційне підтвердження державної української мови викладання в ліцеї.</div>
+          <div class="doc-row-desc">Офіційне підтвердження державної української мови викладання в ліцеї.</div>
         </td>
-        <td style="font-size: 13px; color: #475569;">
-          <span style="display: inline-block; background: #f1f5f9; padding: 3px 8px; border-radius: 4px; font-weight: 500;">
+        <td>
+          <span class="doc-category-pill">
             Організація освітнього процесу та якість освіти
           </span>
         </td>
@@ -440,15 +481,15 @@
       </tr>
     
       <tr class="doc-row" data-category="Організація освітнього процесу та якість освіти" data-title="Методичні рекомендації щодо оцінювання учнів 1-4 класів (Наказ МОН)" data-desc="Нормативний наказ МОН щодо формувального та вербального оцінювання у початковій школі НУШ." data-format="PDF">
-        <td style="width: 45px; text-align: center; font-weight: bold; color: #64748b;">13</td>
+        <td class="doc-col-id">13</td>
         <td>
-          <div style="font-weight: 700; color: #0f3b6c; font-size: 15px; margin-bottom: 4px;">
+          <div class="doc-row-title">
             <a href="https://rada.info/upload/users_files/04348409/1ff627b2da4d461281aea91e89b21dfe.pdf" target="_blank" rel="noopener noreferrer">Методичні рекомендації щодо оцінювання учнів 1-4 класів (Наказ МОН)</a>
           </div>
-          <div style="font-size: 13px; color: #64748b; line-height: 1.4;">Нормативний наказ МОН щодо формувального та вербального оцінювання у початковій школі НУШ.</div>
+          <div class="doc-row-desc">Нормативний наказ МОН щодо формувального та вербального оцінювання у початковій школі НУШ.</div>
         </td>
-        <td style="font-size: 13px; color: #475569;">
-          <span style="display: inline-block; background: #f1f5f9; padding: 3px 8px; border-radius: 4px; font-weight: 500;">
+        <td>
+          <span class="doc-category-pill">
             Організація освітнього процесу та якість освіти
           </span>
         </td>
@@ -463,15 +504,15 @@
       </tr>
     
       <tr class="doc-row" data-category="Організація освітнього процесу та якість освіти" data-title="Критерії оцінювання навчальних досягнень учнів 5-11 класів" data-desc="Офіційне законодавче джерело нормативів бального оцінювання базової та старшої школи." data-format="WEB">
-        <td style="width: 45px; text-align: center; font-weight: bold; color: #64748b;">14</td>
+        <td class="doc-col-id">14</td>
         <td>
-          <div style="font-weight: 700; color: #0f3b6c; font-size: 15px; margin-bottom: 4px;">
+          <div class="doc-row-title">
             <a href="https://zakon.rada.gov.ua/rada/show/v0371290-08/conv#Text" target="_blank" rel="noopener noreferrer">Критерії оцінювання навчальних досягнень учнів 5-11 класів</a>
           </div>
-          <div style="font-size: 13px; color: #64748b; line-height: 1.4;">Офіційне законодавче джерело нормативів бального оцінювання базової та старшої школи.</div>
+          <div class="doc-row-desc">Офіційне законодавче джерело нормативів бального оцінювання базової та старшої школи.</div>
         </td>
-        <td style="font-size: 13px; color: #475569;">
-          <span style="display: inline-block; background: #f1f5f9; padding: 3px 8px; border-radius: 4px; font-weight: 500;">
+        <td>
+          <span class="doc-category-pill">
             Організація освітнього процесу та якість освіти
           </span>
         </td>
@@ -486,15 +527,15 @@
       </tr>
     
       <tr class="doc-row" data-category="Організація освітнього процесу та якість освіти" data-title="Перелік додаткових освітніх та інших послуг" data-desc="Довідка щодо відсутності або наявності платних освітніх послуг." data-format="DOCX">
-        <td style="width: 45px; text-align: center; font-weight: bold; color: #64748b;">15</td>
+        <td class="doc-col-id">15</td>
         <td>
-          <div style="font-weight: 700; color: #0f3b6c; font-size: 15px; margin-bottom: 4px;">
+          <div class="doc-row-title">
             <a href="https://rada.info/upload/users_files/04348409/1b6e46d6349cd14f875c9007e5931d15.docx" target="_blank" rel="noopener noreferrer">Перелік додаткових освітніх та інших послуг</a>
           </div>
-          <div style="font-size: 13px; color: #64748b; line-height: 1.4;">Довідка щодо відсутності або наявності платних освітніх послуг.</div>
+          <div class="doc-row-desc">Довідка щодо відсутності або наявності платних освітніх послуг.</div>
         </td>
-        <td style="font-size: 13px; color: #475569;">
-          <span style="display: inline-block; background: #f1f5f9; padding: 3px 8px; border-radius: 4px; font-weight: 500;">
+        <td>
+          <span class="doc-category-pill">
             Організація освітнього процесу та якість освіти
           </span>
         </td>
@@ -509,15 +550,15 @@
       </tr>
     
       <tr class="doc-row" data-category="Безпечне середовище та протидія булінгу" data-title="План заходів щодо запобігання та протидії булінгу" data-desc="Річний план виховних та просвітницьких заходів із попередження цькування." data-format="PDF">
-        <td style="width: 45px; text-align: center; font-weight: bold; color: #64748b;">16</td>
+        <td class="doc-col-id">16</td>
         <td>
-          <div style="font-weight: 700; color: #0f3b6c; font-size: 15px; margin-bottom: 4px;">
+          <div class="doc-row-title">
             <a href="https://rada.info/upload/users_files/04348409/fb8e9eec006713b976c0f09bd550e00c.pdf" target="_blank" rel="noopener noreferrer">План заходів щодо запобігання та протидії булінгу</a>
           </div>
-          <div style="font-size: 13px; color: #64748b; line-height: 1.4;">Річний план виховних та просвітницьких заходів із попередження цькування.</div>
+          <div class="doc-row-desc">Річний план виховних та просвітницьких заходів із попередження цькування.</div>
         </td>
-        <td style="font-size: 13px; color: #475569;">
-          <span style="display: inline-block; background: #f1f5f9; padding: 3px 8px; border-radius: 4px; font-weight: 500;">
+        <td>
+          <span class="doc-category-pill">
             Безпечне середовище та протидія булінгу
           </span>
         </td>
@@ -532,15 +573,15 @@
       </tr>
     
       <tr class="doc-row" data-category="Безпечне середовище та протидія булінгу" data-title="Порядок подання та розгляду заяв про випадки булінгу" data-desc="Регламент дій для учнів, батьків та педагогів у разі виявлення фактів насильства." data-format="DOCX">
-        <td style="width: 45px; text-align: center; font-weight: bold; color: #64748b;">17</td>
+        <td class="doc-col-id">17</td>
         <td>
-          <div style="font-weight: 700; color: #0f3b6c; font-size: 15px; margin-bottom: 4px;">
+          <div class="doc-row-title">
             <a href="https://rada.info/upload/users_files/04348409/2a4f7ebd7575f57a9c6e1ef36b65c758.docx" target="_blank" rel="noopener noreferrer">Порядок подання та розгляду заяв про випадки булінгу</a>
           </div>
-          <div style="font-size: 13px; color: #64748b; line-height: 1.4;">Регламент дій для учнів, батьків та педагогів у разі виявлення фактів насильства.</div>
+          <div class="doc-row-desc">Регламент дій для учнів, батьків та педагогів у разі виявлення фактів насильства.</div>
         </td>
-        <td style="font-size: 13px; color: #475569;">
-          <span style="display: inline-block; background: #f1f5f9; padding: 3px 8px; border-radius: 4px; font-weight: 500;">
+        <td>
+          <span class="doc-category-pill">
             Безпечне середовище та протидія булінгу
           </span>
         </td>
@@ -555,15 +596,15 @@
       </tr>
     
       <tr class="doc-row" data-category="Безпечне середовище та протидія булінгу" data-title="Порядок реагування на доведені випадки булінгу" data-desc="Алгоритм скликання комісії, інформування поліції та надання психологічної підтримки." data-format="DOCX">
-        <td style="width: 45px; text-align: center; font-weight: bold; color: #64748b;">18</td>
+        <td class="doc-col-id">18</td>
         <td>
-          <div style="font-weight: 700; color: #0f3b6c; font-size: 15px; margin-bottom: 4px;">
+          <div class="doc-row-title">
             <a href="https://rada.info/upload/users_files/04348409/b5f24702e1cdc703b3c844484a752b24.docx" target="_blank" rel="noopener noreferrer">Порядок реагування на доведені випадки булінгу</a>
           </div>
-          <div style="font-size: 13px; color: #64748b; line-height: 1.4;">Алгоритм скликання комісії, інформування поліції та надання психологічної підтримки.</div>
+          <div class="doc-row-desc">Алгоритм скликання комісії, інформування поліції та надання психологічної підтримки.</div>
         </td>
-        <td style="font-size: 13px; color: #475569;">
-          <span style="display: inline-block; background: #f1f5f9; padding: 3px 8px; border-radius: 4px; font-weight: 500;">
+        <td>
+          <span class="doc-category-pill">
             Безпечне середовище та протидія булінгу
           </span>
         </td>
@@ -578,15 +619,15 @@
       </tr>
     
       <tr class="doc-row" data-category="Безпечне середовище та протидія булінгу" data-title="Правила поведінки здобувача освіти в ліцеї" data-desc="Кодекс етичної поведінки, прав, обов'язків та академічної доброчесності учнів." data-format="DOCX">
-        <td style="width: 45px; text-align: center; font-weight: bold; color: #64748b;">19</td>
+        <td class="doc-col-id">19</td>
         <td>
-          <div style="font-weight: 700; color: #0f3b6c; font-size: 15px; margin-bottom: 4px;">
+          <div class="doc-row-title">
             <a href="https://rada.info/upload/users_files/04348409/bade4f9f7a168267fc2d8b449ea76013.docx" target="_blank" rel="noopener noreferrer">Правила поведінки здобувача освіти в ліцеї</a>
           </div>
-          <div style="font-size: 13px; color: #64748b; line-height: 1.4;">Кодекс етичної поведінки, прав, обов'язків та академічної доброчесності учнів.</div>
+          <div class="doc-row-desc">Кодекс етичної поведінки, прав, обов'язків та академічної доброчесності учнів.</div>
         </td>
-        <td style="font-size: 13px; color: #475569;">
-          <span style="display: inline-block; background: #f1f5f9; padding: 3px 8px; border-radius: 4px; font-weight: 500;">
+        <td>
+          <span class="doc-category-pill">
             Безпечне середовище та протидія булінгу
           </span>
         </td>
@@ -601,15 +642,15 @@
       </tr>
     
       <tr class="doc-row" data-category="Інклюзія та матеріально-технічна база" data-title="Умови доступності закладу для навчання осіб з ООП" data-desc="Звіт щодо безбар'єрності приміщень, пандусів та умов для інклюзивного навчання." data-format="ODT">
-        <td style="width: 45px; text-align: center; font-weight: bold; color: #64748b;">20</td>
+        <td class="doc-col-id">20</td>
         <td>
-          <div style="font-weight: 700; color: #0f3b6c; font-size: 15px; margin-bottom: 4px;">
+          <div class="doc-row-title">
             <a href="https://rada.info/upload/users_files/04348409/48363d8aebee4d14375f47b6de261595.odt" target="_blank" rel="noopener noreferrer">Умови доступності закладу для навчання осіб з ООП</a>
           </div>
-          <div style="font-size: 13px; color: #64748b; line-height: 1.4;">Звіт щодо безбар'єрності приміщень, пандусів та умов для інклюзивного навчання.</div>
+          <div class="doc-row-desc">Звіт щодо безбар'єрності приміщень, пандусів та умов для інклюзивного навчання.</div>
         </td>
-        <td style="font-size: 13px; color: #475569;">
-          <span style="display: inline-block; background: #f1f5f9; padding: 3px 8px; border-radius: 4px; font-weight: 500;">
+        <td>
+          <span class="doc-category-pill">
             Інклюзія та матеріально-технічна база
           </span>
         </td>
@@ -624,15 +665,15 @@
       </tr>
     
       <tr class="doc-row" data-category="Інклюзія та матеріально-технічна база" data-title="Матеріально-технічне забезпечення ліцею" data-desc="Інвентарна відомість кабінетів, комп'ютерної техніки, спортивного інвентарю та меблів." data-format="XLSX">
-        <td style="width: 45px; text-align: center; font-weight: bold; color: #64748b;">21</td>
+        <td class="doc-col-id">21</td>
         <td>
-          <div style="font-weight: 700; color: #0f3b6c; font-size: 15px; margin-bottom: 4px;">
+          <div class="doc-row-title">
             <a href="https://rada.info/upload/users_files/04348409/1296a87131a3856139bdfc5b1eef59f1.xlsx" target="_blank" rel="noopener noreferrer">Матеріально-технічне забезпечення ліцею</a>
           </div>
-          <div style="font-size: 13px; color: #64748b; line-height: 1.4;">Інвентарна відомість кабінетів, комп'ютерної техніки, спортивного інвентарю та меблів.</div>
+          <div class="doc-row-desc">Інвентарна відомість кабінетів, комп'ютерної техніки, спортивного інвентарю та меблів.</div>
         </td>
-        <td style="font-size: 13px; color: #475569;">
-          <span style="display: inline-block; background: #f1f5f9; padding: 3px 8px; border-radius: 4px; font-weight: 500;">
+        <td>
+          <span class="doc-category-pill">
             Інклюзія та матеріально-технічна база
           </span>
         </td>
@@ -647,15 +688,15 @@
       </tr>
     
       <tr class="doc-row" data-category="Інклюзія та матеріально-технічна база" data-title="Паспорт матеріально-технічної бази (розширений)" data-desc="Повний технічний паспорт будівель, котельні, споруд цивільного захисту та їдальні." data-format="PDF">
-        <td style="width: 45px; text-align: center; font-weight: bold; color: #64748b;">22</td>
+        <td class="doc-col-id">22</td>
         <td>
-          <div style="font-weight: 700; color: #0f3b6c; font-size: 15px; margin-bottom: 4px;">
+          <div class="doc-row-title">
             <a href="https://rada.info/upload/users_files/04348409/a6aa2a3dd370122c3da5b8ace3126b0d.pdf" target="_blank" rel="noopener noreferrer">Паспорт матеріально-технічної бази (розширений)</a>
           </div>
-          <div style="font-size: 13px; color: #64748b; line-height: 1.4;">Повний технічний паспорт будівель, котельні, споруд цивільного захисту та їдальні.</div>
+          <div class="doc-row-desc">Повний технічний паспорт будівель, котельні, споруд цивільного захисту та їдальні.</div>
         </td>
-        <td style="font-size: 13px; color: #475569;">
-          <span style="display: inline-block; background: #f1f5f9; padding: 3px 8px; border-radius: 4px; font-weight: 500;">
+        <td>
+          <span class="doc-category-pill">
             Інклюзія та матеріально-технічна база
           </span>
         </td>
@@ -670,15 +711,15 @@
       </tr>
     
       <tr class="doc-row" data-category="Вступна кампанія та робота з батьками" data-title="Правила прийому та зарахування до 1 класу" data-desc="Порядок подання документів, черговість зарахування та вимоги до майбутніх першокласників." data-format="PDF">
-        <td style="width: 45px; text-align: center; font-weight: bold; color: #64748b;">23</td>
+        <td class="doc-col-id">23</td>
         <td>
-          <div style="font-weight: 700; color: #0f3b6c; font-size: 15px; margin-bottom: 4px;">
+          <div class="doc-row-title">
             <a href="https://rada.info/upload/users_files/04348409/68c516c84a2f530670d877748f32c6de.pdf" target="_blank" rel="noopener noreferrer">Правила прийому та зарахування до 1 класу</a>
           </div>
-          <div style="font-size: 13px; color: #64748b; line-height: 1.4;">Порядок подання документів, черговість зарахування та вимоги до майбутніх першокласників.</div>
+          <div class="doc-row-desc">Порядок подання документів, черговість зарахування та вимоги до майбутніх першокласників.</div>
         </td>
-        <td style="font-size: 13px; color: #475569;">
-          <span style="display: inline-block; background: #f1f5f9; padding: 3px 8px; border-radius: 4px; font-weight: 500;">
+        <td>
+          <span class="doc-category-pill">
             Вступна кампанія та робота з батьками
           </span>
         </td>
@@ -693,15 +734,15 @@
       </tr>
     
       <tr class="doc-row" data-category="Вступна кампанія та робота з батьками" data-title="Пам'ятка для батьків майбутніх першокласників" data-desc="Поради батькам щодо психологічної та практичної готовності дитини до школи." data-format="ODT">
-        <td style="width: 45px; text-align: center; font-weight: bold; color: #64748b;">24</td>
+        <td class="doc-col-id">24</td>
         <td>
-          <div style="font-weight: 700; color: #0f3b6c; font-size: 15px; margin-bottom: 4px;">
+          <div class="doc-row-title">
             <a href="https://rada.info/upload/users_files/04348409/6b2b4b60c088641e06fed3fe4dc5c62b.odt" target="_blank" rel="noopener noreferrer">Пам'ятка для батьків майбутніх першокласників</a>
           </div>
-          <div style="font-size: 13px; color: #64748b; line-height: 1.4;">Поради батькам щодо психологічної та практичної готовності дитини до школи.</div>
+          <div class="doc-row-desc">Поради батькам щодо психологічної та практичної готовності дитини до школи.</div>
         </td>
-        <td style="font-size: 13px; color: #475569;">
-          <span style="display: inline-block; background: #f1f5f9; padding: 3px 8px; border-radius: 4px; font-weight: 500;">
+        <td>
+          <span class="doc-category-pill">
             Вступна кампанія та робота з батьками
           </span>
         </td>
@@ -716,15 +757,15 @@
       </tr>
     
       <tr class="doc-row" data-category="Вступна кампанія та робота з батьками" data-title="Відеовізитівка для батьків першокласників" data-desc="Відеоекскурсія класами ліцею та знайомство з першою вчителькою на Facebook." data-format="VIDEO">
-        <td style="width: 45px; text-align: center; font-weight: bold; color: #64748b;">25</td>
+        <td class="doc-col-id">25</td>
         <td>
-          <div style="font-weight: 700; color: #0f3b6c; font-size: 15px; margin-bottom: 4px;">
+          <div class="doc-row-title">
             <a href="https://www.facebook.com/share/v/1EUkNYmrti/" target="_blank" rel="noopener noreferrer">Відеовізитівка для батьків першокласників</a>
           </div>
-          <div style="font-size: 13px; color: #64748b; line-height: 1.4;">Відеоекскурсія класами ліцею та знайомство з першою вчителькою на Facebook.</div>
+          <div class="doc-row-desc">Відеоекскурсія класами ліцею та знайомство з першою вчителькою на Facebook.</div>
         </td>
-        <td style="font-size: 13px; color: #475569;">
-          <span style="display: inline-block; background: #f1f5f9; padding: 3px 8px; border-radius: 4px; font-weight: 500;">
+        <td>
+          <span class="doc-category-pill">
             Вступна кампанія та робота з батьками
           </span>
         </td>
@@ -739,15 +780,15 @@
       </tr>
     
       <tr class="doc-row" data-category="Вступна кампанія та робота з батьками" data-title="Зразок згоди батьків на збір та обробку персональних даних" data-desc="Офіційний бланк згоди батьків згідно ЗУ «Про захист персональних даних»." data-format="PDF">
-        <td style="width: 45px; text-align: center; font-weight: bold; color: #64748b;">26</td>
+        <td class="doc-col-id">26</td>
         <td>
-          <div style="font-weight: 700; color: #0f3b6c; font-size: 15px; margin-bottom: 4px;">
+          <div class="doc-row-title">
             <a href="https://rada.info/upload/users_files/04348409/3800145565f14f5589da2df28fd98d21.pdf" target="_blank" rel="noopener noreferrer">Зразок згоди батьків на збір та обробку персональних даних</a>
           </div>
-          <div style="font-size: 13px; color: #64748b; line-height: 1.4;">Офіційний бланк згоди батьків згідно ЗУ «Про захист персональних даних».</div>
+          <div class="doc-row-desc">Офіційний бланк згоди батьків згідно ЗУ «Про захист персональних даних».</div>
         </td>
-        <td style="font-size: 13px; color: #475569;">
-          <span style="display: inline-block; background: #f1f5f9; padding: 3px 8px; border-radius: 4px; font-weight: 500;">
+        <td>
+          <span class="doc-category-pill">
             Вступна кампанія та робота з батьками
           </span>
         </td>
@@ -762,15 +803,15 @@
       </tr>
     
       <tr class="doc-row" data-category="Вступна кампанія та робота з батьками" data-title="Зразок згоди вчителів на обробку персональних даних" data-desc="Бланк згоди працівників ліцею для кадрового діловодства." data-format="ODT">
-        <td style="width: 45px; text-align: center; font-weight: bold; color: #64748b;">27</td>
+        <td class="doc-col-id">27</td>
         <td>
-          <div style="font-weight: 700; color: #0f3b6c; font-size: 15px; margin-bottom: 4px;">
+          <div class="doc-row-title">
             <a href="https://rada.info/upload/users_files/04348409/f14e38470fd5b11162b9cf827509c0e0.odt" target="_blank" rel="noopener noreferrer">Зразок згоди вчителів на обробку персональних даних</a>
           </div>
-          <div style="font-size: 13px; color: #64748b; line-height: 1.4;">Бланк згоди працівників ліцею для кадрового діловодства.</div>
+          <div class="doc-row-desc">Бланк згоди працівників ліцею для кадрового діловодства.</div>
         </td>
-        <td style="font-size: 13px; color: #475569;">
-          <span style="display: inline-block; background: #f1f5f9; padding: 3px 8px; border-radius: 4px; font-weight: 500;">
+        <td>
+          <span class="doc-category-pill">
             Вступна кампанія та робота з батьками
           </span>
         </td>
@@ -785,15 +826,15 @@
       </tr>
     
       <tr class="doc-row" data-category="Звітність керівника" data-title="Річний звіт директора ліцею Демченко Л.М." data-desc="Публічний звіт директора Новопільського ліцею перед громадськістю за навчальний рік." data-format="DOCX">
-        <td style="width: 45px; text-align: center; font-weight: bold; color: #64748b;">28</td>
+        <td class="doc-col-id">28</td>
         <td>
-          <div style="font-weight: 700; color: #0f3b6c; font-size: 15px; margin-bottom: 4px;">
+          <div class="doc-row-title">
             <a href="https://rada.info/upload/users_files/04348409/80b29f4110a868f22668fd72b819c296.docx" target="_blank" rel="noopener noreferrer">Річний звіт директора ліцею Демченко Л.М.</a>
           </div>
-          <div style="font-size: 13px; color: #64748b; line-height: 1.4;">Публічний звіт директора Новопільського ліцею перед громадськістю за навчальний рік.</div>
+          <div class="doc-row-desc">Публічний звіт директора Новопільського ліцею перед громадськістю за навчальний рік.</div>
         </td>
-        <td style="font-size: 13px; color: #475569;">
-          <span style="display: inline-block; background: #f1f5f9; padding: 3px 8px; border-radius: 4px; font-weight: 500;">
+        <td>
+          <span class="doc-category-pill">
             Звітність керівника
           </span>
         </td>
@@ -808,7 +849,7 @@
       </tr>
     
           <tr id="docNoResults" style="display: none;">
-            <td colspan="5" style="text-align: center; padding: 30px; color: #64748b;">
+            <td colspan="5" class="doc-no-results">
               За вашим запитом документів не знайдено. Спробуйте змінити ключові слова або категорію.
             </td>
           </tr>
@@ -832,7 +873,7 @@
           <p>
             Комунальний заклад загальної середньої освіти I–III ступенів Оліївської сільської ради Житомирського району Житомирської області.
           </p>
-          <div style="font-size: 13px; line-height: 1.5; color: #cbd5e1;">
+          <div class="footer-requisites">
             <div>• Код ЄДРПОУ: <strong>06671161</strong></div>
             <div>• ID закладу в ІСУО: <strong>16060</strong></div>
             <div>• КОАТУУ: <strong>1825686201</strong></div>

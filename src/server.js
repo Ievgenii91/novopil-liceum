@@ -116,8 +116,9 @@ const server = http.createServer((req, res) => {
       return res.end(JSON.stringify({ error: 'Параметр file є обов’язковим' }));
     }
 
-    const fullPath = path.join(CONTENT_DIR, fileRel);
-    if (!fullPath.startsWith(CONTENT_DIR) || !fs.existsSync(fullPath)) {
+    const fullPath = path.resolve(CONTENT_DIR, fileRel);
+    const relCheck = path.relative(CONTENT_DIR, fullPath);
+    if (relCheck.startsWith('..') || path.isAbsolute(relCheck) || !fs.existsSync(fullPath)) {
       res.writeHead(404, { 'Content-Type': 'application/json' });
       return res.end(JSON.stringify({ error: 'Файл не знайдено' }));
     }
@@ -141,8 +142,9 @@ const server = http.createServer((req, res) => {
           return res.end(JSON.stringify({ error: 'Некоректні дані запиту' }));
         }
 
-        const fullPath = path.join(CONTENT_DIR, file);
-        if (!fullPath.startsWith(CONTENT_DIR)) {
+        const fullPath = path.resolve(CONTENT_DIR, file);
+        const relCheck = path.relative(CONTENT_DIR, fullPath);
+        if (relCheck.startsWith('..') || path.isAbsolute(relCheck)) {
           res.writeHead(403, { 'Content-Type': 'application/json' });
           return res.end(JSON.stringify({ error: 'Доступ заборонено' }));
         }
@@ -171,7 +173,12 @@ const server = http.createServer((req, res) => {
   }
 
   // 4. Статичні файли сайту з /dist
-  let filePath = path.join(DIST_DIR, pathname);
+  let filePath = path.resolve(DIST_DIR, '.' + pathname);
+  const relDist = path.relative(DIST_DIR, filePath);
+  if (relDist.startsWith('..') || path.isAbsolute(relDist)) {
+    res.writeHead(403, { 'Content-Type': 'text/plain; charset=utf-8' });
+    return res.end('Доступ заборонено');
+  }
 
   // Перевірка директорій (напр. /about/ -> /about/index.html)
   if (fs.existsSync(filePath) && fs.statSync(filePath).isDirectory()) {
@@ -194,7 +201,11 @@ const server = http.createServer((req, res) => {
     stream.pipe(res);
   } else {
     // 404
+    const custom404 = path.join(DIST_DIR, '404.html');
     res.writeHead(404, { 'Content-Type': 'text/html; charset=utf-8' });
+    if (fs.existsSync(custom404)) {
+      return fs.createReadStream(custom404).pipe(res);
+    }
     res.end(`
       <!doctype html>
       <html lang="uk">

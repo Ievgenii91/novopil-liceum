@@ -78,14 +78,20 @@
 
     // Toggle panel visibility
     const panel = document.getElementById('a11yPanel');
-    const toggleBtn = document.getElementById('a11yToggleBtn');
+    const toggleBtns = document.querySelectorAll('#a11yToggleBtn, [data-toggle-a11y]');
     if (panel) {
       if (settings.panelOpen) {
         panel.classList.add('is-active');
-        if (toggleBtn) toggleBtn.classList.add('active');
+        toggleBtns.forEach((b) => {
+          b.classList.add('active');
+          b.setAttribute('aria-expanded', 'true');
+        });
       } else {
         panel.classList.remove('is-active');
-        if (toggleBtn) toggleBtn.classList.remove('active');
+        toggleBtns.forEach((b) => {
+          b.classList.remove('active');
+          b.setAttribute('aria-expanded', 'false');
+        });
       }
     }
   }
@@ -110,14 +116,14 @@
   }
 
   function setupEventListeners() {
-    const toggleBtn = document.getElementById('a11yToggleBtn');
-    if (toggleBtn) {
+    const toggleBtns = document.querySelectorAll('#a11yToggleBtn, [data-toggle-a11y]');
+    toggleBtns.forEach((toggleBtn) => {
       toggleBtn.addEventListener('click', function () {
         settings.panelOpen = !settings.panelOpen;
         saveSettings();
         applySettings();
       });
-    }
+    });
 
     const closeBtn = document.getElementById('a11yCloseBtn');
     if (closeBtn) {

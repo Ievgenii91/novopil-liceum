@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="uk">
+<html lang="uk" data-base-path="">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -18,31 +18,47 @@
     <div class="a11y-container">
       <div class="a11y-group">
         <span class="a11y-label">Розмір шрифту:</span>
-        <button class="a11y-btn" data-a11y-action="fontsize" data-a11y-value="font-md" title="Звичайний розмір шрифту">A</button>
-        <button class="a11y-btn" data-a11y-action="fontsize" data-a11y-value="font-lg" title="Збільшений шрифт">A+</button>
-        <button class="a11y-btn" data-a11y-action="fontsize" data-a11y-value="font-xl" title="Дуже великий шрифт">A++</button>
+        <button type="button" class="a11y-btn" data-a11y-action="fontsize" data-a11y-value="font-md" title="Звичайний розмір шрифту">A</button>
+        <button type="button" class="a11y-btn" data-a11y-action="fontsize" data-a11y-value="font-lg" title="Збільшений шрифт">A+</button>
+        <button type="button" class="a11y-btn" data-a11y-action="fontsize" data-a11y-value="font-xl" title="Дуже великий шрифт">A++</button>
       </div>
 
       <div class="a11y-group">
         <span class="a11y-label">Контрастність:</span>
-        <button class="a11y-btn" data-a11y-action="theme" data-a11y-value="theme-normal" title="Звичайна колірна схема">Стандарт</button>
-        <button class="a11y-btn" data-a11y-action="theme" data-a11y-value="theme-bw" title="Чорно-білий контраст">Ч/Б</button>
-        <button class="a11y-btn" data-a11y-action="theme" data-a11y-value="theme-wb" title="Темний високий контраст">Інверсія</button>
-        <button class="a11y-btn" data-a11y-action="theme" data-a11y-value="theme-by" title="Синій на жовтому фоні">Синьо-жовтий</button>
+        <button type="button" class="a11y-btn" data-a11y-action="theme" data-a11y-value="theme-normal" title="Звичайна колірна схема">Стандарт</button>
+        <button type="button" class="a11y-btn" data-a11y-action="theme" data-a11y-value="theme-bw" title="Чорно-білий контраст">Ч/Б</button>
+        <button type="button" class="a11y-btn" data-a11y-action="theme" data-a11y-value="theme-wb" title="Темний високий контраст">Інверсія</button>
+        <button type="button" class="a11y-btn" data-a11y-action="theme" data-a11y-value="theme-by" title="Синій на жовтому фоні">Синьо-жовтий</button>
       </div>
 
       <div class="a11y-group">
         <span class="a11y-label">Додатково:</span>
-        <button class="a11y-btn" data-a11y-action="spacing" title="Збільшити міжрядковий інтервал">Інтервал</button>
-        <button class="a11y-btn" data-a11y-action="dyslexic" title="Шрифт для людей з дислексією">Шрифт НУШ</button>
-        <button class="a11y-btn" data-a11y-action="images" data-a11y-value="grayscale" title="Чорно-білі фотографії">Ч/Б фото</button>
-        <button class="a11y-btn" data-a11y-action="images" data-a11y-value="hide" title="Приховати зображення">Без фото</button>
-        <button class="a11y-btn" data-a11y-action="speech" title="Озвучити текст сторінки">🔊 Читати голос</button>
-        <button class="a11y-btn" data-a11y-action="reset" title="Скинути до стандартних налаштувань">Скинути</button>
+        <button type="button" class="a11y-btn" data-a11y-action="spacing" title="Збільшити міжрядковий інтервал">Інтервал</button>
+        <button type="button" class="a11y-btn" data-a11y-action="dyslexic" title="Шрифт для людей з дислексією">Шрифт НУШ</button>
+        <button type="button" class="a11y-btn" data-a11y-action="images" data-a11y-value="grayscale" title="Чорно-білі фотографії">Ч/Б фото</button>
+        <button type="button" class="a11y-btn" data-a11y-action="images" data-a11y-value="hide" title="Приховати зображення">Без фото</button>
+        <button type="button" class="a11y-btn" data-a11y-action="speech" title="Озвучити текст сторінки">🔊 Читати голос</button>
+        <button type="button" class="a11y-btn" data-a11y-action="reset" title="Скинути до стандартних налаштувань">Скинути</button>
       </div>
 
       <div>
-        <button id="a11yCloseBtn" class="a11y-btn-close">✕ Закрити</button>
+        <button type="button" id="a11yCloseBtn" class="a11y-btn-close">✕ Закрити</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- МОДАЛЬНЕ ВІКНО ПОШУКУ ПО САЙТУ -->
+  <div id="siteSearchModal" class="search-modal" role="dialog" aria-modal="true" aria-label="Пошук по сайту ліцею" hidden>
+    <div class="search-modal-backdrop" data-close-search></div>
+    <div class="search-modal-dialog">
+      <div class="search-modal-header">
+        <label for="siteSearchInput" class="sr-only">Пошук сторінок, новин та документів</label>
+        <span class="search-modal-icon" aria-hidden="true">🔍</span>
+        <input type="search" id="siteSearchInput" class="search-modal-input" placeholder="Пошук сторінок, новин, розкладу, правил вступу..." autocomplete="off" />
+        <button type="button" id="siteSearchCloseBtn" class="search-modal-close" aria-label="Закрити вікно пошуку">✕</button>
+      </div>
+      <div id="siteSearchResults" class="search-modal-results" role="region" aria-live="polite">
+        <p class="search-modal-hint">Введіть ключове слово (наприклад: «1 клас», «розклад», «булінг», «статут», «харчування»)</p>
       </div>
     </div>
   </div>
@@ -60,13 +76,16 @@
         <span>📍 вул. Миру, 12, с. Новопіль, Житомирський район, Житомирська область, Україна, 12333</span>
       </div>
       <div class="topbar-actions">
-        <button id="a11yToggleBtn" class="btn-accessibility" title="Налаштування сайту для людей з порушенням зору">
+        <button type="button" class="btn-search-trigger" data-open-search title="Пошук по сайту (Ctrl+K)">
+          🔍 Пошук
+        </button>
+        <button type="button" id="a11yToggleBtn" class="btn-accessibility" data-toggle-a11y aria-expanded="false" title="Налаштування сайту для людей з порушенням зору">
           👁️ Людям з порушенням зору
         </button>
         <a href="https://nz.ua/" target="_blank" rel="noopener noreferrer" class="btn-journal-link">
           📖 NZ.UA Щоденник
         </a>
-        <a href="https://www.facebook.com/groups/410306759668647" target="_blank" rel="noopener noreferrer" style="color: #cbd5e1;" title="Facebook ліцею">
+        <a href="https://www.facebook.com/groups/410306759668647" target="_blank" rel="noopener noreferrer" class="topbar-fb-link" title="Facebook ліцею">
           f Facebook
         </a>
       </div>
@@ -79,18 +98,40 @@
       <a href="/" class="brand-wrapper">
         <img src="/assets/images/logo.svg" alt="Герб Новопільського ліцею" class="brand-logo" />
         <div class="brand-text">
-          <h1>Новопільський ліцей</h1>
+          <div class="brand-title">Новопільський ліцей</div>
           <p>Оліївської сільської ради Житомирського району</p>
         </div>
       </a>
 
-      <button id="mobileMenuBtn" class="mobile-menu-btn" aria-label="Відкрити головне меню">
-        ☰
-      </button>
+      <div class="header-mobile-controls">
+        <button type="button" class="mobile-icon-btn" data-open-search aria-label="Пошук по сайту" title="Пошук по сайту">
+          🔍
+        </button>
+        <button type="button" class="mobile-icon-btn" data-toggle-a11y aria-label="Налаштування для людей з порушенням зору" title="Людям з порушенням зору">
+          👁️
+        </button>
+        <button type="button" id="mobileMenuBtn" class="mobile-menu-btn" aria-label="Відкрити головне меню" aria-expanded="false">
+          ☰
+        </button>
+      </div>
 
-      <nav>
+      <nav aria-label="Головна навігація сайту">
         <ul id="navMenu" class="nav-menu">
-          <li class="nav-item active"><a href="/" class="nav-link">Головна</a></li><li class="nav-item "><a href="/about/" class="nav-link">Про ліцей <span class="arrow">▼</span></a><ul class="dropdown-menu"><li><a href="/about/administration/" class="dropdown-link">Візитівка та адміністрація</a></li><li><a href="/about/history/" class="dropdown-link">Історія школи (з 1885 р.)</a></li><li><a href="/about/management/" class="dropdown-link">Структура та врядування</a></li><li><a href="/about/teachers/" class="dropdown-link">Педагогічний колектив</a></li><li><a href="/about/infrastructure/" class="dropdown-link">Матеріально-технічна база</a></li><li><a href="/about/vacancies/" class="dropdown-link">Вакансії</a></li></ul></li><li class="nav-item "><a href="/transparency/" class="nav-link">Прозорість та звітність <span class="arrow">▼</span></a><ul class="dropdown-menu"><li><a href="/transparency/" class="dropdown-link">Огляд публічної інформації</a></li><li><a href="/transparency/statute/" class="dropdown-link">Статут та ліцензії</a></li><li><a href="/transparency/capacity/" class="dropdown-link">Ліцензований обсяг та учні</a></li><li><a href="/transparency/catchment-area/" class="dropdown-link">Територія обслуговування</a></li><li><a href="/transparency/annual-reports/" class="dropdown-link">Звіти директора</a></li><li><a href="/transparency/quality-monitoring/" class="dropdown-link">Моніторинг якості освіти</a></li><li><a href="/transparency/finance/" class="dropdown-link">Фінансова звітність / Закупівлі</a></li><li><a href="/transparency/extra-services/" class="dropdown-link">Додаткові послуги</a></li></ul></li><li class="nav-item "><a href="/education/" class="nav-link">Освітній процес <span class="arrow">▼</span></a><ul class="dropdown-menu"><li><a href="/education/programs/" class="dropdown-link">Освітні програми</a></li><li><a href="/education/evaluation/" class="dropdown-link">Критерії оцінювання (1-4 та 5-11 кл.)</a></li><li><a href="/education/schedule/" class="dropdown-link">Розклад уроків та дзвінків</a></li><li><a href="/education/nush/" class="dropdown-link">НУШ: Нова українська школа</a></li><li><a href="/education/distance-learning/" class="dropdown-link">Дистанційне навчання</a></li><li><a href="/education/language/" class="dropdown-link">Мова освітнього процесу</a></li></ul></li><li class="nav-item "><a href="/safety/" class="nav-link">Безпечне середовище <span class="arrow">▼</span></a><ul class="dropdown-menu"><li><a href="/safety/anti-bullying/" class="dropdown-link">Протидія булінгу (плани, заяви)</a></li><li><a href="/safety/civil-defense/" class="dropdown-link">Цивільний захист та укриття</a></li><li><a href="/safety/inclusion/" class="dropdown-link">Інклюзивна освіта (ООП)</a></li><li><a href="/safety/code-of-conduct/" class="dropdown-link">Правила поведінки учнів</a></li><li><a href="/safety/psychology/" class="dropdown-link">Психологічна служба</a></li></ul></li><li class="nav-item "><a href="/parents-students/" class="nav-link">Вступ та батькам <span class="arrow">▼</span></a><ul class="dropdown-menu"><li><a href="/parents-students/admission-1st-grade/" class="dropdown-link">Прийом до 1 класу</a></li><li><a href="/parents-students/forms/" class="dropdown-link">Зразки заяв та згод</a></li><li><a href="/parents-students/electronic-journal/" class="dropdown-link">Електронний щоденник (NZ.UA)</a></li><li><a href="/parents-students/canteen/" class="dropdown-link">Організація харчування (НАССР)</a></li><li><a href="/parents-students/student-council/" class="dropdown-link">Учнівське самоврядування</a></li></ul></li><li class="nav-item "><a href="/news/" class="nav-link">Медіа <span class="arrow">▼</span></a><ul class="dropdown-menu"><li><a href="/news/" class="dropdown-link">Новини ліцею</a></li><li><a href="/news/gallery/" class="dropdown-link">Фото та відеогалерея</a></li><li><a href="https://www.facebook.com/groups/410306759668647" class="dropdown-link" target="_blank" rel="noopener noreferrer">Facebook-спільнота</a></li></ul></li><li class="nav-item "><a href="/contacts/" class="nav-link">Контакти</a></li>
+          <li class="nav-item active"><a href="/" class="nav-link">Головна</a></li><li class="nav-item "><a href="/about/" class="nav-link" aria-haspopup="true" aria-expanded="false">Про ліцей <span class="arrow" aria-hidden="true">▼</span></a><ul class="dropdown-menu"><li><a href="/about/administration/" class="dropdown-link">Візитівка та адміністрація</a></li><li><a href="/about/history/" class="dropdown-link">Історія школи (з 1885 р.)</a></li><li><a href="/about/management/" class="dropdown-link">Структура та врядування</a></li><li><a href="/about/teachers/" class="dropdown-link">Педагогічний колектив</a></li><li><a href="/about/infrastructure/" class="dropdown-link">Матеріально-технічна база</a></li><li><a href="/about/vacancies/" class="dropdown-link">Вакансії</a></li></ul></li><li class="nav-item "><a href="/transparency/" class="nav-link" aria-haspopup="true" aria-expanded="false">Прозорість та звітність <span class="arrow" aria-hidden="true">▼</span></a><ul class="dropdown-menu"><li><a href="/transparency/" class="dropdown-link">Огляд публічної інформації</a></li><li><a href="/transparency/statute/" class="dropdown-link">Статут та ліцензії</a></li><li><a href="/transparency/capacity/" class="dropdown-link">Ліцензований обсяг та учні</a></li><li><a href="/transparency/catchment-area/" class="dropdown-link">Територія обслуговування</a></li><li><a href="/transparency/annual-reports/" class="dropdown-link">Звіти директора</a></li><li><a href="/transparency/quality-monitoring/" class="dropdown-link">Моніторинг якості освіти</a></li><li><a href="/transparency/finance/" class="dropdown-link">Фінансова звітність / Закупівлі</a></li><li><a href="/transparency/extra-services/" class="dropdown-link">Додаткові послуги</a></li></ul></li><li class="nav-item "><a href="/education/" class="nav-link" aria-haspopup="true" aria-expanded="false">Освітній процес <span class="arrow" aria-hidden="true">▼</span></a><ul class="dropdown-menu"><li><a href="/education/programs/" class="dropdown-link">Освітні програми</a></li><li><a href="/education/evaluation/" class="dropdown-link">Критерії оцінювання (1-4 та 5-11 кл.)</a></li><li><a href="/education/schedule/" class="dropdown-link">Розклад уроків та дзвінків</a></li><li><a href="/education/nush/" class="dropdown-link">НУШ: Нова українська школа</a></li><li><a href="/education/distance-learning/" class="dropdown-link">Дистанційне навчання</a></li><li><a href="/education/language/" class="dropdown-link">Мова освітнього процесу</a></li></ul></li><li class="nav-item "><a href="/safety/" class="nav-link" aria-haspopup="true" aria-expanded="false">Безпечне середовище <span class="arrow" aria-hidden="true">▼</span></a><ul class="dropdown-menu"><li><a href="/safety/anti-bullying/" class="dropdown-link">Протидія булінгу (плани, заяви)</a></li><li><a href="/safety/civil-defense/" class="dropdown-link">Цивільний захист та укриття</a></li><li><a href="/safety/inclusion/" class="dropdown-link">Інклюзивна освіта (ООП)</a></li><li><a href="/safety/code-of-conduct/" class="dropdown-link">Правила поведінки учнів</a></li><li><a href="/safety/psychology/" class="dropdown-link">Психологічна служба</a></li></ul></li><li class="nav-item "><a href="/parents-students/" class="nav-link" aria-haspopup="true" aria-expanded="false">Вступ та батькам <span class="arrow" aria-hidden="true">▼</span></a><ul class="dropdown-menu"><li><a href="/parents-students/admission-1st-grade/" class="dropdown-link">Прийом до 1 класу</a></li><li><a href="/parents-students/forms/" class="dropdown-link">Зразки заяв та згод</a></li><li><a href="/parents-students/electronic-journal/" class="dropdown-link">Електронний щоденник (NZ.UA)</a></li><li><a href="/parents-students/canteen/" class="dropdown-link">Організація харчування (НАССР)</a></li><li><a href="/parents-students/student-council/" class="dropdown-link">Учнівське самоврядування</a></li></ul></li><li class="nav-item "><a href="/news/" class="nav-link" aria-haspopup="true" aria-expanded="false">Медіа <span class="arrow" aria-hidden="true">▼</span></a><ul class="dropdown-menu"><li><a href="/news/" class="dropdown-link">Новини ліцею</a></li><li><a href="/news/gallery/" class="dropdown-link">Фото та відеогалерея</a></li><li><a href="https://www.facebook.com/groups/410306759668647" class="dropdown-link" target="_blank" rel="noopener noreferrer">Facebook-спільнота</a></li></ul></li><li class="nav-item "><a href="/contacts/" class="nav-link">Контакти</a></li>
+          <li class="nav-mobile-Utility">
+            <div class="nav-mobile-actions">
+              <button type="button" class="btn-accessibility" data-toggle-a11y style="width: 100%; justify-content: center; padding: 10px;">
+                👁️ Версія для людей з порушенням зору
+              </button>
+              <a href="https://nz.ua/" target="_blank" rel="noopener noreferrer" class="btn-journal-link" style="width: 100%; justify-content: center; padding: 10px;">
+                📖 Електронний щоденник NZ.UA
+              </a>
+              <div class="nav-mobile-contacts">
+                <a href="tel:+380671844288">📞 +38 (067) 184-42-88</a>
+                <a href="mailto:novopol4@ukr.net">✉️ novopol4@ukr.net</a>
+              </div>
+            </div>
+          </li>
         </ul>
       </nav>
     </div>
@@ -124,18 +165,18 @@
         <div>
           <div class="hero-card">
             <div class="hero-director">
-              <div class="director-avatar">👩‍🏫</div>
+              <div class="director-avatar" aria-hidden="true">👩‍🏫</div>
               <div class="director-info">
-                <h4>Демченко Лідія Миколаївна</h4>
+                <h2>Демченко Лідія Миколаївна</h2>
                 <p>Директор Новопільського ліцею</p>
               </div>
             </div>
             <p class="hero-quote">
               «Ми прагнемо створити в ліцеї атмосферу захищеності, підтримки та натхнення, де кожна дитина відчуває себе особистістю, знаходить друзів та розкриває свої унікальні здібності.»
             </p>
-            <div style="font-size: 13.5px; color: #475569; display: flex; flex-direction: column; gap: 6px;">
-              <div>📞 <strong>Телефон:</strong> +38 (067) 184-42-88</div>
-              <div>✉️ <strong>E-mail:</strong> novopol4@ukr.net</div>
+            <div class="hero-contacts-list">
+              <div>📞 <strong>Телефон:</strong> <a href="tel:+380671844288">+38 (067) 184-42-88</a></div>
+              <div>✉️ <strong>E-mail:</strong> <a href="mailto:novopol4@ukr.net">novopol4@ukr.net</a></div>
               <div>📍 <strong>Адреса:</strong> вул. Миру, 12, с. Новопіль, Житомирський район, Житомирська область, Україна, 12333</div>
             </div>
           </div>
@@ -148,32 +189,32 @@
       <div class="quick-grid">
         
             <a href="/parents-students/admission-1st-grade/" class="quick-card">
-              <div class="quick-icon">🎒</div>
+              <div class="quick-icon" aria-hidden="true">🎒</div>
               <div><h3>Прийом до 1 класу</h3></div>
             </a>
           
             <a href="https://nz.ua/" target="_blank" rel="noopener noreferrer" class="quick-card">
-              <div class="quick-icon">📊</div>
+              <div class="quick-icon" aria-hidden="true">📊</div>
               <div><h3>Електронний щоденник (NZ.UA)</h3></div>
             </a>
           
             <a href="/education/schedule/" class="quick-card">
-              <div class="quick-icon">⏰</div>
+              <div class="quick-icon" aria-hidden="true">⏰</div>
               <div><h3>Розклад уроків</h3></div>
             </a>
           
             <a href="/safety/anti-bullying/" class="quick-card">
-              <div class="quick-icon">🛡️</div>
+              <div class="quick-icon" aria-hidden="true">🛡️</div>
               <div><h3>Протидія булінгу</h3></div>
             </a>
           
             <a href="/safety/civil-defense/" class="quick-card">
-              <div class="quick-icon">🚪</div>
+              <div class="quick-icon" aria-hidden="true">🚪</div>
               <div><h3>Безпека та укриття</h3></div>
             </a>
           
             <a href="/transparency/" class="quick-card">
-              <div class="quick-icon">📜</div>
+              <div class="quick-icon" aria-hidden="true">📜</div>
               <div><h3>Прозорість (ст. 30 ЗУ)</h3></div>
             </a>
           
@@ -211,11 +252,11 @@
   <!-- ОГОЛОШЕННЯ (якщо є активні) -->
   
       <div class="container">
-        <div class="announcement-banner">
-          <div class="announcement-icon">📢</div>
+        <div class="announcement-banner" role="region" aria-label="Важливе оголошення">
+          <div class="announcement-icon" aria-hidden="true">📢</div>
           <div class="announcement-content">
-            <h4>Триває прийом заяв до 1 класу на новий навчальний рік</h4>
-            <p><p>Шановні батьки майбутніх першокласників! Новопільський ліцей здійснює прийом документів для зарахування дітей до 1-го класу. Ознайомитися з правилами, пам'яткою та зразками заяв ви можете у розділі <a href="/parents-students/admission-1st-grade/">«Вступ до 1 класу»</a>. Телефон для довідок: +38 (067) 184-42-88.</p></p>
+            <h2>Триває прийом заяв до 1 класу на новий навчальний рік</h2>
+            <p>Шановні батьки майбутніх першокласників! Новопільський ліцей здійснює прийом документів для зарахування дітей до 1-го класу. Ознайомитися з правилами, пам'яткою та зразками заяв ви можете у розділі <a href="/parents-students/admission-1st-grade/">«Вступ до 1 класу»</a>. Телефон для довідок: +38 (067) 184-42-88.</p>
           </div>
         </div>
       </div>
@@ -247,7 +288,7 @@
             
         <article class="news-card">
           <div class="news-img">
-            <img src="/assets/images/news-1.svg" alt="День здорового харчування в Новопільському ліцеї: формуємо корисні звички" />
+            <img src="/assets/images/news-1.svg" alt="День здорового харчування в Новопільському ліцеї: формуємо корисні звички" loading="lazy" />
             <span class="news-tag">Здорове харчування</span>
           </div>
           <div class="news-body">
@@ -262,7 +303,7 @@
       
         <article class="news-card">
           <div class="news-img">
-            <img src="/assets/images/news/post-2002330900466217.jpg" alt="Щира вдячність за привітання та підтримку з нагоди Дня працівників освіти" />
+            <img src="/assets/images/news/post-2002330900466217.jpg" alt="Щира вдячність за привітання та підтримку з нагоди Дня працівників освіти" loading="lazy" />
             <span class="news-tag">Подяка</span>
           </div>
           <div class="news-body">
@@ -277,7 +318,7 @@
       
         <article class="news-card">
           <div class="news-img">
-            <img src="/assets/images/news-3.svg" alt="День учителя у Новопільському ліцеї: церемонія «Зірки освіти України» та зміна ролей" />
+            <img src="/assets/images/news-3.svg" alt="День учителя у Новопільському ліцеї: церемонія «Зірки освіти України» та зміна ролей" loading="lazy" />
             <span class="news-tag">Свято</span>
           </div>
           <div class="news-body">
@@ -306,7 +347,7 @@
           <p>
             Комунальний заклад загальної середньої освіти I–III ступенів Оліївської сільської ради Житомирського району Житомирської області.
           </p>
-          <div style="font-size: 13px; line-height: 1.5; color: #cbd5e1;">
+          <div class="footer-requisites">
             <div>• Код ЄДРПОУ: <strong>06671161</strong></div>
             <div>• ID закладу в ІСУО: <strong>16060</strong></div>
             <div>• КОАТУУ: <strong>1825686201</strong></div>

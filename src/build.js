@@ -149,31 +149,36 @@ function markdownToHtml(md) {
   });
 
   // Заголовки h4 - h1
-  html = html.replace(/^#### (.*$)/gim, '<h4>$1</h4>');
-  html = html.replace(/^### (.*$)/gim, '<h3>$1</h3>');
-  html = html.replace(/^## (.*$)/gim, '<h2>$1</h2>');
-  html = html.replace(/^# (.*$)/gim, '<h1>$1</h1>');
+  html = html.replace(/^#### (.*$)/gim, '\n\n<h4>$1</h4>\n\n');
+  html = html.replace(/^### (.*$)/gim, '\n\n<h3>$1</h3>\n\n');
+  html = html.replace(/^## (.*$)/gim, '\n\n<h2>$1</h2>\n\n');
+  html = html.replace(/^# (.*$)/gim, '\n\n<h1>$1</h1>\n\n');
 
   // Горизонтальні лінії
-  html = html.replace(/^---$/gim, '<hr class="section-divider" />');
+  html = html.replace(/^---$/gim, '\n\n<hr class="section-divider" />\n\n');
 
   // Жирний та курсив
   html = html.replace(/\*\*\*(.*?)\*\*\*/gim, '<strong><em>$1</em></strong>');
   html = html.replace(/\*\*(.*?)\*\*/gim, '<strong>$1</strong>');
-  html = html.replace(/\*(.*?)\*/gim, '<em>$1</em>');
+  html = html.replace(/(^|[^*\w])\*([^*\r\n]+)\*(?!\*)/gim, '$1<em>$2</em>');
 
-  // GitHub Alerts / Callouts
-  html = html.replace(/> \[!(NOTE|TIP|IMPORTANT|WARNING|CAUTION)\]\r?\n([\s\S]*?)(?=\n\n|$)/gim, (m, type, text) => {
+  // GitHub Alerts / Callouts (підтримка одно- та багаторядкових блоків)
+  html = html.replace(/> \[!(NOTE|TIP|IMPORTANT|WARNING|CAUTION)\]\r?\n((?:>.*(?:\r?\n|$))+)/gim, (m, type, text) => {
     const alertType = type.toLowerCase();
-    const cleanText = text.replace(/^> ?/gm, '').trim();
+    const cleanText = text
+      .trim()
+      .split(/\r?\n/)
+      .map((l) => l.replace(/^> ?/, '').trim())
+      .join('<br />');
     let badge = 'Зверніть увагу';
     if (type === 'WARNING' || type === 'CAUTION') badge = 'Важливо';
     if (type === 'TIP') badge = 'Корисна порада';
-    return `<div class="callout callout-${alertType}"><strong>${badge}:</strong> ${cleanText}</div>`;
+    if (type === 'IMPORTANT') badge = 'Важлива інформація';
+    return `\n\n<div class="callout callout-${alertType}"><strong>${badge}:</strong> ${cleanText}</div>\n\n`;
   });
 
   // Звичайні цитати >
-  html = html.replace(/^> (.*$)/gim, '<blockquote>$1</blockquote>');
+  html = html.replace(/^> (.*$)/gim, '\n\n<blockquote>$1</blockquote>\n\n');
 
   // Таблиці
   html = html.replace(/(\|.+\|\r?\n\|[-:| ]+\|\r?\n(?:\|.+\|\r?\n?)+)/g, (tableMatch) => {
@@ -196,7 +201,7 @@ function markdownToHtml(md) {
       tHtml += '</tr>';
     }
     tHtml += '</tbody></table></div>';
-    return tHtml;
+    return `\n\n${tHtml}\n\n`;
   });
 
   // Зображення ![alt](url) (обов'язково перед звичайними посиланнями!)
@@ -212,24 +217,24 @@ function markdownToHtml(md) {
   // Інлайн-код `code`
   html = html.replace(/`([^`]+)`/gim, '<code>$1</code>');
 
-  // Списки - або *
-  html = html.replace(/(?:^[*-] .+(?:\r?\n|$))+/gm, (listMatch) => {
+  // Списки - або * (включно з відступленими підпунктами)
+  html = html.replace(/(?:^\s*[*-] .+(?:\r?\n|$))+/gm, (listMatch) => {
     const items = listMatch.trim().split(/\r?\n/).map((line) => {
-      return `<li>${line.replace(/^[*-] /, '').trim()}</li>`;
+      return `<li>${line.replace(/^\s*[*-] /, '').trim()}</li>`;
     });
-    return `<ul>${items.join('')}</ul>`;
+    return `\n\n<ul>${items.join('')}</ul>\n\n`;
   });
 
   // Нумеровані списки 1.
-  html = html.replace(/(?:^\d+\. .+(?:\r?\n|$))+/gm, (listMatch) => {
+  html = html.replace(/(?:^\s*\d+\. .+(?:\r?\n|$))+/gm, (listMatch) => {
     const items = listMatch.trim().split(/\r?\n/).map((line) => {
-      return `<li>${line.replace(/^\d+\. /, '').trim()}</li>`;
+      return `<li>${line.replace(/^\s*\d+\. /, '').trim()}</li>`;
     });
-    return `<ol>${items.join('')}</ol>`;
+    return `\n\n<ol>${items.join('')}</ol>\n\n`;
   });
 
   // Параграфи
-  const paragraphs = html.split(/\r?\n\r?\n/);
+  const paragraphs = html.split(/(?:\r?\n){2,}/);
   html = paragraphs
     .map((p) => {
       p = p.trim();
@@ -245,9 +250,57 @@ function markdownToHtml(md) {
       }
       return `<p>${p.replace(/\r?\n/g, '<br />')}</p>`;
     })
+    .filter(Boolean)
     .join('\n');
 
   return html;
+}
+
+// Генерація блоку офіційних документів з реєстру для конкретної сторінки (за pagePath)
+function generatePageDocumentsBoxHtml(pagePath) {
+  if (!pagePath || pagePath === '/' || pagePath === '/transparency/') return '';
+  const docs = documentsRegistry.filter((d) => d.pagePath === pagePath);
+  if (!docs.length) return '';
+
+  const itemsHtml = docs
+    .map((doc) => {
+      const fmt = String(doc.format || 'PDF').toLowerCase();
+      return `
+        <div class="page-doc-card">
+          <div class="page-doc-info">
+            <div class="page-doc-meta">
+              <span class="format-badge badge-${escapeAttr(fmt)}">${escapeAttr(doc.format)}</span>
+              <span class="page-doc-cat">Реєстр ст. 30 ЗУ (№${escapeAttr(doc.id)}) • ${escapeAttr(doc.category)}</span>
+            </div>
+            <h4 class="page-doc-title">
+              <a href="${escapeAttr(doc.url)}" target="_blank" rel="noopener noreferrer">${escapeAttr(doc.title)}</a>
+            </h4>
+            <p class="page-doc-desc">${escapeAttr(doc.description)}</p>
+          </div>
+          <div class="page-doc-action">
+            <a href="${escapeAttr(doc.url)}" target="_blank" rel="noopener noreferrer" class="btn-doc-download">
+              📥 Відкрити першоджерело
+            </a>
+          </div>
+        </div>
+      `;
+    })
+    .join('');
+
+  return `
+    <section class="page-docs-widget" aria-label="Офіційні документи з реєстру прозорості">
+      <div class="page-docs-header">
+        <div>
+          <h3>📂 Верифіковані документи у реєстрі прозорості (ст. 30 ЗУ «Про освіту»)</h3>
+          <p>Офіційні оцифровані першоджерела Оліївської сільської ради, закріплені за цим розділом</p>
+        </div>
+        <a href="/transparency/" class="section-link">Увесь реєстр (${documentsRegistry.length}) →</a>
+      </div>
+      <div class="page-docs-list">
+        ${itemsHtml}
+      </div>
+    </section>
+  `;
 }
 
 // Генерація таблиці 28 документів з фільтрами
@@ -257,31 +310,31 @@ function generateDocumentsRegistryHtml() {
   let selectOptions = '<option value="all">Усі категорії документів (' + documentsRegistry.length + ')</option>';
   categories.forEach((cat) => {
     const count = documentsRegistry.filter((d) => d.category === cat).length;
-    selectOptions += `<option value="${cat}">${cat} (${count})</option>`;
+    selectOptions += `<option value="${escapeAttr(cat)}">${escapeAttr(cat)} (${count})</option>`;
   });
 
   let rowsHtml = '';
   documentsRegistry.forEach((doc) => {
-    const fmt = doc.format.toLowerCase();
+    const fmt = String(doc.format || 'PDF').toLowerCase();
     rowsHtml += `
-      <tr class="doc-row" data-category="${doc.category}" data-title="${doc.title}" data-desc="${doc.description}" data-format="${doc.format}">
-        <td style="width: 45px; text-align: center; font-weight: bold; color: #64748b;">${doc.id}</td>
+      <tr class="doc-row" data-category="${escapeAttr(doc.category)}" data-title="${escapeAttr(doc.title)}" data-desc="${escapeAttr(doc.description)}" data-format="${escapeAttr(doc.format)}">
+        <td class="doc-col-id">${escapeAttr(doc.id)}</td>
         <td>
-          <div style="font-weight: 700; color: #0f3b6c; font-size: 15px; margin-bottom: 4px;">
-            <a href="${doc.url}" target="_blank" rel="noopener noreferrer">${doc.title}</a>
+          <div class="doc-row-title">
+            <a href="${escapeAttr(doc.url)}" target="_blank" rel="noopener noreferrer">${escapeAttr(doc.title)}</a>
           </div>
-          <div style="font-size: 13px; color: #64748b; line-height: 1.4;">${doc.description}</div>
+          <div class="doc-row-desc">${escapeAttr(doc.description)}</div>
         </td>
-        <td style="font-size: 13px; color: #475569;">
-          <span style="display: inline-block; background: #f1f5f9; padding: 3px 8px; border-radius: 4px; font-weight: 500;">
-            ${doc.category}
+        <td>
+          <span class="doc-category-pill">
+            ${escapeAttr(doc.category)}
           </span>
         </td>
         <td style="text-align: center;">
-          <span class="format-badge badge-${fmt}">${doc.format}</span>
+          <span class="format-badge badge-${escapeAttr(fmt)}">${escapeAttr(doc.format)}</span>
         </td>
         <td style="text-align: right; white-space: nowrap;">
-          <a href="${doc.url}" target="_blank" rel="noopener noreferrer" class="btn-doc-download">
+          <a href="${escapeAttr(doc.url)}" target="_blank" rel="noopener noreferrer" class="btn-doc-download">
             📥 Відкрити
           </a>
         </td>
@@ -292,15 +345,15 @@ function generateDocumentsRegistryHtml() {
   return `
     <div class="doc-search-box">
       <div class="doc-input-wrapper">
-        <span class="doc-search-icon">🔍</span>
-        <input type="text" id="docSearchInput" class="doc-input" placeholder="Швидкий пошук документів за назвою або ключовими словами..." />
+        <span class="doc-search-icon" aria-hidden="true">🔍</span>
+        <input type="text" id="docSearchInput" class="doc-input" aria-label="Швидкий пошук документів за назвою або ключовими словами" placeholder="Швидкий пошук документів за назвою або ключовими словами..." />
       </div>
-      <select id="docCategorySelect" class="doc-filter-select">
+      <select id="docCategorySelect" class="doc-filter-select" aria-label="Фільтр документів за категорією">
         ${selectOptions}
       </select>
     </div>
-    <div style="font-size: 13.5px; color: #64748b; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center;">
-      <span>Знайдено документів: <strong id="docCountBadge" style="color: #0f3b6c;">${documentsRegistry.length}</strong></span>
+    <div class="doc-summary-bar">
+      <span>Знайдено документів: <strong id="docCountBadge">${documentsRegistry.length}</strong></span>
       <span>Офіційні першоджерела Оліївської сільської ради</span>
     </div>
     <div class="doc-table-wrapper">
@@ -317,7 +370,7 @@ function generateDocumentsRegistryHtml() {
         <tbody id="docTableBody">
           ${rowsHtml}
           <tr id="docNoResults" style="display: none;">
-            <td colspan="5" style="text-align: center; padding: 30px; color: #64748b;">
+            <td colspan="5" class="doc-no-results">
               За вашим запитом документів не знайдено. Спробуйте змінити ключові слова або категорію.
             </td>
           </tr>
@@ -329,20 +382,25 @@ function generateDocumentsRegistryHtml() {
 
 // Генерація форми зворотного зв'язку та карти для контактів
 function generateContactsHtml() {
+  const email = siteSettings.email || 'novopol4@ukr.net';
   return `
     <div class="contacts-grid">
       <!-- Форма звернення -->
-      <div style="background: #ffffff; padding: 25px; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
-        <h3 style="margin-top: 0; color: #0f3b6c; font-size: 19px; margin-bottom: 12px;">Електронне звернення громадян</h3>
-        <p style="font-size: 13.5px; color: #64748b; margin-bottom: 18px;">
-          Відповідно до Закону України «Про звернення громадян», ви можете надіслати електронний запит до дирекції ліцею.
+      <div class="widget-card">
+        <h3 class="widget-card-title">Електронне звернення громадян</h3>
+        <p class="widget-card-subtitle">
+          Відповідно до Закону України «Про звернення громадян», ви можете сформувати та надіслати електронний запит на офіційну пошту дирекції ліцею (<strong>${escapeAttr(email)}</strong>).
         </p>
 
-        <div id="formSuccessAlert" style="display: none; background: #ecfdf5; border: 1px solid #10b981; color: #065f46; padding: 14px; border-radius: 8px; margin-bottom: 16px; font-size: 14px;">
-          ✓ Ваше звернення успішно надіслано до адміністрації Новопільського ліцею. Відповідь буде надано у встановлений законом термін.
+        <div id="formSuccessAlert" class="form-alert-success" role="status" aria-live="polite" style="display: none;">
+          <div>✓ <strong>Лист-звернення сформовано!</strong> Ваш поштовий клієнт відкрито для підтвердження відправки на адресу <strong>${escapeAttr(email)}</strong>.</div>
+          <div style="margin-top: 8px; display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
+            <a id="contactMailtoFallback" href="mailto:${escapeAttr(email)}" class="btn-doc-download">✉️ Відкрити в пошті ще раз</a>
+            <button type="button" id="contactCopyBtn" class="btn-doc-download" style="border: 1px solid currentColor; cursor: pointer;">📋 Скопіювати текст звернення</button>
+          </div>
         </div>
 
-        <form id="schoolContactForm">
+        <form id="schoolContactForm" data-recipient="${escapeAttr(email)}">
           <div class="form-group">
             <label class="form-label" for="contactName">Прізвище, ім'я та по батькові *</label>
             <input type="text" id="contactName" class="form-control" placeholder="Іваненко Іван Іванович" required />
@@ -358,10 +416,10 @@ function generateContactsHtml() {
           <div class="form-group">
             <label class="form-label" for="contactTopic">Тема звернення</label>
             <select id="contactTopic" class="form-control">
-              <option value="admission">Вступ до 1-го класу / зарахування</option>
-              <option value="learning">Організація освітнього процесу</option>
-              <option value="nutrition">Харчування здобувачів освіти</option>
-              <option value="general">Загальні питання та пропозиції</option>
+              <option value="Вступ до 1-го класу / зарахування">Вступ до 1-го класу / зарахування</option>
+              <option value="Організація освітнього процесу">Організація освітнього процесу</option>
+              <option value="Харчування здобувачів освіти">Харчування здобувачів освіти</option>
+              <option value="Загальні питання та пропозиції">Загальні питання та пропозиції</option>
             </select>
           </div>
           <div class="form-group">
@@ -373,13 +431,14 @@ function generateContactsHtml() {
       </div>
 
       <!-- Інтерактивна карта та схема доїзду -->
-      <div style="background: #ffffff; padding: 25px; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 2px 8px rgba(0,0,0,0.05); display: flex; flex-direction: column;">
-        <h3 style="margin-top: 0; color: #0f3b6c; font-size: 19px; margin-bottom: 12px;">Розташування та безпечний підхід</h3>
-        <p style="font-size: 13.5px; color: #64748b; margin-bottom: 16px;">
-          Адреса: ${siteSettings.address || 'вул. Миру, 12, с. Новопіль, Житомирський район, Житомирська область, Україна, 12333'}.
+      <div class="widget-card" style="display: flex; flex-direction: column;">
+        <h3 class="widget-card-title">Розташування та безпечний підхід</h3>
+        <p class="widget-card-subtitle">
+          Адреса: ${escapeAttr(siteSettings.address || 'вул. Миру, 12, с. Новопіль, Житомирський район, Житомирська область, Україна, 12333')}.
         </p>
-        <div style="flex-grow: 1; min-height: 280px; border-radius: 8px; overflow: hidden; border: 1px solid #cbd5e1; position: relative;">
+        <div class="map-frame-wrapper">
           <iframe 
+            title="Інтерактивна карта розташування Новопільського ліцею"
             width="100%" 
             height="100%" 
             frameborder="0" 
@@ -390,7 +449,7 @@ function generateContactsHtml() {
             style="border: 0; min-height: 300px;">
           </iframe>
         </div>
-        <div style="margin-top: 14px; font-size: 13px; color: #475569; background: #eff6ff; padding: 10px 14px; border-radius: 6px;">
+        <div class="map-landmark-note">
           📍 <strong>Орієнтир:</strong> Центр села Новопіль, поруч із центральною зупинкою та парковою зоною. Під'їзні шляхи асфальтовані, облаштовано безпечний пішохідний перехід.
         </div>
       </div>
@@ -400,21 +459,26 @@ function generateContactsHtml() {
 
 // Генерація форми повідомлення про булінг
 function generateBullyingFormHtml() {
+  const email = siteSettings.email || 'novopol4@ukr.net';
   return `
-    <div style="background: #fff1f2; border: 2px solid #fecdd3; border-radius: 12px; padding: 25px; margin: 30px 0;">
-      <h3 style="margin-top: 0; color: #9f1239; font-size: 20px; display: flex; align-items: center; gap: 8px;">
+    <div class="bully-form-box">
+      <h3 class="bully-form-title">
         🛡️ Форма конфіденційного повідомлення про булінг (цькування)
       </h3>
-      <p style="font-size: 14px; color: #881337; margin-bottom: 18px;">
-        Якщо ви стали свідком або потерпілим від булінгу в ліцеї, ви можете повідомити про це адміністрацію. Ви маєте право залишитися анонімним.
+      <p class="bully-form-subtitle">
+        Якщо ви стали свідком або потерпілим від булінгу в ліцеї, ви можете повідомити про це дирекцію та психологічну службу (<strong>${escapeAttr(email)}</strong>). Ви маєте право залишитися анонімним або звернутися на гарячу лінію <strong>116 111</strong>.
       </p>
 
-      <div id="bullySuccessAlert" style="display: none; background: #ecfdf5; border: 1px solid #10b981; color: #065f46; padding: 14px; border-radius: 8px; margin-bottom: 16px; font-size: 14px;">
-        ✓ Ваше повідомлення зареєстровано та передано дирекції ліцею і психологічній службі для невідкладного реагування. Дякуємо за вашу небайдужість!
+      <div id="bullySuccessAlert" class="form-alert-success" role="status" aria-live="polite" style="display: none;">
+        <div>✓ <strong>Повідомлення сформовано!</strong> Відкрито поштовий клієнт для надсилання дирекції ліцею на <strong>${escapeAttr(email)}</strong> (або скопіюйте текст нижче для передачі через зручний канал).</div>
+        <div style="margin-top: 8px; display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
+          <a id="bullyMailtoFallback" href="mailto:${escapeAttr(email)}" class="btn-doc-download">✉️ Відкрити в пошті ще раз</a>
+          <button type="button" id="bullyCopyBtn" class="btn-doc-download" style="border: 1px solid currentColor; cursor: pointer;">📋 Скопіювати текст заяви</button>
+        </div>
       </div>
 
-      <form id="bullyReportForm">
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+      <form id="bullyReportForm" data-recipient="${escapeAttr(email)}">
+        <div class="bully-form-grid">
           <div class="form-group">
             <label class="form-label" for="bullyName">Ваше ім'я (за бажанням, можна залишити порожнім)</label>
             <input type="text" id="bullyName" class="form-control" placeholder="Анонімно або вкажіть ім'я" />
@@ -422,10 +486,10 @@ function generateBullyingFormHtml() {
           <div class="form-group">
             <label class="form-label" for="bullyRole">Хто ви?</label>
             <select id="bullyRole" class="form-control">
-              <option value="student">Учень / учениця ліцею</option>
-              <option value="parent">Батько / мати / опікун</option>
-              <option value="teacher">Вчитель / працівник ліцею</option>
-              <option value="witness">Свідок ситуації</option>
+              <option value="Учень / учениця ліцею">Учень / учениця ліцею</option>
+              <option value="Батько / мати / опікун">Батько / мати / опікун</option>
+              <option value="Вчитель / працівник ліцею">Вчитель / працівник ліцею</option>
+              <option value="Свідок ситуації">Свідок ситуації</option>
             </select>
           </div>
         </div>
@@ -437,7 +501,7 @@ function generateBullyingFormHtml() {
           <label class="form-label" for="bullyDetails">Опишіть ситуацію *</label>
           <textarea id="bullyDetails" class="form-control" placeholder="Що саме сталося, хто брав участь, чи потрібна термінова психологічна або медична допомога..." required></textarea>
         </div>
-        <button type="submit" class="btn-submit" style="background: #e11d48;">
+        <button type="submit" class="btn-submit btn-submit-danger">
           Надіслати конфіденційне повідомлення
         </button>
       </form>
@@ -455,13 +519,14 @@ function getNewsList() {
     const raw = fs.readFileSync(path.join(newsDir, file), 'utf8');
     const { data, content } = parseFrontmatter(raw);
     const slug = file.replace(/\.md$/, '');
+    const tags = Array.isArray(data.tags) ? data.tags : data.tags ? [String(data.tags)] : ['Події'];
     return {
       slug,
       title: data.title || 'Новина ліцею',
-      date: data.date || '',
+      date: normalizeDate(data.date),
       excerpt: data.excerpt || '',
       author: data.author || 'Пресцентр Новопільського ліцею',
-      tags: data.tags || ['Події'],
+      tags,
       image: data.image || '/assets/images/news-1.svg',
       content,
     };
@@ -600,10 +665,11 @@ function renderNavigationMenu(currentUrl) {
     .map((item) => {
       const isActive = currentUrl === item.url || (item.children && item.children.some((c) => c.url === currentUrl));
       const hasChildren = item.children && item.children.length > 0;
+      const ariaAttrs = hasChildren ? ' aria-haspopup="true" aria-expanded="false"' : '';
 
-      let linkHtml = `<a href="${item.url}" class="nav-link">${item.title}`;
+      let linkHtml = `<a href="${item.url}" class="nav-link"${ariaAttrs}>${item.title}`;
       if (hasChildren) {
-        linkHtml += ` <span class="arrow">▼</span>`;
+        linkHtml += ` <span class="arrow" aria-hidden="true">▼</span>`;
       }
       linkHtml += `</a>`;
 
@@ -649,14 +715,14 @@ function renderSidebarMenu(currentSection, currentUrl) {
 
   return `
     <aside class="page-sidebar">
-      <h3 class="sidebar-title">${sectionObj.title}</h3>
+      <h3 class="sidebar-title">${escapeAttr(sectionObj.title)}</h3>
       <ul class="sidebar-nav">
         ${listHtml}
       </ul>
-      <div style="margin-top: 25px; padding-top: 20px; border-top: 1px solid #e2e8f0; font-size: 13px;">
-        <p style="color: #64748b; margin-bottom: 8px;"><strong>Потрібна консультація?</strong></p>
-        <p style="color: #0f3b6c; font-weight: 700;">${phone}</p>
-        <p style="color: #64748b;">${email}</p>
+      <div class="sidebar-consult-box">
+        <p class="sidebar-consult-label"><strong>Потрібна консультація?</strong></p>
+        <p class="sidebar-consult-phone"><a href="tel:${escapeAttr(phone.replace(/[^0-9+]/g, ''))}">${escapeAttr(phone)}</a></p>
+        <p class="sidebar-consult-email"><a href="mailto:${escapeAttr(email)}">${escapeAttr(email)}</a></p>
       </div>
     </aside>
   `;
@@ -675,15 +741,15 @@ function renderFullPage({ title, description, contentHtml, currentUrl, section, 
           <div class="hero-badge">
             <span>🏛️ Оліївська сільська рада • Житомирський район</span>
           </div>
-          <h1 class="hero-title">${siteSettings.schoolName}</h1>
+          <h1 class="hero-title">${escapeAttr(siteSettings.schoolName)}</h1>
           <p class="hero-desc">
-            Освітній простір успіху, безпеки та розвитку дитини. Зберігаємо понад 140-річні традиції школи з 1885 року та впроваджуємо сучасні технології Нової української школи для 165 ліцеїстів.
+            Освітній простір успіху, безпеки та розвитку дитини. Зберігаємо понад 140-річні традиції школи з 1885 року та впроваджуємо сучасні технології Нової української школи для ${escapeAttr(siteSettings.studentsCount || 165)} ліцеїстів.
           </p>
           <div class="hero-actions">
             <a href="/parents-students/admission-1st-grade/" class="btn-primary">
               🎒 Прийом до 1 класу
             </a>
-            <a href="https://nz.ua/" target="_blank" rel="noopener noreferrer" class="btn-secondary">
+            <a href="${escapeAttr(siteSettings.electronicJournalUrl || 'https://nz.ua/')}" target="_blank" rel="noopener noreferrer" class="btn-secondary">
               📖 Електронний щоденник NZ.UA
             </a>
             <a href="/safety/civil-defense/" class="btn-secondary">
@@ -695,19 +761,19 @@ function renderFullPage({ title, description, contentHtml, currentUrl, section, 
         <div>
           <div class="hero-card">
             <div class="hero-director">
-              <div class="director-avatar">👩‍🏫</div>
+              <div class="director-avatar" aria-hidden="true">👩‍🏫</div>
               <div class="director-info">
-                <h4>${siteSettings.director}</h4>
+                <h2>${escapeAttr(siteSettings.director)}</h2>
                 <p>Директор Новопільського ліцею</p>
               </div>
             </div>
             <p class="hero-quote">
               «Ми прагнемо створити в ліцеї атмосферу захищеності, підтримки та натхнення, де кожна дитина відчуває себе особистістю, знаходить друзів та розкриває свої унікальні здібності.»
             </p>
-            <div style="font-size: 13.5px; color: #475569; display: flex; flex-direction: column; gap: 6px;">
-              <div>📞 <strong>Телефон:</strong> ${siteSettings.phone}</div>
-              <div>✉️ <strong>E-mail:</strong> ${siteSettings.email}</div>
-              <div>📍 <strong>Адреса:</strong> ${siteSettings.address || 'вул. Миру, 12, с. Новопіль'}</div>
+            <div class="hero-contacts-list">
+              <div>📞 <strong>Телефон:</strong> <a href="tel:${escapeAttr(siteSettings.phone.replace(/[^0-9+]/g, ''))}">${escapeAttr(siteSettings.phone)}</a></div>
+              <div>✉️ <strong>E-mail:</strong> <a href="mailto:${escapeAttr(siteSettings.email)}">${escapeAttr(siteSettings.email)}</a></div>
+              <div>📍 <strong>Адреса:</strong> ${escapeAttr(siteSettings.address || 'вул. Миру, 12, с. Новопіль')}</div>
             </div>
           </div>
         </div>
@@ -736,9 +802,9 @@ function renderFullPage({ title, description, contentHtml, currentUrl, section, 
           const icon = iconMap[ql.icon] || ql.icon || '🔗';
           const ext = ql.external ? ' target="_blank" rel="noopener noreferrer"' : '';
           return `
-            <a href="${ql.url}"${ext} class="quick-card">
-              <div class="quick-icon">${icon}</div>
-              <div><h3>${ql.title}</h3></div>
+            <a href="${escapeAttr(ql.url)}"${ext} class="quick-card">
+              <div class="quick-icon" aria-hidden="true">${icon}</div>
+              <div><h3>${escapeAttr(ql.title)}</h3></div>
             </a>
           `;
         }).join('')}
@@ -755,8 +821,8 @@ function renderFullPage({ title, description, contentHtml, currentUrl, section, 
           { value: '100%', label: 'Облаштоване укриття ДСНС' }
         ]).map(st => `
           <div class="stat-item">
-            <div class="stat-num">${st.value}</div>
-            <div class="stat-label">${st.label}</div>
+            <div class="stat-num">${escapeAttr(st.value)}</div>
+            <div class="stat-label">${escapeAttr(st.label)}</div>
           </div>
         `).join('')}
       </div>
@@ -770,11 +836,11 @@ function renderFullPage({ title, description, contentHtml, currentUrl, section, 
     const ann = announcements[0];
     announcementHtml = `
       <div class="container">
-        <div class="announcement-banner">
-          <div class="announcement-icon">📢</div>
+        <div class="announcement-banner" role="region" aria-label="Важливе оголошення">
+          <div class="announcement-icon" aria-hidden="true">📢</div>
           <div class="announcement-content">
-            <h4>${ann.title}</h4>
-            <p>${markdownToHtml(ann.content)}</p>
+            <h2>${escapeAttr(ann.title)}</h2>
+            ${markdownToHtml(ann.content)}
           </div>
         </div>
       </div>
@@ -789,14 +855,14 @@ function renderFullPage({ title, description, contentHtml, currentUrl, section, 
       cards += `
         <article class="news-card">
           <div class="news-img">
-            <img src="${n.image}" alt="${n.title}" />
-            <span class="news-tag">${n.tags[0] || 'Подія'}</span>
+            <img src="${escapeAttr(n.image)}" alt="${escapeAttr(n.title)}" loading="lazy" />
+            <span class="news-tag">${escapeAttr(n.tags[0] || 'Подія')}</span>
           </div>
           <div class="news-body">
-            <div class="news-date">📅 ${n.date} • ${n.author}</div>
-            <h3 class="news-title">${n.title}</h3>
-            <p class="news-desc">${n.excerpt}</p>
-            <a href="/news/${n.slug}/" class="section-link" style="margin-top: auto;">
+            <div class="news-date">📅 ${escapeAttr(n.date)} • ${escapeAttr(n.author)}</div>
+            <h3 class="news-title">${escapeAttr(n.title)}</h3>
+            <p class="news-desc">${escapeAttr(n.excerpt)}</p>
+            <a href="/news/${escapeAttr(n.slug)}/" class="section-link" style="margin-top: auto;">
               Читати повністю →
             </a>
           </div>
@@ -822,13 +888,15 @@ function renderFullPage({ title, description, contentHtml, currentUrl, section, 
     `;
   }
 
+  const phoneClean = (siteSettings.phone || '+380671844288').replace(/[^0-9+]/g, '');
+
   const rawHtml = `<!doctype html>
-<html lang="uk">
+<html lang="uk" data-base-path="${escapeAttr(BASE_PATH)}">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>${title} | Новопільський ліцей Оліївської сільської ради</title>
-  <meta name="description" content="${description || siteSettings.schoolName}" />
+  <title>${escapeAttr(title)} | Новопільський ліцей Оліївської сільської ради</title>
+  <meta name="description" content="${escapeAttr(description || siteSettings.schoolName)}" />
   <link rel="icon" type="image/svg+xml" href="/assets/images/logo.svg" />
   
   <!-- CSS Stylesheets -->
@@ -842,31 +910,47 @@ function renderFullPage({ title, description, contentHtml, currentUrl, section, 
     <div class="a11y-container">
       <div class="a11y-group">
         <span class="a11y-label">Розмір шрифту:</span>
-        <button class="a11y-btn" data-a11y-action="fontsize" data-a11y-value="font-md" title="Звичайний розмір шрифту">A</button>
-        <button class="a11y-btn" data-a11y-action="fontsize" data-a11y-value="font-lg" title="Збільшений шрифт">A+</button>
-        <button class="a11y-btn" data-a11y-action="fontsize" data-a11y-value="font-xl" title="Дуже великий шрифт">A++</button>
+        <button type="button" class="a11y-btn" data-a11y-action="fontsize" data-a11y-value="font-md" title="Звичайний розмір шрифту">A</button>
+        <button type="button" class="a11y-btn" data-a11y-action="fontsize" data-a11y-value="font-lg" title="Збільшений шрифт">A+</button>
+        <button type="button" class="a11y-btn" data-a11y-action="fontsize" data-a11y-value="font-xl" title="Дуже великий шрифт">A++</button>
       </div>
 
       <div class="a11y-group">
         <span class="a11y-label">Контрастність:</span>
-        <button class="a11y-btn" data-a11y-action="theme" data-a11y-value="theme-normal" title="Звичайна колірна схема">Стандарт</button>
-        <button class="a11y-btn" data-a11y-action="theme" data-a11y-value="theme-bw" title="Чорно-білий контраст">Ч/Б</button>
-        <button class="a11y-btn" data-a11y-action="theme" data-a11y-value="theme-wb" title="Темний високий контраст">Інверсія</button>
-        <button class="a11y-btn" data-a11y-action="theme" data-a11y-value="theme-by" title="Синій на жовтому фоні">Синьо-жовтий</button>
+        <button type="button" class="a11y-btn" data-a11y-action="theme" data-a11y-value="theme-normal" title="Звичайна колірна схема">Стандарт</button>
+        <button type="button" class="a11y-btn" data-a11y-action="theme" data-a11y-value="theme-bw" title="Чорно-білий контраст">Ч/Б</button>
+        <button type="button" class="a11y-btn" data-a11y-action="theme" data-a11y-value="theme-wb" title="Темний високий контраст">Інверсія</button>
+        <button type="button" class="a11y-btn" data-a11y-action="theme" data-a11y-value="theme-by" title="Синій на жовтому фоні">Синьо-жовтий</button>
       </div>
 
       <div class="a11y-group">
         <span class="a11y-label">Додатково:</span>
-        <button class="a11y-btn" data-a11y-action="spacing" title="Збільшити міжрядковий інтервал">Інтервал</button>
-        <button class="a11y-btn" data-a11y-action="dyslexic" title="Шрифт для людей з дислексією">Шрифт НУШ</button>
-        <button class="a11y-btn" data-a11y-action="images" data-a11y-value="grayscale" title="Чорно-білі фотографії">Ч/Б фото</button>
-        <button class="a11y-btn" data-a11y-action="images" data-a11y-value="hide" title="Приховати зображення">Без фото</button>
-        <button class="a11y-btn" data-a11y-action="speech" title="Озвучити текст сторінки">🔊 Читати голос</button>
-        <button class="a11y-btn" data-a11y-action="reset" title="Скинути до стандартних налаштувань">Скинути</button>
+        <button type="button" class="a11y-btn" data-a11y-action="spacing" title="Збільшити міжрядковий інтервал">Інтервал</button>
+        <button type="button" class="a11y-btn" data-a11y-action="dyslexic" title="Шрифт для людей з дислексією">Шрифт НУШ</button>
+        <button type="button" class="a11y-btn" data-a11y-action="images" data-a11y-value="grayscale" title="Чорно-білі фотографії">Ч/Б фото</button>
+        <button type="button" class="a11y-btn" data-a11y-action="images" data-a11y-value="hide" title="Приховати зображення">Без фото</button>
+        <button type="button" class="a11y-btn" data-a11y-action="speech" title="Озвучити текст сторінки">🔊 Читати голос</button>
+        <button type="button" class="a11y-btn" data-a11y-action="reset" title="Скинути до стандартних налаштувань">Скинути</button>
       </div>
 
       <div>
-        <button id="a11yCloseBtn" class="a11y-btn-close">✕ Закрити</button>
+        <button type="button" id="a11yCloseBtn" class="a11y-btn-close">✕ Закрити</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- МОДАЛЬНЕ ВІКНО ПОШУКУ ПО САЙТУ -->
+  <div id="siteSearchModal" class="search-modal" role="dialog" aria-modal="true" aria-label="Пошук по сайту ліцею" hidden>
+    <div class="search-modal-backdrop" data-close-search></div>
+    <div class="search-modal-dialog">
+      <div class="search-modal-header">
+        <label for="siteSearchInput" class="sr-only">Пошук сторінок, новин та документів</label>
+        <span class="search-modal-icon" aria-hidden="true">🔍</span>
+        <input type="search" id="siteSearchInput" class="search-modal-input" placeholder="Пошук сторінок, новин, розкладу, правил вступу..." autocomplete="off" />
+        <button type="button" id="siteSearchCloseBtn" class="search-modal-close" aria-label="Закрити вікно пошуку">✕</button>
+      </div>
+      <div id="siteSearchResults" class="search-modal-results" role="region" aria-live="polite">
+        <p class="search-modal-hint">Введіть ключове слово (наприклад: «1 клас», «розклад», «булінг», «статут», «харчування»)</p>
       </div>
     </div>
   </div>
@@ -875,22 +959,25 @@ function renderFullPage({ title, description, contentHtml, currentUrl, section, 
   <div class="topbar">
     <div class="container">
       <div class="topbar-contacts">
-        <a href="tel:${siteSettings.phone.replace(/[^0-9+]/g, '')}">
-          📞 ${siteSettings.phone}
+        <a href="tel:${escapeAttr(phoneClean)}">
+          📞 ${escapeAttr(siteSettings.phone)}
         </a>
-        <a href="mailto:${siteSettings.email}">
-          ✉️ ${siteSettings.email}
+        <a href="mailto:${escapeAttr(siteSettings.email)}">
+          ✉️ ${escapeAttr(siteSettings.email)}
         </a>
-        <span>📍 ${siteSettings.address || 'с. Новопіль, вул. Миру, 12'}</span>
+        <span>📍 ${escapeAttr(siteSettings.address || 'с. Новопіль, вул. Миру, 12')}</span>
       </div>
       <div class="topbar-actions">
-        <button id="a11yToggleBtn" class="btn-accessibility" title="Налаштування сайту для людей з порушенням зору">
+        <button type="button" class="btn-search-trigger" data-open-search title="Пошук по сайту (Ctrl+K)">
+          🔍 Пошук
+        </button>
+        <button type="button" id="a11yToggleBtn" class="btn-accessibility" data-toggle-a11y aria-expanded="false" title="Налаштування сайту для людей з порушенням зору">
           👁️ Людям з порушенням зору
         </button>
-        <a href="https://nz.ua/" target="_blank" rel="noopener noreferrer" class="btn-journal-link">
+        <a href="${escapeAttr(siteSettings.electronicJournalUrl || 'https://nz.ua/')}" target="_blank" rel="noopener noreferrer" class="btn-journal-link">
           📖 NZ.UA Щоденник
         </a>
-        <a href="${siteSettings.facebookUrl}" target="_blank" rel="noopener noreferrer" style="color: #cbd5e1;" title="Facebook ліцею">
+        <a href="${escapeAttr(siteSettings.facebookUrl)}" target="_blank" rel="noopener noreferrer" class="topbar-fb-link" title="Facebook ліцею">
           f Facebook
         </a>
       </div>
@@ -903,18 +990,40 @@ function renderFullPage({ title, description, contentHtml, currentUrl, section, 
       <a href="/" class="brand-wrapper">
         <img src="/assets/images/logo.svg" alt="Герб Новопільського ліцею" class="brand-logo" />
         <div class="brand-text">
-          <h1>${siteSettings.shortName}</h1>
+          <div class="brand-title">${escapeAttr(siteSettings.shortName)}</div>
           <p>Оліївської сільської ради Житомирського району</p>
         </div>
       </a>
 
-      <button id="mobileMenuBtn" class="mobile-menu-btn" aria-label="Відкрити головне меню">
-        ☰
-      </button>
+      <div class="header-mobile-controls">
+        <button type="button" class="mobile-icon-btn" data-open-search aria-label="Пошук по сайту" title="Пошук по сайту">
+          🔍
+        </button>
+        <button type="button" class="mobile-icon-btn" data-toggle-a11y aria-label="Налаштування для людей з порушенням зору" title="Людям з порушенням зору">
+          👁️
+        </button>
+        <button type="button" id="mobileMenuBtn" class="mobile-menu-btn" aria-label="Відкрити головне меню" aria-expanded="false">
+          ☰
+        </button>
+      </div>
 
-      <nav>
+      <nav aria-label="Головна навігація сайту">
         <ul id="navMenu" class="nav-menu">
           ${navHtml}
+          <li class="nav-mobile-Utility">
+            <div class="nav-mobile-actions">
+              <button type="button" class="btn-accessibility" data-toggle-a11y style="width: 100%; justify-content: center; padding: 10px;">
+                👁️ Версія для людей з порушенням зору
+              </button>
+              <a href="${escapeAttr(siteSettings.electronicJournalUrl || 'https://nz.ua/')}" target="_blank" rel="noopener noreferrer" class="btn-journal-link" style="width: 100%; justify-content: center; padding: 10px;">
+                📖 Електронний щоденник NZ.UA
+              </a>
+              <div class="nav-mobile-contacts">
+                <a href="tel:${escapeAttr(phoneClean)}">📞 ${escapeAttr(siteSettings.phone)}</a>
+                <a href="mailto:${escapeAttr(siteSettings.email)}">✉️ ${escapeAttr(siteSettings.email)}</a>
+              </div>
+            </div>
+          </li>
         </ul>
       </nav>
     </div>
@@ -941,9 +1050,9 @@ function renderFullPage({ title, description, contentHtml, currentUrl, section, 
         : `
         <div class="page-header">
           <div class="container">
-            <div class="breadcrumbs">
+            <div class="breadcrumbs" aria-label="Хлібні крихти">
               <a href="/">Головна</a>
-              <span>/</span>
+              <span aria-hidden="true">/</span>
               ${(() => {
                 const sectionUrlMap = {
                   'Про ліцей': '/about/',
@@ -961,8 +1070,8 @@ function renderFullPage({ title, description, contentHtml, currentUrl, section, 
                 }
                 return `<span>${escapeAttr(section)}</span>`;
               })()}
-              <span>/</span>
-              <span>${escapeAttr(title)}</span>
+              <span aria-hidden="true">/</span>
+              <span aria-current="page">${escapeAttr(title)}</span>
             </div>
             <h1 class="page-title">${escapeAttr(title)}</h1>
           </div>
@@ -983,15 +1092,15 @@ function renderFullPage({ title, description, contentHtml, currentUrl, section, 
     <div class="container">
       <div class="footer-grid">
         <div class="footer-brand">
-          <h3>${siteSettings.shortName}</h3>
+          <h3>${escapeAttr(siteSettings.shortName)}</h3>
           <p>
             Комунальний заклад загальної середньої освіти I–III ступенів Оліївської сільської ради Житомирського району Житомирської області.
           </p>
-          <div style="font-size: 13px; line-height: 1.5; color: #cbd5e1;">
-            <div>• Код ЄДРПОУ: <strong>${siteSettings.edrpou}</strong></div>
-            <div>• ID закладу в ІСУО: <strong>${siteSettings.isuoId}</strong></div>
-            <div>• КОАТУУ: <strong>${siteSettings.koatuu}</strong></div>
-            <div>• КАТОТТГ: <strong>${siteSettings.katottg}</strong></div>
+          <div class="footer-requisites">
+            <div>• Код ЄДРПОУ: <strong>${escapeAttr(siteSettings.edrpou)}</strong></div>
+            <div>• ID закладу в ІСУО: <strong>${escapeAttr(siteSettings.isuoId)}</strong></div>
+            <div>• КОАТУУ: <strong>${escapeAttr(siteSettings.koatuu)}</strong></div>
+            <div>• КАТОТТГ: <strong>${escapeAttr(siteSettings.katottg)}</strong></div>
           </div>
         </div>
 
@@ -1012,7 +1121,7 @@ function renderFullPage({ title, description, contentHtml, currentUrl, section, 
           <h4>Швидкий доступ</h4>
           <ul class="footer-links">
             <li><a href="/parents-students/admission-1st-grade/">Вступ до 1 класу</a></li>
-            <li><a href="https://nz.ua/" target="_blank" rel="noopener noreferrer">Електронний щоденник NZ.UA</a></li>
+            <li><a href="${escapeAttr(siteSettings.electronicJournalUrl || 'https://nz.ua/')}" target="_blank" rel="noopener noreferrer">Електронний щоденник NZ.UA</a></li>
             <li><a href="/safety/civil-defense/">Укриття ліцею</a></li>
             <li><a href="/safety/anti-bullying/">Протидія булінгу</a></li>
             <li><a href="/transparency/statute/">Статутні документи</a></li>
@@ -1023,11 +1132,11 @@ function renderFullPage({ title, description, contentHtml, currentUrl, section, 
         <div class="footer-col">
           <h4>Контакти ліцею</h4>
           <ul class="footer-contacts">
-            <li>📍 ${siteSettings.address || '12333, Житомирська обл., Житомирський р-н, с. Новопіль, вул. Миру, 12'}</li>
-            <li>📞 <a href="tel:${siteSettings.phone.replace(/[^0-9+]/g, '')}">${siteSettings.phone}</a></li>
-            <li>✉️ <a href="mailto:${siteSettings.email}">${siteSettings.email}</a></li>
-            <li>👤 Директор: ${siteSettings.director}</li>
-            <li>🌐 <a href="${siteSettings.facebookUrl}" target="_blank" rel="noopener noreferrer">Facebook-сторінка</a></li>
+            <li>📍 ${escapeAttr(siteSettings.address || '12333, Житомирська обл., Житомирський р-н, с. Новопіль, вул. Миру, 12')}</li>
+            <li>📞 <a href="tel:${escapeAttr(phoneClean)}">${escapeAttr(siteSettings.phone)}</a></li>
+            <li>✉️ <a href="mailto:${escapeAttr(siteSettings.email)}">${escapeAttr(siteSettings.email)}</a></li>
+            <li>👤 Директор: ${escapeAttr(siteSettings.director)}</li>
+            <li>🌐 <a href="${escapeAttr(siteSettings.facebookUrl)}" target="_blank" rel="noopener noreferrer">Facebook-сторінка</a></li>
           </ul>
         </div>
       </div>
@@ -1089,6 +1198,26 @@ function buildSite() {
   console.log('📦 Копіювання статичних асетів (CSS, JS, зображення, Decap CMS)...');
   copyDirSync(PUBLIC_DIR, DIST_DIR);
 
+  // Адаптація BASE_PATH для адмін-панелі та конфігурації Decap CMS у dist/
+  if (BASE_PATH) {
+    const adminHtmlPath = path.join(DIST_DIR, 'admin', 'index.html');
+    if (fs.existsSync(adminHtmlPath)) {
+      fs.writeFileSync(adminHtmlPath, applyBasePath(fs.readFileSync(adminHtmlPath, 'utf8')), 'utf8');
+    }
+    const editorHtmlPath = path.join(DIST_DIR, 'admin', 'editor', 'index.html');
+    if (fs.existsSync(editorHtmlPath)) {
+      fs.writeFileSync(editorHtmlPath, applyBasePath(fs.readFileSync(editorHtmlPath, 'utf8')), 'utf8');
+    }
+    const decapConfigPath = path.join(DIST_DIR, 'admin', 'config.yml');
+    if (fs.existsSync(decapConfigPath)) {
+      const cfg = fs.readFileSync(decapConfigPath, 'utf8').replace(
+        /^public_folder:\s*["']?\/assets\/uploads["']?/m,
+        `public_folder: "${BASE_PATH}/assets/uploads"`
+      );
+      fs.writeFileSync(decapConfigPath, cfg, 'utf8');
+    }
+  }
+
   // 2. Збирання сторінок контенту
   const pages = getAllPages();
   const searchIndex = [];
@@ -1115,14 +1244,14 @@ function buildSite() {
         cards += `
           <article class="news-card">
             <div class="news-img">
-              <img src="${n.image}" alt="${n.title}" />
-              <span class="news-tag">${n.tags[0] || 'Подія'}</span>
+              <img src="${escapeAttr(n.image)}" alt="${escapeAttr(n.title)}" loading="lazy" />
+              <span class="news-tag">${escapeAttr(n.tags[0] || 'Подія')}</span>
             </div>
             <div class="news-body">
-              <div class="news-date">📅 ${n.date} • ${n.author}</div>
-              <h3 class="news-title">${n.title}</h3>
-              <p class="news-desc">${n.excerpt}</p>
-              <a href="/news/${n.slug}/" class="section-link" style="margin-top: auto;">
+              <div class="news-date">📅 ${escapeAttr(n.date)} • ${escapeAttr(n.author)}</div>
+              <h3 class="news-title">${escapeAttr(n.title)}</h3>
+              <p class="news-desc">${escapeAttr(n.excerpt)}</p>
+              <a href="/news/${escapeAttr(n.slug)}/" class="section-link" style="margin-top: auto;">
                 Читати повністю →
               </a>
             </div>
@@ -1130,6 +1259,12 @@ function buildSite() {
         `;
       });
       parsedBody = parsedBody.replace('<!-- NEWS_GRID -->', `<div class="cards-grid">${cards}</div>`);
+    }
+
+    // Автоматичний блок верифікованих документів з реєстру прозорості (ст. 30 ЗУ) для відповідних підсторінок
+    const pageDocsBox = generatePageDocumentsBoxHtml(page.path);
+    if (pageDocsBox) {
+      parsedBody += '\n' + pageDocsBox;
     }
 
     const isHomepage = page.path === '/' || page.path === '';
@@ -1158,7 +1293,7 @@ function buildSite() {
 
     searchIndex.push({
       title: page.title,
-      url: page.path,
+      url: `${BASE_PATH}${page.path}`,
       section: page.section,
       description: page.description,
     });
@@ -1170,18 +1305,18 @@ function buildSite() {
 
   newsList.forEach((news) => {
     const newsContentHtml = `
-      <div style="font-size: 14px; color: #64748b; margin-bottom: 20px;">
-        📅 <strong>Дата публікації:</strong> ${news.date} | ✍️ <strong>Автор:</strong> ${news.author}
+      <div class="news-article-meta">
+        📅 <strong>Дата публікації:</strong> ${escapeAttr(news.date)} | ✍️ <strong>Автор:</strong> ${escapeAttr(news.author)}
       </div>
-      <div style="margin-bottom: 25px; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
-        <img src="${news.image}" alt="${news.title}" style="width: 100%; max-height: 420px; object-fit: cover;" />
+      <div class="news-article-cover">
+        <img src="${escapeAttr(news.image)}" alt="${escapeAttr(news.title)}" style="width: 100%; max-height: 420px; object-fit: cover;" />
       </div>
-      <div style="font-size: 17px; line-height: 1.8;">
+      <div class="news-article-body">
         ${markdownToHtml(news.content)}
       </div>
-      <div style="margin-top: 35px; padding-top: 20px; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center;">
+      <div class="news-article-footer">
         <a href="/news/" class="section-link">← Повернутися до всіх новин</a>
-        <a href="${siteSettings.facebookUrl}" target="_blank" rel="noopener noreferrer" class="section-link">Обговорити на Facebook →</a>
+        <a href="${escapeAttr(siteSettings.facebookUrl)}" target="_blank" rel="noopener noreferrer" class="section-link">Обговорити на Facebook →</a>
       </div>
     `;
 
@@ -1202,14 +1337,43 @@ function buildSite() {
 
     searchIndex.push({
       title: news.title,
-      url: `/news/${news.slug}/`,
+      url: `${BASE_PATH}/news/${news.slug}/`,
       section: 'Новини ліцею',
       description: news.excerpt,
     });
   });
 
-  // 4. Генерація search-index.json
+  // Додаємо документи з реєстру до пошукового індексу для зручного наскрізного пошуку
+  documentsRegistry.forEach((doc) => {
+    searchIndex.push({
+      title: `📄 ${doc.title} (${doc.format})`,
+      url: doc.pagePath ? `${BASE_PATH}${doc.pagePath}` : `${BASE_PATH}/transparency/`,
+      section: `Документ ст. 30 ЗУ • ${doc.category}`,
+      description: doc.description,
+    });
+  });
+
+  // 4. Генерація search-index.json та 404.html (для GitHub Pages)
   fs.writeFileSync(path.join(DIST_DIR, 'search-index.json'), JSON.stringify(searchIndex, null, 2), 'utf8');
+
+  const notFoundHtml = renderFullPage({
+    title: '404 — Сторінку не знайдено',
+    description: 'Запитувану сторінку не знайдено на офіційному сайті Новопільського ліцею.',
+    contentHtml: `
+      <div style="text-align: center; padding: 40px 10px;">
+        <h2 style="font-size: 56px; margin-bottom: 10px;">404</h2>
+        <p style="font-size: 18px; margin-bottom: 24px;">На жаль, запитувану сторінку не знайдено або її було переміщено.</p>
+        <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+          <a href="/" class="btn-primary">🏠 Повернутися на головну</a>
+          <a href="/transparency/" class="btn-doc-download" style="padding: 12px 20px;">📜 Реєстр документів (ст. 30 ЗУ)</a>
+        </div>
+      </div>
+    `,
+    currentUrl: '/404.html',
+    section: 'Головна',
+    isHomepage: false,
+  });
+  fs.writeFileSync(path.join(DIST_DIR, '404.html'), notFoundHtml, 'utf8');
 
   // 5. Генерація sitemap.xml
   let sitemapXml = '<?xml version="1.0" encoding="UTF-8"?>\n';
@@ -1235,3 +1399,4 @@ if (require.main === module) {
 }
 
 module.exports = { buildSite };
+

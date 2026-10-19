@@ -137,6 +137,7 @@ html.theme-bw body {
 
 html.theme-bw .topbar,
 html.theme-bw .site-header,
+html.theme-bw .page-header,
 html.theme-bw .hero,
 html.theme-bw .hero-card,
 html.theme-bw .quick-card,
@@ -147,7 +148,26 @@ html.theme-bw .page-content,
 html.theme-bw .site-footer,
 html.theme-bw .doc-search-box,
 html.theme-bw .doc-table-wrapper,
-html.theme-bw .dropdown-menu {
+html.theme-bw .dropdown-menu,
+html.theme-bw .widget-card,
+html.theme-bw .bully-form-box,
+html.theme-bw .callout,
+html.theme-bw .announcement-banner,
+html.theme-bw .page-docs-widget,
+html.theme-bw .page-doc-card,
+html.theme-bw .search-modal-dialog,
+html.theme-bw .data-table,
+html.theme-bw .data-table th,
+html.theme-bw .data-table td,
+html.theme-bw .doc-table th,
+html.theme-bw .doc-table td,
+html.theme-bw .form-control,
+html.theme-bw .doc-input,
+html.theme-bw .doc-filter-select,
+html.theme-bw .form-alert-success,
+html.theme-bw .map-landmark-note,
+html.theme-bw .doc-category-pill,
+html.theme-bw .format-badge {
   background: #ffffff !important;
   color: #000000 !important;
   border: 2px solid #000000 !important;
@@ -161,9 +181,17 @@ html.theme-bw h3,
 html.theme-bw h4,
 html.theme-bw p,
 html.theme-bw span,
+html.theme-bw label,
+html.theme-bw li,
+html.theme-bw div,
 html.theme-bw td,
 html.theme-bw th {
   color: #000000 !important;
+}
+
+html.theme-bw .a11y-panel,
+html.theme-bw .a11y-panel * {
+  color: inherit;
 }
 
 html.theme-bw a {
@@ -174,7 +202,11 @@ html.theme-bw a {
 html.theme-bw .btn-primary,
 html.theme-bw .btn-secondary,
 html.theme-bw .btn-submit,
-html.theme-bw .btn-doc-download {
+html.theme-bw .btn-doc-download,
+html.theme-bw .btn-journal-link,
+html.theme-bw .btn-accessibility,
+html.theme-bw .btn-search-trigger,
+html.theme-bw .mobile-icon-btn {
   background: #000000 !important;
   color: #ffffff !important;
   border: 2px solid #000000 !important;
@@ -188,6 +220,7 @@ html.theme-wb body {
 
 html.theme-wb .topbar,
 html.theme-wb .site-header,
+html.theme-wb .page-header,
 html.theme-wb .hero,
 html.theme-wb .hero-card,
 html.theme-wb .quick-card,
@@ -198,7 +231,26 @@ html.theme-wb .page-content,
 html.theme-wb .site-footer,
 html.theme-wb .doc-search-box,
 html.theme-wb .doc-table-wrapper,
-html.theme-wb .dropdown-menu {
+html.theme-wb .dropdown-menu,
+html.theme-wb .widget-card,
+html.theme-wb .bully-form-box,
+html.theme-wb .callout,
+html.theme-wb .announcement-banner,
+html.theme-wb .page-docs-widget,
+html.theme-wb .page-doc-card,
+html.theme-wb .search-modal-dialog,
+html.theme-wb .data-table,
+html.theme-wb .data-table th,
+html.theme-wb .data-table td,
+html.theme-wb .doc-table th,
+html.theme-wb .doc-table td,
+html.theme-wb .form-control,
+html.theme-wb .doc-input,
+html.theme-wb .doc-filter-select,
+html.theme-wb .form-alert-success,
+html.theme-wb .map-landmark-note,
+html.theme-wb .doc-category-pill,
+html.theme-wb .format-badge {
   background: #000000 !important;
   color: #ffffff !important;
   border: 2px solid #ffffff !important;
@@ -212,6 +264,9 @@ html.theme-wb h3,
 html.theme-wb h4,
 html.theme-wb p,
 html.theme-wb span,
+html.theme-wb label,
+html.theme-wb li,
+html.theme-wb div,
 html.theme-wb td,
 html.theme-wb th {
   color: #ffffff !important;
@@ -225,7 +280,11 @@ html.theme-wb a {
 html.theme-wb .btn-primary,
 html.theme-wb .btn-secondary,
 html.theme-wb .btn-submit,
-html.theme-wb .btn-doc-download {
+html.theme-wb .btn-doc-download,
+html.theme-wb .btn-journal-link,
+html.theme-wb .btn-accessibility,
+html.theme-wb .btn-search-trigger,
+html.theme-wb .mobile-icon-btn {
   background: #ffff00 !important;
   color: #000000 !important;
   border: 2px solid #ffffff !important;
@@ -240,6 +299,7 @@ html.theme-by body {
 
 html.theme-by .topbar,
 html.theme-by .site-header,
+html.theme-by .page-header,
 html.theme-by .hero,
 html.theme-by .hero-card,
 html.theme-by .quick-card,
@@ -250,7 +310,26 @@ html.theme-by .page-content,
 html.theme-by .site-footer,
 html.theme-by .doc-search-box,
 html.theme-by .doc-table-wrapper,
-html.theme-by .dropdown-menu {
+html.theme-by .dropdown-menu,
+html.theme-by .widget-card,
+html.theme-by .bully-form-box,
+html.theme-by .callout,
+html.theme-by .announcement-banner,
+html.theme-by .page-docs-widget,
+html.theme-by .page-doc-card,
+html.theme-by .search-modal-dialog,
+html.theme-by .data-table,
+html.theme-by .data-table th,
+html.theme-by .data-table td,
+html.theme-by .doc-table th,
+html.theme-by .doc-table td,
+html.theme-by .form-control,
+html.theme-by .doc-input,
+html.theme-by .doc-filter-select,
+html.theme-by .form-alert-success,
+html.theme-by .map-landmark-note,
+html.theme-by .doc-category-pill,
+html.theme-by .format-badge {
   background: #ffffbb !important;
   color: #002244 !important;
   border: 2px solid #002244 !important;
@@ -264,9 +343,17 @@ html.theme-by h3,
 html.theme-by h4,
 html.theme-by p,
 html.theme-by span,
+html.theme-by label,
+html.theme-by li,
+html.theme-by div,
 html.theme-by td,
 html.theme-by th {
   color: #002244 !important;
+}
+
+html.theme-by .a11y-panel,
+html.theme-by .a11y-panel * {
+  color: inherit;
 }
 
 html.theme-by a {
@@ -277,7 +364,11 @@ html.theme-by a {
 html.theme-by .btn-primary,
 html.theme-by .btn-secondary,
 html.theme-by .btn-submit,
-html.theme-by .btn-doc-download {
+html.theme-by .btn-doc-download,
+html.theme-by .btn-journal-link,
+html.theme-by .btn-accessibility,
+html.theme-by .btn-search-trigger,
+html.theme-by .mobile-icon-btn {
   background: #002244 !important;
   color: #ffffbb !important;
   border: 2px solid #002244 !important;
