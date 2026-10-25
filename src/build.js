@@ -872,9 +872,6 @@ function renderFullPage({ title, description, contentHtml, currentUrl, section, 
             <a href="/parents-students/admission-1st-grade/" class="btn-primary">
               🎒 Прийом до 1 класу
             </a>
-            <a href="${escapeAttr(siteSettings.electronicJournalUrl || 'https://nz.ua/')}" target="_blank" rel="noopener noreferrer" class="btn-secondary">
-              📖 Електронний щоденник NZ.UA
-            </a>
             <a href="/safety/civil-defense/" class="btn-secondary">
               🛡️ Безпека та укриття
             </a>
@@ -908,7 +905,6 @@ function renderFullPage({ title, description, contentHtml, currentUrl, section, 
       <div class="quick-grid">
         ${(siteSettings.quickLinks && siteSettings.quickLinks.length ? siteSettings.quickLinks : [
           { title: 'Вступ до 1 класу', url: '/parents-students/admission-1st-grade/', icon: '🎒' },
-          { title: 'Щоденник NZ.UA', url: 'https://nz.ua/', icon: '📊', external: true },
           { title: 'Розклад уроків', url: '/education/schedule/', icon: '⏰' },
           { title: 'Протидія булінгу', url: '/safety/anti-bullying/', icon: '🛡️' },
           { title: 'Безпечне укриття', url: '/safety/civil-defense/', icon: '🚪' },
@@ -1267,12 +1263,8 @@ function renderFullPage({ title, description, contentHtml, currentUrl, section, 
         <div>
           © ${new Date().getFullYear()} Новопільський ліцей Оліївської сільської ради. Всі права захищено.
         </div>
-        <div style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap;">
+        <div>
           <a href="/transparency/">Відповідність ст. 30 ЗУ «Про освіту»</a>
-          <span>•</span>
-          <a href="/admin/" class="footer-cms-badge" title="Керування вмістом сайту через Git-based CMS (Decap)">
-            ⚙️ Панель керування (Git CMS)
-          </a>
         </div>
       </div>
     </div>

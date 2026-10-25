@@ -27,7 +27,6 @@
   ],
   "quickLinks": [
     { "title": "Прийом до 1 класу", "url": "/parents-students/admission-1st-grade/", "icon": "admission" },
-    { "title": "Електронний щоденник (NZ.UA)", "url": "https://nz.ua/", "icon": "journal", "external": true },
     { "title": "Розклад уроків", "url": "/education/schedule/", "icon": "schedule" },
     { "title": "Протидія булінгу", "url": "/safety/anti-bullying/", "icon": "safety" },
     { "title": "Безпека та укриття", "url": "/safety/civil-defense/", "icon": "shield" },
