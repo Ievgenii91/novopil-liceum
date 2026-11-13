@@ -191,6 +191,11 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://novopil-lyceum.zt.ua/news/2026-10-29-yunyj-vynakhidnyk-protez-dlya-kurky/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://novopil-lyceum.zt.ua/news/2026-10-16-den-zdorovoho-kharchuvannya/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
